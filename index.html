@@ -432,12 +432,18 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   display: flex;
   align-items: center;
   gap: var(--sp-xsm);
-  flex-wrap: wrap;
+}
+.toolbar-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  margin-left: auto;
 }
 .search-input-wrap {
   position: relative;
-  flex: 1;
-  min-width: 240px;
+  width: 400px;
+  max-width: 400px;
+  flex-shrink: 0;
 }
 .search-input-wrap svg {
   position: absolute;
@@ -451,7 +457,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   width: 100%;
   height: 36px;
   padding: 0 var(--sp-sm) 0 36px;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--neutral-70);
   border-radius: var(--cr-2xsm);
   background: var(--bg-primary);
   font-family: var(--font);
@@ -460,7 +466,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   outline: none;
   transition: border-color 0.12s;
 }
-.search-input::placeholder { color: var(--text-tertiary); }
+.search-input::placeholder { color: var(--text-secondary); }
 .search-input:focus { border-color: var(--border-focused); }
 .filter-btn {
   height: 36px;
@@ -481,6 +487,142 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 .filter-btn:hover { background: var(--bg-secondary); border-color: var(--neutral-70); }
 .filter-arrow { color: var(--text-secondary); font-size: 11px; }
+
+/* ─── Date Filter Dropdown ───────────────────────────────────────────────── */
+.date-filter-wrap { position: relative; }
+.date-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  background: var(--bg-primary);
+  border: 1px solid var(--neutral-50);
+  border-radius: var(--cr-2xsm);
+  box-shadow: 0 4px 16px -4px rgba(16,24,40,0.10), 0 2px 6px -2px rgba(16,24,40,0.06);
+  padding: var(--sp-2xsm) 0;
+  z-index: 300;
+}
+.dd-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--sp-sm);
+  background: none;
+  border: none;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  gap: var(--sp-xsm);
+  white-space: nowrap;
+}
+.dd-item:hover { background: var(--neutral-30); }
+.dd-item-check { padding-left: var(--sp-sm); }
+.dd-check {
+  width: 16px;
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--accent-60);
+  font-weight: 600;
+}
+.dd-arrow { margin-left: auto; color: var(--text-secondary); font-size: 13px; }
+.dd-sep { height: 1px; background: var(--neutral-40); margin: var(--sp-2xsm) 0; }
+.filter-btn.active-filter { border-color: var(--accent-60); color: var(--accent-60); }
+.filter-btn.active-filter .filter-arrow { color: var(--accent-60); }
+
+/* ─── Date Modal ─────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,16,18,0.40);
+  z-index: 400;
+}
+.date-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-primary);
+  border: 1px solid var(--neutral-50);
+  border-radius: var(--cr-md);
+  box-shadow: 0 8px 32px -8px rgba(16,24,40,0.18), 0 4px 12px -4px rgba(16,24,40,0.10);
+  width: 400px;
+  padding: var(--sp-xlg);
+  z-index: 401;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-size: 16px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  line-height: 22px;
+}
+.modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: var(--cr-2xsm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.modal-close:hover { background: var(--neutral-30); color: var(--text-primary); }
+.modal-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: calc(-1 * var(--sp-xsm)) 0 0;
+  line-height: 18px;
+}
+.modal-quick-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2xsm);
+}
+.year-btn {
+  height: 32px;
+  padding: 0 var(--sp-sm);
+  border: 1px solid var(--neutral-60);
+  border-radius: var(--cr-rounded);
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.year-btn:hover { background: var(--neutral-30); border-color: var(--neutral-70); }
+.year-btn.active { background: var(--accent-60); border-color: var(--accent-60); color: #fff; }
+.modal-divider { height: 1px; background: var(--neutral-40); }
+.modal-custom-date { display: flex; flex-direction: column; gap: var(--sp-xsm); }
+.modal-label { font-size: 13px; font-weight: var(--fw-medium); color: var(--text-secondary); }
+.modal-date-row { display: flex; gap: var(--sp-xsm); align-items: center; }
+.modal-date-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 var(--sp-sm);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--cr-2xsm);
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+}
+.modal-date-input:focus { border-color: var(--accent-60); }
 
 /* ─── Status Tabs (Harmony Secondary Tabs) ───────────────────────────────── */
 .status-pills {
@@ -626,21 +768,23 @@ td {
 .chevron-btn.open { transform: rotate(90deg); color: var(--text-primary); }
 
 /* ─── Platforms Cell ─────────────────────────────────────────────────────── */
-.platforms-cell { min-width: 120px; }
-.platforms-main {
+.platforms-cell {
   display: flex;
   align-items: center;
-  gap: var(--sp-3xsm);
+  gap: var(--sp-xsm);
+  min-width: 120px;
+}
+.platforms-count {
   font-size: 13px;
   font-weight: var(--fw-medium);
-  margin-bottom: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.warn-icon { font-size: 12px; line-height: 1; cursor: default; }
-.warn-orange { color: var(--orange-60); }
-.warn-red { color: var(--red-60); }
 .progress-bar-wrap {
+  flex-shrink: 0;
+  width: 56px;
   height: 4px;
-  background: var(--neutral-40);
+  background: var(--neutral-70);
   border-radius: var(--cr-rounded);
   overflow: hidden;
 }
@@ -650,6 +794,52 @@ td {
   background: var(--green-70);
   transition: width 0.3s;
 }
+.warn-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  color: var(--orange-60);
+  position: relative;
+}
+.warn-icon.warn-red { color: var(--red-60); }
+.warn-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2023;
+  border: 1px solid #3a3c42;
+  border-radius: 8px;
+  padding: 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #ebeff5;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 200;
+  box-shadow: 0 4px 12px -2px rgba(16,24,40,0.04), 0 12px 16px -4px rgba(16,24,40,0.03);
+  transition: none;
+}
+.warn-icon::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #3a3c42;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 201;
+  transition: none;
+}
+.warn-icon:hover::after,
+.warn-icon:hover::before { opacity: 1; }
 
 /* ─── UPC / Date cells ───────────────────────────────────────────────────── */
 .mono { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 12px; color: var(--text-secondary); letter-spacing: 0.2px; }
@@ -908,9 +1098,23 @@ td {
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
         <input type="text" class="search-input" placeholder="Search by title, artist, label or UPC…" id="searchInput">
       </div>
-      <button class="filter-btn">Release date <span class="filter-arrow">▾</span></button>
-      <button class="filter-btn">Artist <span class="filter-arrow">▾</span></button>
-      <button class="filter-btn">More filters <span class="filter-arrow">▾</span></button>
+      <div class="toolbar-filters">
+        <div class="date-filter-wrap" id="dateFilterWrap">
+          <button class="filter-btn" id="dateFilterBtn" onclick="toggleDateDropdown(event)">
+            <span id="dateFilterLabel">Release date</span> <span class="filter-arrow">▾</span>
+          </button>
+          <div class="date-dropdown hidden" id="dateDropdown">
+            <button class="dd-item dd-item-check" data-quick="all" onclick="applyQuickDate('all')"><span class="dd-check" id="chk-all">✓</span>All time</button>
+            <button class="dd-item dd-item-check" data-quick="days7" onclick="applyQuickDate('days7')"><span class="dd-check" id="chk-days7"></span>Last 7 days</button>
+            <button class="dd-item dd-item-check" data-quick="month" onclick="applyQuickDate('month')"><span class="dd-check" id="chk-month"></span>Last month</button>
+            <button class="dd-item dd-item-check" data-quick="months3" onclick="applyQuickDate('months3')"><span class="dd-check" id="chk-months3"></span>Last 3 months</button>
+            <div class="dd-sep"></div>
+            <button class="dd-item" onclick="openDateModal()">Before… <span class="dd-arrow">›</span></button>
+          </div>
+        </div>
+        <button class="filter-btn">Artist <span class="filter-arrow">▾</span></button>
+        <button class="filter-btn">More filters <span class="filter-arrow">▾</span></button>
+      </div>
     </div>
 
     <!-- Status Tabs -->
@@ -1121,7 +1325,7 @@ const releases = [
     upc: "196871000801",
     status: "need-action",
     type: "EP",
-    platforms: { count: 35, total: 42, territories: 162, warn: "red" },
+    platforms: { count: 41, total: 42, territories: 162, warn: "red" },
     coverHue: 345,
     tracks: [
       { num: 1, title: "Fragment I",   artists: "Éclat", isrc: "FRLM12500801" },
@@ -1529,7 +1733,7 @@ const releases = [
     upc: "196871002901",
     status: "delivered",
     type: "Album",
-    platforms: { count: 35, total: 42, territories: 132, warn: "red" },
+    platforms: { count: 41, total: 42, territories: 132, warn: "red" },
     coverHue: 5,
     tracks: [
       { num: 1,  title: "Spectre visible",  artists: "Neon Waves", isrc: "FRLM12302901" },
@@ -1686,7 +1890,7 @@ const releases = [
     upc: "196871003701",
     status: "delivered",
     type: "EP",
-    platforms: { count: 35, total: 42, territories: 88, warn: "red" },
+    platforms: { count: 41, total: 42, territories: 88, warn: "red" },
     coverHue: 138,
     tracks: [
       { num: 1, title: "Silice",     artists: "Null Pointer", isrc: "FRLM12403701" },
@@ -1788,19 +1992,20 @@ function coverSVGLarge(hue) {
 
 function platformsCell(p, status) {
   if (status !== 'delivered') {
-    return `<div class="platforms-cell"><div class="platforms-main">—</div></div>`;
+    return `<div class="platforms-cell"><div class="platforms-count">—</div></div>`;
   }
   const pct = p.total > 0 ? Math.round((p.count / p.total) * 100) : 0;
   const missing = p.total - p.count;
   let warnIcon = '';
   if (p.warn === 'red' && missing > 0) {
-    warnIcon = `<span class="warn-icon warn-red" title="Delivery issue on ${missing} tier 1 store${missing > 1 ? 's' : ''}">⚠</span>`;
+    warnIcon = `<span class="warn-icon warn-red" data-tooltip="Delivery issue on ${missing} top DSP${missing > 1 ? 's' : ''}"><svg width="13" height="13" viewBox="0 0 16 16"><path d="M8 1.5L1 14.5h14L8 1.5z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12" r="0.9" fill="#fff"/></svg></span>`;
   } else if (p.warn === 'orange' && missing > 0) {
-    warnIcon = `<span class="warn-icon warn-orange" title="Delivery issue on ${missing} store${missing > 1 ? 's' : ''}">⚠</span>`;
+    warnIcon = `<span class="warn-icon" data-tooltip="Delivery issue on ${missing} DSP${missing > 1 ? 's' : ''}"><svg width="13" height="13" viewBox="0 0 16 16"><path d="M8 1.5L1 14.5h14L8 1.5z" fill="currentColor"/><path d="M8 6.5v3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12" r="0.9" fill="#fff"/></svg></span>`;
   }
   return `<div class="platforms-cell">
-    <div class="platforms-main">${p.count}/${p.total} DSPs ${warnIcon}</div>
+    <span class="platforms-count">${p.count}/${p.total} DSPs</span>
     <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+    ${warnIcon}
   </div>`;
 }
 
@@ -1812,10 +2017,27 @@ function formatDate(iso) {
 
 function filteredReleases() {
   const q = document.getElementById('searchInput').value.toLowerCase();
+  const now = new Date();
   return releases.filter(r => {
     const matchStatus = activeFilter === 'all' || r.status === activeFilter;
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
-    return matchStatus && matchSearch;
+    let matchDate = true;
+    if (activeDateFilter.type !== 'all' && r.date) {
+      const d = new Date(r.date + 'T00:00:00');
+      if (activeDateFilter.type === 'days7') {
+        const cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 7);
+        matchDate = d >= cutoff;
+      } else if (activeDateFilter.type === 'month') {
+        const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 1);
+        matchDate = d >= cutoff;
+      } else if (activeDateFilter.type === 'months3') {
+        const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 3);
+        matchDate = d >= cutoff;
+      } else if (activeDateFilter.type === 'before' && activeDateFilter.value) {
+        matchDate = d < activeDateFilter.value;
+      }
+    }
+    return matchStatus && matchSearch && matchDate;
   });
 }
 
@@ -1960,8 +2182,122 @@ document.getElementById('statusPills').addEventListener('click', e => {
 // ─── Search ───────────────────────────────────────────────────────────────
 document.getElementById('searchInput').addEventListener('input', renderTable);
 
+// ─── Date Filter ──────────────────────────────────────────────────────────
+let activeDateFilter = { type: 'all', value: null };
+
+function toggleDateDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('dateDropdown').classList.toggle('hidden');
+}
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('dateFilterWrap').contains(e.target)) {
+    document.getElementById('dateDropdown').classList.add('hidden');
+  }
+});
+
+function applyQuickDate(type) {
+  activeDateFilter = { type, value: null };
+  document.getElementById('dateDropdown').classList.add('hidden');
+  updateDateFilterUI();
+  renderTable();
+}
+
+function updateDateFilterUI() {
+  const labels = { all: 'Release date', days7: 'Last 7 days', month: 'Last month', months3: 'Last 3 months' };
+  const btn = document.getElementById('dateFilterBtn');
+  const labelEl = document.getElementById('dateFilterLabel');
+
+  // Update checkmarks
+  ['all','days7','month','months3'].forEach(k => {
+    const el = document.getElementById('chk-' + k);
+    if (el) el.textContent = activeDateFilter.type === k ? '✓' : '';
+  });
+
+  // Update button label + active state
+  if (activeDateFilter.type === 'before') {
+    const d = activeDateFilter.value;
+    labelEl.textContent = 'Before ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    btn.classList.add('active-filter');
+  } else {
+    labelEl.textContent = labels[activeDateFilter.type];
+    btn.classList.toggle('active-filter', activeDateFilter.type !== 'all');
+  }
+
+  // Highlight active year btn in modal
+  document.querySelectorAll('.year-btn').forEach(b => {
+    const yr = parseInt(b.dataset.year);
+    b.classList.toggle('active', activeDateFilter.type === 'before' && activeDateFilter.value && activeDateFilter.value.getFullYear() === yr);
+  });
+}
+
+function openDateModal() {
+  document.getElementById('dateDropdown').classList.add('hidden');
+  document.getElementById('dateModalOverlay').classList.remove('hidden');
+  document.getElementById('dateModal').classList.remove('hidden');
+  if (activeDateFilter.type === 'before' && activeDateFilter.value) {
+    const d = activeDateFilter.value;
+    document.getElementById('customDateInput').value = d.toISOString().split('T')[0];
+  }
+  updateDateFilterUI();
+}
+
+function closeDateModal() {
+  document.getElementById('dateModalOverlay').classList.add('hidden');
+  document.getElementById('dateModal').classList.add('hidden');
+}
+
+function applyBeforeYear(year) {
+  activeDateFilter = { type: 'before', value: new Date(year, 0, 1) };
+  updateDateFilterUI();
+  renderTable();
+  closeDateModal();
+}
+
+function applyCustomDate() {
+  const val = document.getElementById('customDateInput').value;
+  if (!val) return;
+  activeDateFilter = { type: 'before', value: new Date(val + 'T00:00:00') };
+  updateDateFilterUI();
+  renderTable();
+  closeDateModal();
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────
+// Stamp year data attrs on year buttons
+document.querySelectorAll('.year-btn').forEach(b => {
+  const m = b.textContent.match(/\d{4}/);
+  if (m) b.dataset.year = m[0];
+});
 renderTable();
 </script>
+<!-- Date Modal -->
+<div class="modal-overlay hidden" id="dateModalOverlay" onclick="closeDateModal()"></div>
+<div class="date-modal hidden" id="dateModal">
+  <div class="modal-header">
+    <span class="modal-title">Select date</span>
+    <button class="modal-close" onclick="closeDateModal()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+    </button>
+  </div>
+  <p class="modal-subtitle">Show all releases before a specific date</p>
+  <div class="modal-quick-years">
+    <button class="year-btn" onclick="applyBeforeYear(2026)">Before 2026</button>
+    <button class="year-btn" onclick="applyBeforeYear(2025)">Before 2025</button>
+    <button class="year-btn" onclick="applyBeforeYear(2024)">Before 2024</button>
+    <button class="year-btn" onclick="applyBeforeYear(2023)">Before 2023</button>
+    <button class="year-btn" onclick="applyBeforeYear(2022)">Before 2022</button>
+    <button class="year-btn" onclick="applyBeforeYear(2021)">Before 2021</button>
+    <button class="year-btn" onclick="applyBeforeYear(2020)">Before 2020</button>
+  </div>
+  <div class="modal-divider"></div>
+  <div class="modal-custom-date">
+    <label class="modal-label" for="customDateInput">Or select a custom date</label>
+    <div class="modal-date-row">
+      <input type="date" class="modal-date-input" id="customDateInput">
+      <button class="btn btn-primary" onclick="applyCustomDate()">Apply</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
