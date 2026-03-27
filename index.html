@@ -918,6 +918,56 @@ td {
 .chevron-btn:hover { color: var(--text-primary); background: var(--neutral-40); }
 .chevron-btn.open { transform: rotate(90deg); color: var(--text-primary); }
 
+/* ─── Star / Watchlist ───────────────────────────────────────────────────── */
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--sp-3xsm);
+  border-radius: var(--cr-4xsm);
+  display: flex;
+  align-items: center;
+  color: var(--neutral-70);
+  transition: color 0.1s, background 0.1s;
+  flex-shrink: 0;
+}
+.star-btn:hover { color: var(--neutral-120); background: var(--neutral-40); }
+.star-btn.starred { color: #f5a623; }
+.star-btn.starred:hover { color: #d4891a; background: var(--neutral-40); }
+.watchlist-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xsm);
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.watchlist-btn:hover { background: var(--neutral-40); border-color: var(--neutral-70); }
+.watchlist-btn.active { background: #fef9ec; border-color: #f5a623; color: #d4891a; }
+.watchlist-btn.active:hover { background: #fdf3d6; }
+.watchlist-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--cr-rounded);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  background: #f5a623;
+  color: #fff;
+}
+
 /* ─── Platforms Cell ─────────────────────────────────────────────────────── */
 .platforms-cell {
   display: flex;
@@ -1269,6 +1319,10 @@ td {
         </div>
         <button class="filter-btn" id="artistFilterBtn" onclick="openArtistModal()"><span id="artistFilterLabel">Artist</span> <span class="filter-arrow">▾</span></button>
         <button class="filter-btn">More filters <span class="filter-arrow">▾</span></button>
+        <button class="watchlist-btn" id="watchlistBtn" onclick="toggleWatchlistFilter()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
+          <span id="watchlistBtnLabel">Watchlist</span>
+        </button>
       </div>
     </div>
 
@@ -1287,6 +1341,7 @@ td {
       <table id="releasesTable">
         <thead>
           <tr>
+            <th style="width:36px"></th>
             <th style="width:300px"><div class="th-inner">Release</div></th>
             <th><div class="th-inner">Release date
               <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
@@ -2193,7 +2248,8 @@ function filteredReleases() {
         matchDate = d < activeDateFilter.value;
       }
     }
-    return matchStatus && matchSearch && matchDate && matchArtist;
+    const matchWatchlist = !watchlistFilterActive || watchlist.has(r.id);
+    return matchStatus && matchSearch && matchDate && matchArtist && matchWatchlist;
   });
 }
 
@@ -2204,7 +2260,7 @@ function renderTable() {
   tbody.innerHTML = '';
 
   if (data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
     return;
   }
 
@@ -2216,7 +2272,13 @@ function renderTable() {
     const isActive = openPanelId === r.id;
     if (isExpanded) tr.classList.add('expanded');
 
+    const isStarred = watchlist.has(r.id);
     tr.innerHTML = `
+      <td style="padding:0 0 0 var(--sp-xsm)">
+        <button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
+        </button>
+      </td>
       <td>
         <div class="release-cell">
           <button class="chevron-btn${isExpanded ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})">
@@ -2242,7 +2304,7 @@ function renderTable() {
     if (isExpanded) {
       const subTr = document.createElement('tr');
       subTr.classList.add('sub-row');
-      subTr.innerHTML = `<td colspan="6">
+      subTr.innerHTML = `<td colspan="7">
         <div class="sub-table-wrap">
           <table class="sub-table">
             <thead>
@@ -2337,6 +2399,39 @@ document.getElementById('statusPills').addEventListener('click', e => {
 
 // ─── Search ───────────────────────────────────────────────────────────────
 document.getElementById('searchInput').addEventListener('input', renderTable);
+
+// ─── Watchlist ────────────────────────────────────────────────────────────
+const watchlist = new Set();
+let watchlistFilterActive = false;
+
+function toggleWatchlist(id, btn) {
+  if (watchlist.has(id)) {
+    watchlist.delete(id);
+    btn.classList.remove('starred');
+    btn.querySelector('svg').setAttribute('fill', 'none');
+    btn.title = 'Add to watchlist';
+  } else {
+    watchlist.add(id);
+    btn.classList.add('starred');
+    btn.querySelector('svg').setAttribute('fill', 'currentColor');
+    btn.title = 'Remove from watchlist';
+  }
+  updateWatchlistBtn();
+  if (watchlistFilterActive) renderTable();
+}
+
+function toggleWatchlistFilter() {
+  watchlistFilterActive = !watchlistFilterActive;
+  updateWatchlistBtn();
+  renderTable();
+}
+
+function updateWatchlistBtn() {
+  const btn = document.getElementById('watchlistBtn');
+  const label = document.getElementById('watchlistBtnLabel');
+  btn.classList.toggle('active', watchlistFilterActive);
+  label.textContent = 'Watchlist';
+}
 
 // ─── Artist Filter ────────────────────────────────────────────────────────
 const artistData = [
