@@ -335,6 +335,12 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   border: none;
 }
 .btn-ghost:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+.btn-dark {
+  background: var(--neutral-190);
+  color: #fff;
+  border: 1px solid var(--neutral-190);
+}
+.btn-dark:hover { background: var(--neutral-170); border-color: var(--neutral-170); }
 
 /* ─── Attention Block ────────────────────────────────────────────────────── */
 .attention-block {
@@ -633,6 +639,141 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   outline: none;
 }
 .modal-date-input:focus { border-color: var(--accent-60); }
+
+/* ─── Artist Modal ───────────────────────────────────────────────────────── */
+.artist-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-primary);
+  border: 1px solid var(--neutral-50);
+  border-radius: var(--cr-md);
+  box-shadow: 0 8px 32px -8px rgba(16,24,40,0.18), 0 4px 12px -4px rgba(16,24,40,0.10);
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  z-index: 401;
+  max-height: 600px;
+  overflow: hidden;
+}
+.artist-modal-header {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-md) var(--sp-md) 0 var(--sp-md);
+  flex-shrink: 0;
+}
+.artist-modal-title {
+  font-size: 16px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  flex: 1;
+}
+.artist-search-wrap {
+  position: relative;
+  padding: var(--sp-sm) var(--sp-md);
+  flex-shrink: 0;
+}
+.artist-search-wrap svg {
+  position: absolute;
+  left: calc(var(--sp-md) + var(--sp-sm));
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+.artist-search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--sp-sm) 0 34px;
+  border: 1px solid var(--neutral-70);
+  border-radius: var(--cr-2xsm);
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  box-sizing: border-box;
+}
+.artist-search-input::placeholder { color: var(--text-secondary); }
+.artist-search-input:focus { border-color: var(--accent-60); }
+.artist-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--sp-xsm);
+}
+.artist-section-label {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: var(--sp-xsm) var(--sp-xsm) var(--sp-3xsm);
+}
+.artist-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-2xsm) var(--sp-xsm);
+  border-radius: var(--cr-2xsm);
+  cursor: pointer;
+  transition: background 0.1s;
+  user-select: none;
+}
+.artist-row:hover { background: var(--neutral-30); }
+.artist-row.selected { background: var(--neutral-30); }
+.artist-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: var(--fw-semibold);
+  color: #fff;
+  flex-shrink: 0;
+}
+.artist-row-info { flex: 1; min-width: 0; }
+.artist-row-name {
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.artist-row-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.artist-check {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--neutral-70);
+  border-radius: var(--cr-5xsm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.1s, border-color 0.1s;
+}
+.artist-row.selected .artist-check {
+  background: var(--neutral-190);
+  border-color: var(--neutral-190);
+}
+.artist-check-icon { display: none; }
+.artist-row.selected .artist-check-icon { display: block; }
+.artist-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-sm) var(--sp-md);
+  border-top: 1px solid var(--neutral-40);
+  flex-shrink: 0;
+  gap: var(--sp-xsm);
+}
+.artist-modal-footer .btn { flex: 1; justify-content: center; }
 
 /* ─── Status Tabs (Harmony Secondary Tabs) ───────────────────────────────── */
 .status-pills {
@@ -1126,7 +1267,7 @@ td {
             <button class="dd-item" onclick="openDateModal()">Before… <span class="dd-arrow">›</span></button>
           </div>
         </div>
-        <button class="filter-btn">Artist <span class="filter-arrow">▾</span></button>
+        <button class="filter-btn" id="artistFilterBtn" onclick="openArtistModal()"><span id="artistFilterLabel">Artist</span> <span class="filter-arrow">▾</span></button>
         <button class="filter-btn">More filters <span class="filter-arrow">▾</span></button>
       </div>
     </div>
@@ -2035,6 +2176,7 @@ function filteredReleases() {
   return releases.filter(r => {
     const matchStatus = activeFilter === 'all' || r.status === activeFilter;
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
+    const matchArtist = selectedArtists.size === 0 || selectedArtists.has(r.artist);
     let matchDate = true;
     if (activeDateFilter.type !== 'all' && r.date) {
       const d = new Date(r.date + 'T00:00:00');
@@ -2051,7 +2193,7 @@ function filteredReleases() {
         matchDate = d < activeDateFilter.value;
       }
     }
-    return matchStatus && matchSearch && matchDate;
+    return matchStatus && matchSearch && matchDate && matchArtist;
   });
 }
 
@@ -2196,6 +2338,121 @@ document.getElementById('statusPills').addEventListener('click', e => {
 // ─── Search ───────────────────────────────────────────────────────────────
 document.getElementById('searchInput').addEventListener('input', renderTable);
 
+// ─── Artist Filter ────────────────────────────────────────────────────────
+const artistData = [
+  { name: "Aurélie Dumas",    releases: 6, pinned: true  },
+  { name: "Null Pointer",     releases: 6, pinned: true  },
+  { name: "Neon Waves",       releases: 5, pinned: true  },
+  { name: "Doux Rêve",        releases: 5, pinned: false },
+  { name: "Solange Mireille", releases: 5, pinned: false },
+  { name: "Cassian Bleu",     releases: 5, pinned: false },
+  { name: "Marco & The Drift",releases: 4, pinned: false },
+  { name: "Éclat",            releases: 4, pinned: false },
+];
+
+let selectedArtists = new Set();
+let pendingArtists  = new Set();
+
+function nameInitials(name) {
+  const p = name.trim().split(/\s+/);
+  return p.length === 1 ? p[0][0].toUpperCase() : (p[0][0] + p[p.length-1][0]).toUpperCase();
+}
+function nameHue(name) {
+  let h = 0;
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return h;
+}
+
+function renderArtistList(query = '') {
+  const q = query.toLowerCase();
+  const filtered = artistData.filter(a => !q || a.name.toLowerCase().includes(q));
+  const pinned = filtered.filter(a => a.pinned);
+  const all    = filtered.filter(a => !a.pinned);
+
+  function rowHTML(a) {
+    const hue = nameHue(a.name);
+    const initials = nameInitials(a.name);
+    const sel = pendingArtists.has(a.name) ? 'selected' : '';
+    return `<div class="artist-row ${sel}" onclick="toggleArtistRow('${a.name.replace(/'/g,"\\'")}', this)">
+      <div class="artist-avatar" style="background:hsl(${hue},55%,52%)">${initials}</div>
+      <div class="artist-row-info">
+        <div class="artist-row-name">${a.name}</div>
+        <div class="artist-row-count">${a.releases} release${a.releases > 1 ? 's' : ''}</div>
+      </div>
+      <div class="artist-check">
+        <svg class="artist-check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 4,8 10,1"/></svg>
+      </div>
+    </div>`;
+  }
+
+  let html = '';
+  if (pinned.length) {
+    html += `<div class="artist-section-label">Pinned</div>${pinned.map(rowHTML).join('')}`;
+  }
+  if (all.length) {
+    html += `<div class="artist-section-label">All Artists</div>${all.map(rowHTML).join('')}`;
+  }
+  if (!filtered.length) {
+    html = `<div style="padding:var(--sp-xlg);text-align:center;color:var(--text-secondary);font-size:13px">No artists found</div>`;
+  }
+  document.getElementById('artistModalBody').innerHTML = html;
+}
+
+function toggleArtistRow(name, el) {
+  if (pendingArtists.has(name)) {
+    pendingArtists.delete(name);
+    el.classList.remove('selected');
+  } else {
+    pendingArtists.add(name);
+    el.classList.add('selected');
+  }
+}
+
+function openArtistModal() {
+  pendingArtists = new Set(selectedArtists);
+  document.getElementById('artistSearchInput').value = '';
+  renderArtistList();
+  document.getElementById('artistModalOverlay').classList.remove('hidden');
+  document.getElementById('artistModal').classList.remove('hidden');
+  document.getElementById('artistSearchInput').focus();
+}
+
+function closeArtistModal() {
+  document.getElementById('artistModalOverlay').classList.add('hidden');
+  document.getElementById('artistModal').classList.add('hidden');
+}
+
+function clearArtistSelection() {
+  pendingArtists.clear();
+  renderArtistList(document.getElementById('artistSearchInput').value);
+}
+
+function applyArtistFilter() {
+  selectedArtists = new Set(pendingArtists);
+  closeArtistModal();
+  updateArtistFilterBtn();
+  renderTable();
+}
+
+function updateArtistFilterBtn() {
+  const btn = document.getElementById('artistFilterBtn');
+  const label = document.getElementById('artistFilterLabel');
+  if (selectedArtists.size === 0) {
+    label.textContent = 'Artist';
+    btn.classList.remove('active-filter');
+  } else if (selectedArtists.size === 1) {
+    label.textContent = [...selectedArtists][0];
+    btn.classList.add('active-filter');
+  } else {
+    label.textContent = `${selectedArtists.size} artists`;
+    btn.classList.add('active-filter');
+  }
+}
+
+document.getElementById('artistSearchInput')?.addEventListener('input', e => {
+  renderArtistList(e.target.value);
+});
+
 // ─── Date Filter ──────────────────────────────────────────────────────────
 let activeDateFilter = { type: 'all', value: null };
 
@@ -2291,6 +2548,26 @@ document.querySelectorAll('.year-btn').forEach(b => {
 });
 renderTable();
 </script>
+<!-- Artist Modal -->
+<div class="modal-overlay hidden" id="artistModalOverlay" onclick="closeArtistModal()"></div>
+<div class="artist-modal hidden" id="artistModal">
+  <div class="artist-modal-header">
+    <span class="artist-modal-title">Select Artists</span>
+    <button class="modal-close" onclick="closeArtistModal()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+    </button>
+  </div>
+  <div class="artist-search-wrap">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+    <input type="text" class="artist-search-input" id="artistSearchInput" placeholder="Search artists…">
+  </div>
+  <div class="artist-modal-body" id="artistModalBody"></div>
+  <div class="artist-modal-footer">
+    <button class="btn btn-outline" onclick="clearArtistSelection()">Clear All</button>
+    <button class="btn btn-dark" onclick="applyArtistFilter()">Apply</button>
+  </div>
+</div>
+
 <!-- Date Modal -->
 <div class="modal-overlay hidden" id="dateModalOverlay" onclick="closeDateModal()"></div>
 <div class="date-modal hidden" id="dateModal">
