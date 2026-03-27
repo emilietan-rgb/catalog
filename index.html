@@ -469,13 +469,13 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .search-input::placeholder { color: var(--text-secondary); }
 .search-input:focus { border-color: var(--border-focused); }
 .filter-btn {
-  height: 36px;
-  padding: 0 var(--sp-sm);
+  height: 32px;
+  padding: 0 8px;
   border: 1px solid var(--border-primary);
-  border-radius: var(--cr-2xsm);
-  background: var(--bg-primary);
+  border-radius: 6px;
+  background: var(--bg-secondary);
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: var(--fw-medium);
   color: var(--text-primary);
   cursor: pointer;
@@ -485,8 +485,8 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   transition: background 0.1s, border-color 0.1s;
   white-space: nowrap;
 }
-.filter-btn:hover { background: var(--bg-secondary); border-color: var(--neutral-70); }
-.filter-arrow { color: var(--text-secondary); font-size: 11px; }
+.filter-btn:hover { background: var(--neutral-40); border-color: var(--neutral-70); }
+.filter-arrow { color: var(--neutral-160); font-size: 11px; }
 
 /* ─── Date Filter Dropdown ───────────────────────────────────────────────── */
 .date-filter-wrap { position: relative; }
