@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Releases — Believe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Harmony DS Tokens ──────────────────────────────────────────────────── */
+:root {
+  /* Color Core */
+  --accent-60: #2599fb;
+  --accent-70: #218ae2;
+  --accent-10: #e9f5ff;
+  --green-60: #1dc35f;
+  --green-70: #1db056;
+  --green-10: #e8faef;
+  --green-80: #189c4c;
+  --orange-60: #ff852f;
+  --orange-70: #e67828;
+  --orange-10: #fff3ea;
+  --orange-20: #ffe7d5;
+  --red-60: #ff3e5c;
+  --red-70: #e63a52;
+  --red-10: #ffecef;
+  --neutral-10: #fffefd;
+  --neutral-20: #f9fafc;
+  --neutral-30: #f3f4f8;
+  --neutral-40: #ebeff5;
+  --neutral-50: #e5e9f1;
+  --neutral-60: #dadeea;
+  --neutral-70: #cdd3e2;
+  --neutral-80: #c1c8dc;
+  --neutral-90: #aeb4c6;
+  --neutral-100: #9aa0b0;
+  --neutral-120: #747884;
+  --neutral-130: #62646e;
+  --neutral-140: #4e5058;
+  --neutral-150: #3a3c42;
+  --neutral-160: #27282c;
+  --neutral-170: #1f2023;
+  --neutral-190: #0f1012;
+
+  /* Semantic */
+  --bg-primary: #fffefd;
+  --bg-secondary: #f9fafc;
+  --bg-tertiary: #f3f4f8;
+  --text-primary: #0f1012;
+  --text-secondary: #747884;
+  --text-tertiary: #aeb4c6;
+  --border-primary: #ebeff5;
+  --border-focused: #2599fb;
+  --divider: #f3f4f8;
+  --sidebar-bg: #fffefd;
+  --sidebar-text: #0f1012;
+  --sidebar-text-secondary: #747884;
+  --sidebar-active-bg: #e9f5ff;
+  --sidebar-hover-bg: #f3f4f8;
+
+  /* Spacing */
+  --sp-4xsm: 2px;
+  --sp-3xsm: 4px;
+  --sp-2xsm: 6px;
+  --sp-xsm: 8px;
+  --sp-sm: 12px;
+  --sp-md: 16px;
+  --sp-lg: 20px;
+  --sp-xlg: 24px;
+  --sp-2xlg: 32px;
+  --sp-3xlg: 40px;
+
+  /* Border Radius */
+  --cr-4xsm: 4px;
+  --cr-3xsm: 6px;
+  --cr-2xsm: 8px;
+  --cr-xsm: 10px;
+  --cr-sm: 12px;
+  --cr-md: 16px;
+  --cr-rounded: 512px;
+
+  /* Typography */
+  --font: 'Inter', sans-serif;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* Elevation */
+  --el-1: 0px 4px 12px -2px rgba(16,24,40,0.04), 0px 12px 16px -4px rgba(16,24,40,0.03);
+  --el-2: 0px 8px 8px -4px rgba(16,24,40,0.04), 0px 24px 24px -4px rgba(16,24,40,0.08);
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); font-size: 14px; color: var(--text-primary); background: #fff; display: flex; height: 100vh; overflow: hidden; }
+
+/* ─── Sidebar ────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: 232px;
+  min-width: 232px;
+  background: var(--neutral-20);
+  border-right: 1px solid var(--neutral-40);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+/* Header: logo + bell */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-md) var(--sp-md) var(--sp-xsm);
+  flex-shrink: 0;
+}
+.sidebar-logo-text {
+  font-size: 17px;
+  font-weight: var(--fw-semibold);
+  color: var(--neutral-190);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.sidebar-bell {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--cr-2xsm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-120);
+  transition: background 0.1s, color 0.1s;
+  flex-shrink: 0;
+}
+.sidebar-bell:hover { background: var(--neutral-30); color: var(--neutral-160); }
+/* Nav scroll area */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-2xsm) var(--sp-xsm);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+/* Base nav item */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  padding: 7px var(--sp-xsm);
+  border-radius: var(--cr-2xsm);
+  color: var(--neutral-150);
+  font-size: 13px;
+  font-weight: var(--fw-regular);
+  text-decoration: none;
+  user-select: none;
+  cursor: default;
+  transition: background 0.1s;
+}
+.nav-item.clickable { cursor: pointer; }
+.nav-item.clickable:hover { background: var(--neutral-30); color: var(--neutral-190); }
+/* Create new */
+.nav-item.nav-create {
+  color: var(--neutral-190);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+.nav-item.nav-create:hover { background: var(--neutral-30); }
+/* Category parent row (Catalog with arrow) */
+.nav-parent {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  padding: 7px var(--sp-xsm);
+  border-radius: var(--cr-2xsm);
+  color: var(--neutral-150);
+  font-size: 13px;
+  font-weight: var(--fw-regular);
+  user-select: none;
+  cursor: default;
+}
+.nav-parent-arrow {
+  margin-left: auto;
+  color: var(--neutral-100);
+  font-size: 11px;
+  transition: transform 0.15s;
+  display: inline-block;
+}
+/* Sub-items under Catalog */
+.nav-subitems {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: var(--sp-lg);
+}
+.nav-sub {
+  padding: 6px var(--sp-xsm);
+  border-radius: var(--cr-2xsm);
+  color: var(--neutral-130);
+  font-size: 13px;
+  font-weight: var(--fw-regular);
+  text-decoration: none;
+  display: block;
+  cursor: default;
+  transition: background 0.1s;
+}
+.nav-sub.active {
+  background: var(--neutral-30);
+  color: var(--neutral-190);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+.nav-sub.active:hover { background: var(--neutral-40); }
+/* Spacer pushes Help to bottom */
+.nav-spacer { flex: 1; min-height: var(--sp-md); }
+/* Icon in nav */
+.nav-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+/* User footer */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  padding: var(--sp-sm) var(--sp-md);
+  border-top: 1px solid var(--neutral-40);
+  flex-shrink: 0;
+  cursor: default;
+}
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--cr-rounded);
+  background: var(--neutral-150);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+.user-info { min-width: 0; flex: 1; }
+.user-name {
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--neutral-190);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-email {
+  font-size: 11px;
+  color: var(--neutral-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Main Layout ────────────────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+}
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-xlg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  background: #fff;
+}
+
+/* ─── Page Header ────────────────────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+.page-header-left h1 {
+  font-size: 24px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  line-height: 28px;
+  letter-spacing: -0.3px;
+}
+.page-header-left .subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  font-weight: var(--fw-regular);
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2xsm);
+  padding: var(--sp-2xsm) var(--sp-sm);
+  border-radius: var(--cr-2xsm);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  border: none;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent-60);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-70); }
+.btn-outline {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+.btn-outline:hover { background: var(--bg-secondary); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+}
+.btn-ghost:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+
+/* ─── Attention Block ────────────────────────────────────────────────────── */
+.attention-block {
+  background: var(--orange-10);
+  border: 1px solid var(--orange-60);
+  border-radius: var(--cr-sm);
+  padding: var(--sp-md);
+}
+.attention-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  margin-bottom: var(--sp-sm);
+}
+.attention-title {
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--orange-70);
+  flex: 1;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--sp-3xsm);
+  border-radius: var(--cr-rounded);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  background: var(--orange-60);
+  color: #fff;
+}
+.attention-dismiss {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--orange-70);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 var(--sp-3xsm);
+  border-radius: var(--cr-4xsm);
+  transition: background 0.1s;
+  font-family: var(--font);
+}
+.attention-dismiss:hover { background: var(--orange-20); }
+.attention-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xsm);
+}
+.attention-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-2xsm) var(--sp-xsm);
+  background: rgba(255,255,255,0.6);
+  border-radius: var(--cr-2xsm);
+  font-size: 13px;
+}
+.attention-item-title { flex: 1; font-weight: var(--fw-medium); color: var(--text-primary); }
+.attention-item-artist { color: var(--text-secondary); }
+.attention-link {
+  color: var(--orange-70);
+  font-weight: var(--fw-medium);
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.attention-link:hover { color: var(--orange-60); text-decoration: underline; }
+
+/* ─── Chips ──────────────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xsm);
+  padding: 2px var(--sp-2xsm);
+  border-radius: var(--cr-rounded);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.chip-neutral { background: var(--neutral-40); color: var(--neutral-140); }
+.chip-accent { background: var(--accent-10); color: var(--accent-70); }
+.chip-green { background: var(--green-10); color: var(--green-80); }
+.chip-orange { background: var(--orange-10); color: var(--orange-70); border: 1px solid var(--orange-20); }
+.chip-red { background: var(--red-10); color: var(--red-70); }
+
+/* ─── Toolbar ────────────────────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  flex-wrap: wrap;
+}
+.search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+.search-input-wrap svg {
+  position: absolute;
+  left: var(--sp-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--sp-sm) 0 36px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--cr-2xsm);
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.12s;
+}
+.search-input::placeholder { color: var(--text-tertiary); }
+.search-input:focus { border-color: var(--border-focused); }
+.filter-btn {
+  height: 36px;
+  padding: 0 var(--sp-sm);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--cr-2xsm);
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xsm);
+  transition: background 0.1s, border-color 0.1s;
+  white-space: nowrap;
+}
+.filter-btn:hover { background: var(--bg-secondary); border-color: var(--neutral-70); }
+.filter-arrow { color: var(--text-secondary); font-size: 11px; }
+
+/* ─── Status Tabs (Harmony Secondary Tabs) ───────────────────────────────── */
+.status-pills {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3xsm);
+  padding: 0 var(--sp-sm);
+  min-height: 32px;
+  min-width: 64px;
+  border-radius: var(--cr-rounded);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  line-height: 18px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--neutral-120);
+  transition: background 0.12s, color 0.12s;
+  user-select: none;
+  white-space: nowrap;
+}
+.pill:hover { background: var(--neutral-30); color: var(--neutral-160); }
+.pill.active {
+  background: var(--neutral-30);
+  color: var(--neutral-160);
+}
+.pill-count { font-weight: var(--fw-medium); }
+
+/* ─── Table Card ─────────────────────────────────────────────────────────── */
+.table-card {
+  background: #fff;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead tr {
+  border-bottom: 1px solid var(--divider);
+  background: transparent;
+}
+th {
+  padding: var(--sp-3xsm);
+  text-align: left;
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-family: var(--font);
+}
+th:first-child { padding-left: var(--sp-3xsm); }
+.th-inner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 var(--sp-3xsm);
+  border-radius: var(--cr-2xsm);
+  width: 100%;
+}
+.sort-icon {
+  color: var(--neutral-90);
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+tbody tr {
+  border-bottom: 1px solid var(--divider);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--bg-secondary); }
+tbody tr.expanded { background: var(--bg-secondary); }
+td {
+  padding: var(--sp-sm) var(--sp-md);
+  vertical-align: middle;
+  color: var(--text-primary);
+}
+
+/* ─── Release Cell ───────────────────────────────────────────────────────── */
+.release-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  min-width: 0;
+}
+.release-cover {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cr-2xsm);
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--neutral-40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  font-weight: var(--fw-medium);
+  overflow: hidden;
+}
+.release-cover-svg { width: 40px; height: 40px; border-radius: var(--cr-2xsm); flex-shrink: 0; }
+.release-info { min-width: 0; flex: 1; }
+.release-title {
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+}
+.release-artist {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+.chevron-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  padding: var(--sp-3xsm);
+  border-radius: var(--cr-4xsm);
+  display: flex;
+  align-items: center;
+  transition: color 0.1s, background 0.1s, transform 0.15s;
+  flex-shrink: 0;
+}
+.chevron-btn:hover { color: var(--text-primary); background: var(--neutral-40); }
+.chevron-btn.open { transform: rotate(90deg); color: var(--text-primary); }
+
+/* ─── Platforms Cell ─────────────────────────────────────────────────────── */
+.platforms-cell { min-width: 120px; }
+.platforms-main {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3xsm);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  margin-bottom: 3px;
+}
+.warn-icon { font-size: 12px; line-height: 1; cursor: default; }
+.warn-orange { color: var(--orange-60); }
+.warn-red { color: var(--red-60); }
+.progress-bar-wrap {
+  height: 4px;
+  background: var(--neutral-40);
+  border-radius: var(--cr-rounded);
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--cr-rounded);
+  background: var(--green-70);
+  transition: width 0.3s;
+}
+
+/* ─── UPC / Date cells ───────────────────────────────────────────────────── */
+.mono { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 12px; color: var(--text-secondary); letter-spacing: 0.2px; }
+.date-cell { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+
+/* ─── Sub-table (tracks) ─────────────────────────────────────────────────── */
+.sub-row { background: var(--bg-secondary) !important; cursor: default !important; }
+.sub-row:hover { background: var(--bg-secondary) !important; }
+.sub-table-wrap { padding: 0 var(--sp-md) var(--sp-sm); }
+.sub-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.sub-table th {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: var(--sp-3xsm) var(--sp-xsm);
+  border-bottom: 1px solid var(--divider);
+}
+.sub-table td {
+  padding: var(--sp-3xsm) var(--sp-xsm);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--divider);
+  vertical-align: middle;
+  font-size: 12px;
+}
+.sub-table tr:last-child td { border-bottom: none; }
+.track-num { color: var(--text-tertiary); font-weight: var(--fw-medium); width: 24px; }
+.isrc-wrap { display: flex; align-items: center; gap: var(--sp-3xsm); }
+.copy-btn {
+  background: none;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--cr-4xsm);
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: var(--font);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.copy-btn:hover { background: var(--neutral-40); }
+
+/* ─── Side Panel ─────────────────────────────────────────────────────────── */
+.side-panel {
+  width: 360px;
+  min-width: 360px;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border-primary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease;
+}
+.side-panel.hidden { display: none; }
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-md) var(--sp-md) var(--sp-sm);
+  border-bottom: 1px solid var(--divider);
+}
+.panel-title { font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.panel-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0 var(--sp-3xsm);
+  border-radius: var(--cr-4xsm);
+  line-height: 1;
+  transition: background 0.1s;
+}
+.panel-close:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.panel-body { flex: 1; overflow-y: auto; padding: var(--sp-md); }
+.panel-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--cr-sm);
+  background: var(--neutral-40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-md);
+  overflow: hidden;
+}
+.panel-cover-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.panel-release-title { font-size: 18px; font-weight: var(--fw-semibold); margin-bottom: 4px; }
+.panel-artist { font-size: 14px; color: var(--text-secondary); margin-bottom: var(--sp-sm); }
+.panel-meta { display: flex; flex-direction: column; gap: var(--sp-xsm); margin-top: var(--sp-md); }
+.panel-meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.panel-meta-label { color: var(--text-secondary); }
+.panel-meta-value { font-weight: var(--fw-medium); color: var(--text-primary); }
+.panel-section-title { font-size: 11px; font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin: var(--sp-md) 0 var(--sp-xsm); }
+.panel-placeholder {
+  background: var(--bg-tertiary);
+  border-radius: var(--cr-2xsm);
+  padding: var(--sp-lg);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  margin-top: var(--sp-xsm);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--neutral-60); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--neutral-80); }
+
+/* ─── Util ───────────────────────────────────────────────────────────────── */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.gap-xsm { gap: var(--sp-xsm); }
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══════════════════════════════════════════════════════════ -->
+<nav class="sidebar">
+
+  <!-- Logo + Bell -->
+  <div class="sidebar-header">
+    <span class="sidebar-logo-text">believe.</span>
+    <button class="sidebar-bell" title="Notifications">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M8 2a4 4 0 0 1 4 4v3l1 1.5H3L4 9V6a4 4 0 0 1 4-4z"/>
+        <path d="M6.5 13a1.5 1.5 0 0 0 3 0"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Nav -->
+  <div class="sidebar-nav">
+
+    <!-- Create new -->
+    <a class="nav-item nav-create clickable" href="#">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
+      Create new
+    </a>
+
+    <!-- Search -->
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4"/><line x1="10.5" y1="10.5" x2="14" y2="14"/></svg>
+      Search
+    </span>
+
+    <!-- Overview -->
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+      Overview
+    </span>
+
+    <!-- Catalog (expanded) -->
+    <div class="nav-parent">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12"/><rect x="2" y="2" width="12" height="12" rx="1"/></svg>
+      Catalog
+      <span class="nav-parent-arrow">▾</span>
+    </div>
+    <div class="nav-subitems">
+      <a class="nav-sub active clickable" href="#">Releases</a>
+      <span class="nav-sub">Artists</span>
+    </div>
+
+    <!-- Other items -->
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h8M2 12h5"/></svg>
+      Promotion
+    </span>
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,12 5,7 8,9 11,4 14,6"/></svg>
+      Analytics
+    </span>
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><path d="M2 6h12M6 6v8"/></svg>
+      Finance
+    </span>
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2h4l1 3H5L6 2zM3 5h10l-1 9H4L3 5z"/></svg>
+      Rights
+    </span>
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M4 4l.7.7M11.3 11.3l.7.7M4 12l.7-.7M11.3 4.7l.7-.7"/></svg>
+      Admin
+    </span>
+
+    <div class="nav-spacer"></div>
+
+    <span class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 7v4" stroke-linecap="round"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+      Help &amp; support
+    </span>
+
+  </div>
+
+  <!-- User Footer -->
+  <div class="sidebar-user">
+    <div class="user-avatar">KB</div>
+    <div class="user-info">
+      <div class="user-name">Kellie Bell</div>
+      <div class="user-email">kelliebell@believe.com</div>
+    </div>
+  </div>
+
+</nav>
+
+<!-- ═══ MAIN ════════════════════════════════════════════════════════════════ -->
+<div class="main">
+  <div class="content" id="mainContent">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Releases</h1>
+        <p class="subtitle">40 releases</p>
+      </div>
+      <button class="btn btn-primary" onclick="void(0)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v9M4 7l4 4 4-4M2 14h12"/></svg>
+        Export
+      </button>
+    </div>
+
+    <!-- Attention Block -->
+    <div class="attention-block" id="attentionBlock">
+      <div class="attention-header">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#e67828" stroke-width="1.5"><path d="M8 2L1 14h14L8 2z"/><path d="M8 6v4M8 11v1" stroke-linecap="round"/></svg>
+        <span class="attention-title">Requires your attention</span>
+        <span class="badge">2</span>
+        <button class="attention-dismiss" onclick="document.getElementById('attentionBlock').classList.add('hidden')" title="Dismiss">×</button>
+      </div>
+      <div class="attention-list">
+        <div class="attention-item">
+          <span class="release-title" style="flex:1">Midnight Frequencies</span>
+          <span class="attention-item-artist">Nyx Collective</span>
+          <span class="chip chip-orange">Need action</span>
+          <a class="attention-link" href="#">Review →</a>
+        </div>
+        <div class="attention-item">
+          <span class="release-title" style="flex:1">Tessellate</span>
+          <span class="attention-item-artist">Éclat</span>
+          <span class="chip chip-orange">Need action</span>
+          <a class="attention-link" href="#">Review →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-input-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+        <input type="text" class="search-input" placeholder="Search by title, artist, label or UPC…" id="searchInput">
+      </div>
+      <button class="filter-btn">Release date <span class="filter-arrow">▾</span></button>
+      <button class="filter-btn">Artist <span class="filter-arrow">▾</span></button>
+      <button class="filter-btn">More filters <span class="filter-arrow">▾</span></button>
+    </div>
+
+    <!-- Status Tabs -->
+    <div class="status-pills" id="statusPills">
+      <button class="pill active" data-status="all">All (40)</button>
+      <button class="pill" data-status="draft">Draft (2)</button>
+      <button class="pill" data-status="processing">Processing (4)</button>
+      <button class="pill" data-status="delivered">Delivered (30)</button>
+      <button class="pill" data-status="need-action">Need action (2)</button>
+      <button class="pill" data-status="unsellable">Unsellable (2)</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <table id="releasesTable">
+        <thead>
+          <tr>
+            <th style="width:300px"><div class="th-inner">Release</div></th>
+            <th><div class="th-inner">Release date
+              <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
+            </div></th>
+            <th><div class="th-inner">UPC</div></th>
+            <th><div class="th-inner">Label
+              <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
+            </div></th>
+            <th style="width:160px"><div class="th-inner">Platforms</div></th>
+            <th><div class="th-inner">Status
+              <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
+            </div></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ SIDE PANEL ══════════════════════════════════════════════════════════ -->
+<div class="side-panel hidden" id="sidePanel">
+  <div class="panel-header">
+    <span class="panel-title" id="panelTitle">Release details</span>
+    <button class="panel-close" onclick="closePanel()">×</button>
+  </div>
+  <div class="panel-body" id="panelBody">
+    <div class="panel-cover" id="panelCover"></div>
+    <div class="panel-release-title" id="panelRelTitle"></div>
+    <div class="panel-artist" id="panelRelArtist"></div>
+    <div id="panelStatusWrap"></div>
+    <div class="panel-meta" id="panelMeta"></div>
+    <div class="panel-section-title">Distribution</div>
+    <div class="panel-placeholder">Platform distribution details coming soon.</div>
+    <div class="panel-section-title">Tracks</div>
+    <div class="panel-placeholder" id="panelTracks"></div>
+  </div>
+</div>
+
+<script>
+// ─── Data ─────────────────────────────────────────────────────────────────
+const releases = [
+
+  // ── DRAFT (2) ────────────────────────────────────────────────────────────
+  {
+    id: 1,
+    title: "Lueurs",
+    artist: "Aurélie Dumas",
+    label: "Lumière Records",
+    date: "2025-06-20",
+    upc: "196871000101",
+    status: "draft",
+    type: "Single",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 210,
+    tracks: [
+      { num: 1, title: "Lueurs", artists: "Aurélie Dumas", isrc: "" },
+      { num: 2, title: "Lueurs (Instrumental)", artists: "Aurélie Dumas", isrc: "" },
+    ]
+  },
+  {
+    id: 2,
+    title: "Phosphène",
+    artist: "Doux Rêve",
+    label: "Lumière Records",
+    date: "2025-07-04",
+    upc: "196871000102",
+    status: "draft",
+    type: "EP",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 295,
+    tracks: [
+      { num: 1, title: "Phosphène", artists: "Doux Rêve", isrc: "" },
+      { num: 2, title: "Brume dorée", artists: "Doux Rêve", isrc: "" },
+      { num: 3, title: "Sommeil des dunes", artists: "Doux Rêve", isrc: "" },
+      { num: 4, title: "Éther", artists: "Doux Rêve", isrc: "" },
+    ]
+  },
+
+  // ── PROCESSING (4) ───────────────────────────────────────────────────────
+  {
+    id: 3,
+    title: "Hypnose",
+    artist: "Neon Waves",
+    label: "Lumière Records",
+    date: "2025-05-30",
+    upc: "196871000201",
+    status: "processing",
+    type: "Album",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 185,
+    tracks: [
+      { num: 1,  title: "Nuit électrique",      artists: "Neon Waves", isrc: "FRLM12500301" },
+      { num: 2,  title: "Hypnose",              artists: "Neon Waves", isrc: "FRLM12500302" },
+      { num: 3,  title: "Résonance",            artists: "Neon Waves", isrc: "FRLM12500303" },
+      { num: 4,  title: "Vague de chaleur",     artists: "Neon Waves", isrc: "FRLM12500304" },
+      { num: 5,  title: "Stroboscope",          artists: "Neon Waves", isrc: "FRLM12500305" },
+      { num: 6,  title: "Polarité",             artists: "Neon Waves", isrc: "FRLM12500306" },
+      { num: 7,  title: "Horizon synthétique",  artists: "Neon Waves", isrc: "FRLM12500307" },
+      { num: 8,  title: "Fréquence basse",      artists: "Neon Waves", isrc: "FRLM12500308" },
+      { num: 9,  title: "Lumière froide",       artists: "Neon Waves", isrc: "FRLM12500309" },
+      { num: 10, title: "Épilogue néon",        artists: "Neon Waves", isrc: "FRLM12500310" },
+    ]
+  },
+  {
+    id: 4,
+    title: "Dérives",
+    artist: "Marco & The Drift",
+    label: "Lumière Records",
+    date: "2025-05-15",
+    upc: "196871000202",
+    status: "processing",
+    type: "Single",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 38,
+    tracks: [
+      { num: 1, title: "Dérives",              artists: "Marco & The Drift", isrc: "FRLM12500401" },
+      { num: 2, title: "Dérives (Club Mix)",   artists: "Marco & The Drift", isrc: "FRLM12500402" },
+    ]
+  },
+  {
+    id: 5,
+    title: "Zéro Kelvin",
+    artist: "Null Pointer",
+    label: "Lumière Records",
+    date: "2025-05-08",
+    upc: "196871000203",
+    status: "processing",
+    type: "EP",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 155,
+    tracks: [
+      { num: 1, title: "Zéro Kelvin",    artists: "Null Pointer", isrc: "FRLM12500501" },
+      { num: 2, title: "Void Loop",      artists: "Null Pointer", isrc: "FRLM12500502" },
+      { num: 3, title: "Seg Fault",      artists: "Null Pointer", isrc: "FRLM12500503" },
+      { num: 4, title: "Stack Overflow", artists: "Null Pointer", isrc: "FRLM12500504" },
+    ]
+  },
+  {
+    id: 6,
+    title: "Solstice",
+    artist: "Solange Mireille",
+    label: "Lumière Records",
+    date: "2025-04-28",
+    upc: "196871000204",
+    status: "processing",
+    type: "Album",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 330,
+    tracks: [
+      { num: 1, title: "Solstice",          artists: "Solange Mireille", isrc: "FRLM12500601" },
+      { num: 2, title: "La chaleur en mai", artists: "Solange Mireille", isrc: "FRLM12500602" },
+      { num: 3, title: "Janvier bleu",      artists: "Solange Mireille", isrc: "FRLM12500603" },
+      { num: 4, title: "Carreaux de lune",  artists: "Solange Mireille", isrc: "FRLM12500604" },
+      { num: 5, title: "Le bord du monde",  artists: "Solange Mireille", isrc: "FRLM12500605" },
+      { num: 6, title: "Solstice (Reprise)", artists: "Solange Mireille", isrc: "FRLM12500606" },
+    ]
+  },
+
+  // ── NEED ACTION (2) ──────────────────────────────────────────────────────
+  {
+    id: 7,
+    title: "Midnight Frequencies",
+    artist: "Neon Waves",
+    label: "Lumière Records",
+    date: "2025-03-12",
+    upc: "196871000701",
+    status: "need-action",
+    type: "Album",
+    platforms: { count: 38, total: 42, territories: 145, warn: "orange" },
+    coverHue: 220,
+    tracks: [
+      { num: 1,  title: "Signal de nuit",          artists: "Neon Waves", isrc: "FRLM12500701" },
+      { num: 2,  title: "Midnight Frequencies",    artists: "Neon Waves", isrc: "FRLM12500702" },
+      { num: 3,  title: "Oscillation",             artists: "Neon Waves", isrc: "FRLM12500703" },
+      { num: 4,  title: "Sous la surface",         artists: "Neon Waves", isrc: "FRLM12500704" },
+      { num: 5,  title: "Darkroom",                artists: "Neon Waves", isrc: "FRLM12500705" },
+      { num: 6,  title: "Spectre",                 artists: "Neon Waves", isrc: "FRLM12500706" },
+      { num: 7,  title: "Pont des ombres",         artists: "Neon Waves", isrc: "FRLM12500707" },
+      { num: 8,  title: "Latitude inconnue",       artists: "Neon Waves", isrc: "FRLM12500708" },
+      { num: 9,  title: "Fréquences du minuit",    artists: "Neon Waves", isrc: "FRLM12500709" },
+    ]
+  },
+  {
+    id: 8,
+    title: "Tessellate",
+    artist: "Éclat",
+    label: "Lumière Records",
+    date: "2025-02-20",
+    upc: "196871000801",
+    status: "need-action",
+    type: "EP",
+    platforms: { count: 35, total: 42, territories: 162, warn: "red" },
+    coverHue: 345,
+    tracks: [
+      { num: 1, title: "Fragment I",   artists: "Éclat", isrc: "FRLM12500801" },
+      { num: 2, title: "Tessellate",   artists: "Éclat", isrc: "FRLM12500802" },
+      { num: 3, title: "Fragment II",  artists: "Éclat", isrc: "FRLM12500803" },
+      { num: 4, title: "Dissolution",  artists: "Éclat", isrc: "FRLM12500804" },
+    ]
+  },
+
+  // ── UNSELLABLE (2) ───────────────────────────────────────────────────────
+  {
+    id: 9,
+    title: "Analogique",
+    artist: "Cassian Bleu",
+    label: "Lumière Records",
+    date: "2021-03-05",
+    upc: "196871000901",
+    status: "unsellable",
+    type: "Album",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 50,
+    tracks: [
+      { num: 1, title: "Grains de sable",  artists: "Cassian Bleu", isrc: "FRLM12100901" },
+      { num: 2, title: "Chambre obscure",  artists: "Cassian Bleu", isrc: "FRLM12100902" },
+      { num: 3, title: "Analogique",       artists: "Cassian Bleu", isrc: "FRLM12100903" },
+      { num: 4, title: "Diaphragme",       artists: "Cassian Bleu", isrc: "FRLM12100904" },
+      { num: 5, title: "Mise au point",    artists: "Cassian Bleu", isrc: "FRLM12100905" },
+      { num: 6, title: "Négatif",          artists: "Cassian Bleu", isrc: "FRLM12100906" },
+    ]
+  },
+  {
+    id: 10,
+    title: "Première Lumière",
+    artist: "Aurélie Dumas",
+    label: "Lumière Records",
+    date: "2020-11-14",
+    upc: "196871001001",
+    status: "unsellable",
+    type: "Single",
+    platforms: { count: 0, total: 42, territories: 0, warn: null },
+    coverHue: 200,
+    tracks: [
+      { num: 1, title: "Première Lumière",              artists: "Aurélie Dumas", isrc: "FRLM12001001" },
+      { num: 2, title: "Première Lumière (Acoustic)",   artists: "Aurélie Dumas", isrc: "FRLM12001002" },
+    ]
+  },
+
+  // ── DELIVERED (30) ───────────────────────────────────────────────────────
+  {
+    id: 11,
+    title: "Cascade",
+    artist: "Aurélie Dumas",
+    label: "Lumière Records",
+    date: "2025-03-14",
+    upc: "196871001101",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 178, warn: null },
+    coverHue: 208,
+    tracks: [
+      { num: 1, title: "Cascade",               artists: "Aurélie Dumas", isrc: "FRLM12501101" },
+      { num: 2, title: "Cascade (Radio Edit)",   artists: "Aurélie Dumas", isrc: "FRLM12501102" },
+      { num: 3, title: "Cascade (Instrumental)", artists: "Aurélie Dumas", isrc: "FRLM12501103" },
+    ]
+  },
+  {
+    id: 12,
+    title: "Éclipse Dorée",
+    artist: "Aurélie Dumas",
+    label: "Lumière Records",
+    date: "2024-09-06",
+    upc: "196871001201",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 210, warn: null },
+    coverHue: 45,
+    tracks: [
+      { num: 1,  title: "Lever de rideau",     artists: "Aurélie Dumas", isrc: "FRLM12401201" },
+      { num: 2,  title: "Éclipse Dorée",       artists: "Aurélie Dumas", isrc: "FRLM12401202" },
+      { num: 3,  title: "Reflets d'or",        artists: "Aurélie Dumas", isrc: "FRLM12401203" },
+      { num: 4,  title: "Courant alternatif",  artists: "Aurélie Dumas", isrc: "FRLM12401204" },
+      { num: 5,  title: "Pluie de photons",    artists: "Aurélie Dumas", isrc: "FRLM12401205" },
+      { num: 6,  title: "Horizon",             artists: "Aurélie Dumas", isrc: "FRLM12401206" },
+      { num: 7,  title: "La dernière vague",   artists: "Aurélie Dumas", isrc: "FRLM12401207" },
+      { num: 8,  title: "Coda",                artists: "Aurélie Dumas", isrc: "FRLM12401208" },
+    ]
+  },
+  {
+    id: 13,
+    title: "Synthétique",
+    artist: "Neon Waves",
+    label: "Lumière Records",
+    date: "2024-11-22",
+    upc: "196871001301",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 40, total: 42, territories: 195, warn: "orange" },
+    coverHue: 190,
+    tracks: [
+      { num: 1,  title: "Intro",               artists: "Neon Waves", isrc: "FRLM12401301" },
+      { num: 2,  title: "Synthétique",         artists: "Neon Waves", isrc: "FRLM12401302" },
+      { num: 3,  title: "Arcade",              artists: "Neon Waves", isrc: "FRLM12401303" },
+      { num: 4,  title: "Cristal liquide",     artists: "Neon Waves", isrc: "FRLM12401304" },
+      { num: 5,  title: "Pixel",               artists: "Neon Waves", isrc: "FRLM12401305" },
+      { num: 6,  title: "Rétro-onde",          artists: "Neon Waves", isrc: "FRLM12401306" },
+      { num: 7,  title: "Néon rose",           artists: "Neon Waves", isrc: "FRLM12401307" },
+      { num: 8,  title: "Outro",               artists: "Neon Waves", isrc: "FRLM12401308" },
+    ]
+  },
+  {
+    id: 14,
+    title: "Chrome",
+    artist: "Neon Waves",
+    label: "Lumière Records",
+    date: "2024-04-19",
+    upc: "196871001401",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 220, warn: null },
+    coverHue: 175,
+    tracks: [
+      { num: 1, title: "Chrome",          artists: "Neon Waves", isrc: "FRLM12401401" },
+      { num: 2, title: "Chrome (Remix)",  artists: "Neon Waves", isrc: "FRLM12401402" },
+    ]
+  },
+  {
+    id: 15,
+    title: "Soleil Levant",
+    artist: "Marco & The Drift",
+    label: "Lumière Records",
+    date: "2025-01-17",
+    upc: "196871001501",
+    status: "delivered",
+    type: "EP",
+    platforms: { count: 42, total: 42, territories: 188, warn: null },
+    coverHue: 32,
+    tracks: [
+      { num: 1, title: "Soleil Levant",          artists: "Marco & The Drift", isrc: "FRLM12501501" },
+      { num: 2, title: "Golden Hour",            artists: "Marco & The Drift", isrc: "FRLM12501502" },
+      { num: 3, title: "Crépuscule électrique",  artists: "Marco & The Drift", isrc: "FRLM12501503" },
+      { num: 4, title: "Aube",                   artists: "Marco & The Drift", isrc: "FRLM12501504" },
+    ]
+  },
+  {
+    id: 16,
+    title: "Dérive Continentale",
+    artist: "Marco & The Drift",
+    label: "Lumière Records",
+    date: "2024-07-05",
+    upc: "196871001601",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 38, total: 42, territories: 142, warn: "orange" },
+    coverHue: 22,
+    tracks: [
+      { num: 1,  title: "Plaques tectoniques",   artists: "Marco & The Drift", isrc: "FRLM12401601" },
+      { num: 2,  title: "Dérive Continentale",   artists: "Marco & The Drift", isrc: "FRLM12401602" },
+      { num: 3,  title: "Subduction",            artists: "Marco & The Drift", isrc: "FRLM12401603" },
+      { num: 4,  title: "Magma",                 artists: "Marco & The Drift", isrc: "FRLM12401604" },
+      { num: 5,  title: "Tremblements",          artists: "Marco & The Drift", isrc: "FRLM12401605" },
+      { num: 6,  title: "Rift",                  artists: "Marco & The Drift", isrc: "FRLM12401606" },
+      { num: 7,  title: "Île nouvelle",          artists: "Marco & The Drift", isrc: "FRLM12401607" },
+      { num: 8,  title: "Séisme doux",           artists: "Marco & The Drift", isrc: "FRLM12401608" },
+      { num: 9,  title: "Épilogue géologique",   artists: "Marco & The Drift", isrc: "FRLM12401609" },
+    ]
+  },
+  {
+    id: 17,
+    title: "Brouillard",
+    artist: "Éclat",
+    label: "Lumière Records",
+    date: "2024-10-03",
+    upc: "196871001701",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 175, warn: null },
+    coverHue: 255,
+    tracks: [
+      { num: 1,  title: "Prélude",         artists: "Éclat", isrc: "FRLM12401701" },
+      { num: 2,  title: "Brouillard",      artists: "Éclat", isrc: "FRLM12401702" },
+      { num: 3,  title: "Flou artistique", artists: "Éclat", isrc: "FRLM12401703" },
+      { num: 4,  title: "Condensation",    artists: "Éclat", isrc: "FRLM12401704" },
+      { num: 5,  title: "Nuage bas",       artists: "Éclat", isrc: "FRLM12401705" },
+      { num: 6,  title: "Vapeur",          artists: "Éclat", isrc: "FRLM12401706" },
+      { num: 7,  title: "Coda brumeuse",   artists: "Éclat", isrc: "FRLM12401707" },
+    ]
+  },
+  {
+    id: 18,
+    title: "Ondes courtes",
+    artist: "Éclat",
+    label: "Lumière Records",
+    date: "2023-12-08",
+    upc: "196871001801",
+    status: "delivered",
+    type: "EP",
+    platforms: { count: 40, total: 42, territories: 158, warn: "orange" },
+    coverHue: 270,
+    tracks: [
+      { num: 1, title: "Porteuse",      artists: "Éclat", isrc: "FRLM12301801" },
+      { num: 2, title: "Ondes courtes", artists: "Éclat", isrc: "FRLM12301802" },
+      { num: 3, title: "Interférence",  artists: "Éclat", isrc: "FRLM12301803" },
+      { num: 4, title: "Silence radio", artists: "Éclat", isrc: "FRLM12301804" },
+    ]
+  },
+  {
+    id: 19,
+    title: "Kernel Panic",
+    artist: "Null Pointer",
+    label: "Lumière Records",
+    date: "2024-08-29",
+    upc: "196871001901",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 200, warn: null },
+    coverHue: 162,
+    tracks: [
+      { num: 1,  title: "Boot sequence",   artists: "Null Pointer", isrc: "FRLM12401901" },
+      { num: 2,  title: "Kernel Panic",    artists: "Null Pointer", isrc: "FRLM12401902" },
+      { num: 3,  title: "Deadlock",        artists: "Null Pointer", isrc: "FRLM12401903" },
+      { num: 4,  title: "Race condition",  artists: "Null Pointer", isrc: "FRLM12401904" },
+      { num: 5,  title: "Buffer overflow", artists: "Null Pointer", isrc: "FRLM12401905" },
+      { num: 6,  title: "Null reference",  artists: "Null Pointer", isrc: "FRLM12401906" },
+      { num: 7,  title: "Core dump",       artists: "Null Pointer", isrc: "FRLM12401907" },
+      { num: 8,  title: "Reboot",          artists: "Null Pointer", isrc: "FRLM12401908" },
+    ]
+  },
+  {
+    id: 20,
+    title: "404",
+    artist: "Null Pointer",
+    label: "Lumière Records",
+    date: "2024-02-14",
+    upc: "196871002001",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 215, warn: null },
+    coverHue: 145,
+    tracks: [
+      { num: 1, title: "404",               artists: "Null Pointer", isrc: "FRLM12402001" },
+      { num: 2, title: "404 (Dub Version)", artists: "Null Pointer", isrc: "FRLM12402002" },
+    ]
+  },
+  {
+    id: 21,
+    title: "Minuit à Paris",
+    artist: "Solange Mireille",
+    label: "Lumière Records",
+    date: "2024-12-06",
+    upc: "196871002101",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 235, warn: null },
+    coverHue: 325,
+    tracks: [
+      { num: 1,  title: "Arrivée de nuit",    artists: "Solange Mireille", isrc: "FRLM12402101" },
+      { num: 2,  title: "Minuit à Paris",     artists: "Solange Mireille", isrc: "FRLM12402102" },
+      { num: 3,  title: "Rue des Martyrs",    artists: "Solange Mireille", isrc: "FRLM12402103" },
+      { num: 4,  title: "Café de flore",      artists: "Solange Mireille", isrc: "FRLM12402104" },
+      { num: 5,  title: "La Seine la nuit",   artists: "Solange Mireille", isrc: "FRLM12402105" },
+      { num: 6,  title: "Métro fantôme",      artists: "Solange Mireille", isrc: "FRLM12402106" },
+      { num: 7,  title: "Départ au matin",    artists: "Solange Mireille", isrc: "FRLM12402107" },
+    ]
+  },
+  {
+    id: 22,
+    title: "Velours",
+    artist: "Solange Mireille",
+    label: "Lumière Records",
+    date: "2023-10-20",
+    upc: "196871002201",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 40, total: 42, territories: 190, warn: null },
+    coverHue: 310,
+    tracks: [
+      { num: 1, title: "Velours",              artists: "Solange Mireille", isrc: "FRLM12302201" },
+      { num: 2, title: "Velours (Version duo)", artists: "Solange Mireille", isrc: "FRLM12302202" },
+    ]
+  },
+  {
+    id: 23,
+    title: "Aquarelle",
+    artist: "Doux Rêve",
+    label: "Lumière Records",
+    date: "2025-02-07",
+    upc: "196871002301",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 168, warn: null },
+    coverHue: 285,
+    tracks: [
+      { num: 1,  title: "Lavis",            artists: "Doux Rêve", isrc: "FRLM12502301" },
+      { num: 2,  title: "Aquarelle",        artists: "Doux Rêve", isrc: "FRLM12502302" },
+      { num: 3,  title: "Nuit de velours",  artists: "Doux Rêve", isrc: "FRLM12502303" },
+      { num: 4,  title: "Paysage doux",     artists: "Doux Rêve", isrc: "FRLM12502304" },
+      { num: 5,  title: "Fond de teint",    artists: "Doux Rêve", isrc: "FRLM12502305" },
+      { num: 6,  title: "Transparence",     artists: "Doux Rêve", isrc: "FRLM12502306" },
+      { num: 7,  title: "Séchage lent",     artists: "Doux Rêve", isrc: "FRLM12502307" },
+      { num: 8,  title: "Ultime couche",    artists: "Doux Rêve", isrc: "FRLM12502308" },
+    ]
+  },
+  {
+    id: 24,
+    title: "Coton",
+    artist: "Doux Rêve",
+    label: "Lumière Records",
+    date: "2024-05-17",
+    upc: "196871002401",
+    status: "delivered",
+    type: "EP",
+    platforms: { count: 42, total: 42, territories: 152, warn: null },
+    coverHue: 280,
+    tracks: [
+      { num: 1, title: "Coton",          artists: "Doux Rêve", isrc: "FRLM12402401" },
+      { num: 2, title: "Laine",          artists: "Doux Rêve", isrc: "FRLM12402402" },
+      { num: 3, title: "Soie",           artists: "Doux Rêve", isrc: "FRLM12402403" },
+      { num: 4, title: "Lin",            artists: "Doux Rêve", isrc: "FRLM12402404" },
+    ]
+  },
+  {
+    id: 25,
+    title: "Brûme de mer",
+    artist: "Cassian Bleu",
+    label: "Lumière Records",
+    date: "2025-01-31",
+    upc: "196871002501",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 183, warn: null },
+    coverHue: 48,
+    tracks: [
+      { num: 1,  title: "Sel",           artists: "Cassian Bleu", isrc: "FRLM12502501" },
+      { num: 2,  title: "Brûme de mer",  artists: "Cassian Bleu", isrc: "FRLM12502502" },
+      { num: 3,  title: "Mousse",        artists: "Cassian Bleu", isrc: "FRLM12502503" },
+      { num: 4,  title: "Vague basse",   artists: "Cassian Bleu", isrc: "FRLM12502504" },
+      { num: 5,  title: "Marée",         artists: "Cassian Bleu", isrc: "FRLM12502505" },
+      { num: 6,  title: "Estran",        artists: "Cassian Bleu", isrc: "FRLM12502506" },
+      { num: 7,  title: "Épave",         artists: "Cassian Bleu", isrc: "FRLM12502507" },
+    ]
+  },
+  {
+    id: 26,
+    title: "Grenier",
+    artist: "Cassian Bleu",
+    label: "Lumière Records",
+    date: "2024-03-22",
+    upc: "196871002601",
+    status: "delivered",
+    type: "EP",
+    platforms: { count: 38, total: 42, territories: 120, warn: null },
+    coverHue: 55,
+    tracks: [
+      { num: 1, title: "Grenier",          artists: "Cassian Bleu", isrc: "FRLM12402601" },
+      { num: 2, title: "Vieilles photos",  artists: "Cassian Bleu", isrc: "FRLM12402602" },
+      { num: 3, title: "Poussière",        artists: "Cassian Bleu", isrc: "FRLM12402603" },
+      { num: 4, title: "Mémoire",          artists: "Cassian Bleu", isrc: "FRLM12402604" },
+    ]
+  },
+  {
+    id: 27,
+    title: "Particules",
+    artist: "Aurélie Dumas",
+    label: "Lumière Records",
+    date: "2023-11-10",
+    upc: "196871002701",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 205, warn: null },
+    coverHue: 215,
+    tracks: [
+      { num: 1, title: "Particules",              artists: "Aurélie Dumas", isrc: "FRLM12302701" },
+      { num: 2, title: "Particules (Extended)",   artists: "Aurélie Dumas", isrc: "FRLM12302702" },
+    ]
+  },
+  {
+    id: 28,
+    title: "Vague à l'âme",
+    artist: "Aurélie Dumas",
+    label: "Lumière Records",
+    date: "2023-06-23",
+    upc: "196871002801",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 198, warn: null },
+    coverHue: 200,
+    tracks: [
+      { num: 1,  title: "Amorce",           artists: "Aurélie Dumas", isrc: "FRLM12302801" },
+      { num: 2,  title: "Vague à l'âme",    artists: "Aurélie Dumas", isrc: "FRLM12302802" },
+      { num: 3,  title: "Flux et reflux",   artists: "Aurélie Dumas", isrc: "FRLM12302803" },
+      { num: 4,  title: "Marée montante",   artists: "Aurélie Dumas", isrc: "FRLM12302804" },
+      { num: 5,  title: "Courant froid",    artists: "Aurélie Dumas", isrc: "FRLM12302805" },
+      { num: 6,  title: "Embruns",          artists: "Aurélie Dumas", isrc: "FRLM12302806" },
+      { num: 7,  title: "Ressac",           artists: "Aurélie Dumas", isrc: "FRLM12302807" },
+      { num: 8,  title: "Basse mer",        artists: "Aurélie Dumas", isrc: "FRLM12302808" },
+      { num: 9,  title: "Haute mer",        artists: "Aurélie Dumas", isrc: "FRLM12302809" },
+    ]
+  },
+  {
+    id: 29,
+    title: "Infrarouge",
+    artist: "Neon Waves",
+    label: "Lumière Records",
+    date: "2023-08-18",
+    upc: "196871002901",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 35, total: 42, territories: 132, warn: "red" },
+    coverHue: 5,
+    tracks: [
+      { num: 1,  title: "Spectre visible",  artists: "Neon Waves", isrc: "FRLM12302901" },
+      { num: 2,  title: "Infrarouge",       artists: "Neon Waves", isrc: "FRLM12302902" },
+      { num: 3,  title: "Ultraviolet",      artists: "Neon Waves", isrc: "FRLM12302903" },
+      { num: 4,  title: "Micro-ondes",      artists: "Neon Waves", isrc: "FRLM12302904" },
+      { num: 5,  title: "Rayons X",         artists: "Neon Waves", isrc: "FRLM12302905" },
+      { num: 6,  title: "Gamma",            artists: "Neon Waves", isrc: "FRLM12302906" },
+      { num: 7,  title: "Longueur d'onde",  artists: "Neon Waves", isrc: "FRLM12302907" },
+    ]
+  },
+  {
+    id: 30,
+    title: "Lenteur",
+    artist: "Éclat",
+    label: "Lumière Records",
+    date: "2024-01-12",
+    upc: "196871003001",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 170, warn: null },
+    coverHue: 248,
+    tracks: [
+      { num: 1,  title: "Préambule",       artists: "Éclat", isrc: "FRLM12403001" },
+      { num: 2,  title: "Lenteur",         artists: "Éclat", isrc: "FRLM12403002" },
+      { num: 3,  title: "Patience",        artists: "Éclat", isrc: "FRLM12403003" },
+      { num: 4,  title: "Durée",           artists: "Éclat", isrc: "FRLM12403004" },
+      { num: 5,  title: "Permanence",      artists: "Éclat", isrc: "FRLM12403005" },
+      { num: 6,  title: "Immobilité",      artists: "Éclat", isrc: "FRLM12403006" },
+      { num: 7,  title: "Coda",            artists: "Éclat", isrc: "FRLM12403007" },
+    ]
+  },
+  {
+    id: 31,
+    title: "Chlore",
+    artist: "Null Pointer",
+    label: "Lumière Records",
+    date: "2023-05-05",
+    upc: "196871003101",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 222, warn: null },
+    coverHue: 168,
+    tracks: [
+      { num: 1, title: "Chlore",           artists: "Null Pointer", isrc: "FRLM12303101" },
+      { num: 2, title: "Chlore (Alt Mix)", artists: "Null Pointer", isrc: "FRLM12303102" },
+    ]
+  },
+  {
+    id: 32,
+    title: "Processus",
+    artist: "Null Pointer",
+    label: "Lumière Records",
+    date: "2023-03-17",
+    upc: "196871003201",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 40, total: 42, territories: 180, warn: null },
+    coverHue: 150,
+    tracks: [
+      { num: 1,  title: "Init",        artists: "Null Pointer", isrc: "FRLM12303201" },
+      { num: 2,  title: "Processus",   artists: "Null Pointer", isrc: "FRLM12303202" },
+      { num: 3,  title: "Thread",      artists: "Null Pointer", isrc: "FRLM12303203" },
+      { num: 4,  title: "Fork",        artists: "Null Pointer", isrc: "FRLM12303204" },
+      { num: 5,  title: "Exec",        artists: "Null Pointer", isrc: "FRLM12303205" },
+      { num: 6,  title: "Signal",      artists: "Null Pointer", isrc: "FRLM12303206" },
+      { num: 7,  title: "Exit",        artists: "Null Pointer", isrc: "FRLM12303207" },
+    ]
+  },
+  {
+    id: 33,
+    title: "Mélopée",
+    artist: "Solange Mireille",
+    label: "Lumière Records",
+    date: "2023-07-07",
+    upc: "196871003301",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 240, warn: null },
+    coverHue: 340,
+    tracks: [
+      { num: 1,  title: "Ouverture",       artists: "Solange Mireille", isrc: "FRLM12303301" },
+      { num: 2,  title: "Mélopée",         artists: "Solange Mireille", isrc: "FRLM12303302" },
+      { num: 3,  title: "Berceuse",        artists: "Solange Mireille", isrc: "FRLM12303303" },
+      { num: 4,  title: "Comptine",        artists: "Solange Mireille", isrc: "FRLM12303304" },
+      { num: 5,  title: "Chant du soir",   artists: "Solange Mireille", isrc: "FRLM12303305" },
+      { num: 6,  title: "Nocturne",        artists: "Solange Mireille", isrc: "FRLM12303306" },
+      { num: 7,  title: "Final",           artists: "Solange Mireille", isrc: "FRLM12303307" },
+    ]
+  },
+  {
+    id: 34,
+    title: "Rosée",
+    artist: "Doux Rêve",
+    label: "Lumière Records",
+    date: "2023-09-29",
+    upc: "196871003401",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 160, warn: null },
+    coverHue: 290,
+    tracks: [
+      { num: 1, title: "Rosée",               artists: "Doux Rêve", isrc: "FRLM12303401" },
+      { num: 2, title: "Rosée (Night Edit)",  artists: "Doux Rêve", isrc: "FRLM12303402" },
+    ]
+  },
+  {
+    id: 35,
+    title: "Grain",
+    artist: "Cassian Bleu",
+    label: "Lumière Records",
+    date: "2023-04-14",
+    upc: "196871003501",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 145, warn: null },
+    coverHue: 58,
+    tracks: [
+      { num: 1,  title: "Particule",     artists: "Cassian Bleu", isrc: "FRLM12303501" },
+      { num: 2,  title: "Grain",         artists: "Cassian Bleu", isrc: "FRLM12303502" },
+      { num: 3,  title: "Texture",       artists: "Cassian Bleu", isrc: "FRLM12303503" },
+      { num: 4,  title: "Rugosité",      artists: "Cassian Bleu", isrc: "FRLM12303504" },
+      { num: 5,  title: "Poli",          artists: "Cassian Bleu", isrc: "FRLM12303505" },
+      { num: 6,  title: "Mat",           artists: "Cassian Bleu", isrc: "FRLM12303506" },
+    ]
+  },
+  {
+    id: 36,
+    title: "Onde de choc",
+    artist: "Marco & The Drift",
+    label: "Lumière Records",
+    date: "2023-02-03",
+    upc: "196871003601",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 192, warn: null },
+    coverHue: 28,
+    tracks: [
+      { num: 1,  title: "Frontal",        artists: "Marco & The Drift", isrc: "FRLM12303601" },
+      { num: 2,  title: "Onde de choc",   artists: "Marco & The Drift", isrc: "FRLM12303602" },
+      { num: 3,  title: "Sillage",        artists: "Marco & The Drift", isrc: "FRLM12303603" },
+      { num: 4,  title: "Impact",         artists: "Marco & The Drift", isrc: "FRLM12303604" },
+      { num: 5,  title: "Réplique",       artists: "Marco & The Drift", isrc: "FRLM12303605" },
+      { num: 6,  title: "Amortissement",  artists: "Marco & The Drift", isrc: "FRLM12303606" },
+      { num: 7,  title: "Silence après",  artists: "Marco & The Drift", isrc: "FRLM12303607" },
+    ]
+  },
+  {
+    id: 37,
+    title: "Silice",
+    artist: "Null Pointer",
+    label: "Lumière Records",
+    date: "2024-06-28",
+    upc: "196871003701",
+    status: "delivered",
+    type: "EP",
+    platforms: { count: 35, total: 42, territories: 88, warn: "red" },
+    coverHue: 138,
+    tracks: [
+      { num: 1, title: "Silice",     artists: "Null Pointer", isrc: "FRLM12403701" },
+      { num: 2, title: "Quartz",     artists: "Null Pointer", isrc: "FRLM12403702" },
+      { num: 3, title: "Feldspath",  artists: "Null Pointer", isrc: "FRLM12403703" },
+      { num: 4, title: "Mica",       artists: "Null Pointer", isrc: "FRLM12403704" },
+    ]
+  },
+  {
+    id: 38,
+    title: "Tropique",
+    artist: "Solange Mireille",
+    label: "Lumière Records",
+    date: "2024-11-01",
+    upc: "196871003801",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 42, total: 42, territories: 228, warn: null },
+    coverHue: 350,
+    tracks: [
+      { num: 1, title: "Tropique",            artists: "Solange Mireille", isrc: "FRLM12403801" },
+      { num: 2, title: "Tropique (Acoustic)", artists: "Solange Mireille", isrc: "FRLM12403802" },
+    ]
+  },
+  {
+    id: 39,
+    title: "Cinéscope",
+    artist: "Doux Rêve",
+    label: "Lumière Records",
+    date: "2023-01-20",
+    upc: "196871003901",
+    status: "delivered",
+    type: "Album",
+    platforms: { count: 42, total: 42, territories: 155, warn: null },
+    coverHue: 275,
+    tracks: [
+      { num: 1,  title: "Générique",         artists: "Doux Rêve", isrc: "FRLM12303901" },
+      { num: 2,  title: "Cinéscope",         artists: "Doux Rêve", isrc: "FRLM12303902" },
+      { num: 3,  title: "Plan séquence",     artists: "Doux Rêve", isrc: "FRLM12303903" },
+      { num: 4,  title: "Fondu enchaîné",    artists: "Doux Rêve", isrc: "FRLM12303904" },
+      { num: 5,  title: "Contre-champ",      artists: "Doux Rêve", isrc: "FRLM12303905" },
+      { num: 6,  title: "Montage",           artists: "Doux Rêve", isrc: "FRLM12303906" },
+      { num: 7,  title: "Fin de bobine",     artists: "Doux Rêve", isrc: "FRLM12303907" },
+    ]
+  },
+  {
+    id: 40,
+    title: "Ambre",
+    artist: "Cassian Bleu",
+    label: "Lumière Records",
+    date: "2023-10-06",
+    upc: "196871004001",
+    status: "delivered",
+    type: "Single",
+    platforms: { count: 40, total: 42, territories: 138, warn: null },
+    coverHue: 42,
+    tracks: [
+      { num: 1, title: "Ambre",          artists: "Cassian Bleu", isrc: "FRLM12304001" },
+      { num: 2, title: "Ambre (Soir)",   artists: "Cassian Bleu", isrc: "FRLM12304002" },
+    ]
+  },
+];
+
+// ─── State ────────────────────────────────────────────────────────────────
+let activeFilter = "all";
+let expandedRows = new Set();
+let openPanelId = null;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────
+function statusChip(status) {
+  const map = {
+    "draft":       ["chip-neutral",  "Draft"],
+    "processing":  ["chip-accent",   "Processing"],
+    "delivered":   ["chip-green",    "Delivered"],
+    "need-action": ["chip-orange",   "Need action"],
+    "unsellable":  ["chip-neutral",  "Unsellable"],
+  };
+  const [cls, label] = map[status] || ["chip-neutral", status];
+  return `<span class="chip ${cls}">${label}</span>`;
+}
+
+function coverSVG(hue, size = 40) {
+  const r = 40, radius = size / 2;
+  return `<svg class="release-cover-svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${size}" height="${size}" rx="6" fill="hsl(${hue},55%,88%)"/>
+    <circle cx="${radius}" cy="${radius}" r="${size*0.3}" fill="hsl(${hue},60%,60%)" opacity="0.7"/>
+    <circle cx="${radius}" cy="${radius}" r="${size*0.14}" fill="hsl(${hue},65%,45%)"/>
+  </svg>`;
+}
+
+function coverSVGLarge(hue) {
+  return `<svg width="100%" height="100%" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="display:block">
+    <rect width="200" height="200" fill="hsl(${hue},55%,90%)"/>
+    <circle cx="100" cy="100" r="70" fill="hsl(${hue},60%,65%)" opacity="0.6"/>
+    <circle cx="100" cy="100" r="35" fill="hsl(${hue},65%,48%)"/>
+    <circle cx="100" cy="100" r="12" fill="hsl(${hue},10%,95%)"/>
+  </svg>`;
+}
+
+function platformsCell(p, status) {
+  if (status !== 'delivered') {
+    return `<div class="platforms-cell"><div class="platforms-main">—</div></div>`;
+  }
+  const pct = p.total > 0 ? Math.round((p.count / p.total) * 100) : 0;
+  const missing = p.total - p.count;
+  let warnIcon = '';
+  if (p.warn === 'red' && missing > 0) {
+    warnIcon = `<span class="warn-icon warn-red" title="Delivery issue on ${missing} tier 1 store${missing > 1 ? 's' : ''}">⚠</span>`;
+  } else if (p.warn === 'orange' && missing > 0) {
+    warnIcon = `<span class="warn-icon warn-orange" title="Delivery issue on ${missing} store${missing > 1 ? 's' : ''}">⚠</span>`;
+  }
+  return `<div class="platforms-cell">
+    <div class="platforms-main">${p.count}/${p.total} DSPs ${warnIcon}</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function filteredReleases() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  return releases.filter(r => {
+    const matchStatus = activeFilter === 'all' || r.status === activeFilter;
+    const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
+    return matchStatus && matchSearch;
+  });
+}
+
+// ─── Render Table ─────────────────────────────────────────────────────────
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  const data = filteredReleases();
+  tbody.innerHTML = '';
+
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
+    return;
+  }
+
+  data.forEach(r => {
+    // Main row
+    const tr = document.createElement('tr');
+    tr.dataset.id = r.id;
+    const isExpanded = expandedRows.has(r.id);
+    const isActive = openPanelId === r.id;
+    if (isExpanded) tr.classList.add('expanded');
+
+    tr.innerHTML = `
+      <td>
+        <div class="release-cell">
+          <button class="chevron-btn${isExpanded ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg>
+          </button>
+          ${coverSVG(r.coverHue)}
+          <div class="release-info">
+            <div class="release-title">${r.title}</div>
+            <div class="release-artist">${r.artist}</div>
+          </div>
+        </div>
+      </td>
+      <td class="date-cell">${formatDate(r.date)}</td>
+      <td><span class="mono">${r.upc}</span></td>
+      <td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>
+      <td>${platformsCell(r.platforms, r.status)}</td>
+      <td>${statusChip(r.status)}</td>
+    `;
+    tr.addEventListener('click', () => openPanel(r.id));
+    tbody.appendChild(tr);
+
+    // Sub-row (tracks)
+    if (isExpanded) {
+      const subTr = document.createElement('tr');
+      subTr.classList.add('sub-row');
+      subTr.innerHTML = `<td colspan="6">
+        <div class="sub-table-wrap">
+          <table class="sub-table">
+            <thead>
+              <tr>
+                <th style="width:28px">#</th>
+                <th>Track title</th>
+                <th>Artists</th>
+                <th>ISRC</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${r.tracks.map(t => `<tr>
+                <td class="track-num">${t.num}</td>
+                <td style="font-weight:500">${t.title}</td>
+                <td style="color:var(--text-secondary)">${t.artists}</td>
+                <td>
+                  <div class="isrc-wrap">
+                    <span class="mono">${t.isrc || '—'}</span>
+                    ${t.isrc ? `<button class="copy-btn" onclick="event.stopPropagation();copyISRC('${t.isrc}',this)">copy</button>` : ''}
+                  </div>
+                </td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </td>`;
+      tbody.appendChild(subTr);
+    }
+  });
+}
+
+// ─── Toggle expand ────────────────────────────────────────────────────────
+function toggleExpand(id) {
+  if (expandedRows.has(id)) expandedRows.delete(id);
+  else expandedRows.add(id);
+  renderTable();
+}
+
+// ─── Copy ISRC ────────────────────────────────────────────────────────────
+function copyISRC(isrc, btn) {
+  navigator.clipboard.writeText(isrc).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    setTimeout(() => btn.textContent = orig, 1200);
+  });
+}
+
+// ─── Side Panel ───────────────────────────────────────────────────────────
+function openPanel(id) {
+  const r = releases.find(x => x.id === id);
+  if (!r) return;
+  openPanelId = id;
+
+  document.getElementById('panelTitle').textContent = r.title;
+  document.getElementById('panelCover').innerHTML = coverSVGLarge(r.coverHue);
+  document.getElementById('panelRelTitle').textContent = r.title;
+  document.getElementById('panelRelArtist').textContent = r.artist;
+  document.getElementById('panelStatusWrap').innerHTML = statusChip(r.status);
+  document.getElementById('panelMeta').innerHTML = `
+    <div class="panel-meta-row"><span class="panel-meta-label">Label</span><span class="panel-meta-value">${r.label}</span></div>
+    <div class="panel-meta-row"><span class="panel-meta-label">Release date</span><span class="panel-meta-value">${formatDate(r.date)}</span></div>
+    <div class="panel-meta-row"><span class="panel-meta-label">UPC</span><span class="panel-meta-value mono">${r.upc}</span></div>
+    <div class="panel-meta-row"><span class="panel-meta-label">Platforms</span><span class="panel-meta-value">${r.platforms.count === 0 ? '—' : r.platforms.count + '/' + r.platforms.total + ' DSPs'}</span></div>
+    <div class="panel-meta-row"><span class="panel-meta-label">Territories</span><span class="panel-meta-value">${r.platforms.territories || '—'}</span></div>
+    <div class="panel-meta-row"><span class="panel-meta-label">Tracks</span><span class="panel-meta-value">${r.tracks.length}</span></div>
+  `;
+  document.getElementById('panelTracks').innerHTML = r.tracks.map(t =>
+    `<div style="display:flex;justify-content:space-between;align-items:center;padding:var(--sp-3xsm) 0;border-bottom:1px solid var(--divider);font-size:12px">
+      <span style="color:var(--text-tertiary);width:20px">${t.num}</span>
+      <span style="flex:1;font-weight:500">${t.title}</span>
+      <span class="mono" style="color:var(--text-secondary)">${t.isrc || '—'}</span>
+    </div>`
+  ).join('');
+
+  document.getElementById('sidePanel').classList.remove('hidden');
+}
+
+function closePanel() {
+  openPanelId = null;
+  document.getElementById('sidePanel').classList.add('hidden');
+}
+
+// ─── Status pills ─────────────────────────────────────────────────────────
+document.getElementById('statusPills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill');
+  if (!pill) return;
+  activeFilter = pill.dataset.status;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderTable();
+});
+
+// ─── Search ───────────────────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', renderTable);
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+renderTable();
+</script>
+</body>
+</html>
