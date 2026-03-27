@@ -1341,7 +1341,6 @@ td {
       <table id="releasesTable">
         <thead>
           <tr>
-            <th style="width:36px"></th>
             <th style="width:300px"><div class="th-inner">Release</div></th>
             <th><div class="th-inner">Release date
               <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
@@ -1354,6 +1353,8 @@ td {
             <th><div class="th-inner">Status
               <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
             </div></th>
+            <th style="width:36px"></th>
+            <th style="width:36px"></th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -2260,7 +2261,7 @@ function renderTable() {
   tbody.innerHTML = '';
 
   if (data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
     return;
   }
 
@@ -2274,16 +2275,8 @@ function renderTable() {
 
     const isStarred = watchlist.has(r.id);
     tr.innerHTML = `
-      <td style="padding:0 0 0 var(--sp-xsm)">
-        <button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
-        </button>
-      </td>
       <td>
         <div class="release-cell">
-          <button class="chevron-btn${isExpanded ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg>
-          </button>
           ${coverSVG(r.coverHue)}
           <div class="release-info">
             <div class="release-title">${r.title}</div>
@@ -2296,6 +2289,16 @@ function renderTable() {
       <td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>
       <td>${platformsCell(r.platforms, r.status)}</td>
       <td>${statusChip(r.status)}</td>
+      <td style="padding:0">
+        <button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
+        </button>
+      </td>
+      <td style="padding:0">
+        <button class="chevron-btn${isExpanded ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg>
+        </button>
+      </td>
     `;
     tr.addEventListener('click', () => openPanel(r.id));
     tbody.appendChild(tr);
@@ -2304,7 +2307,7 @@ function renderTable() {
     if (isExpanded) {
       const subTr = document.createElement('tr');
       subTr.classList.add('sub-row');
-      subTr.innerHTML = `<td colspan="7">
+      subTr.innerHTML = `<td colspan="8">
         <div class="sub-table-wrap">
           <table class="sub-table">
             <thead>
