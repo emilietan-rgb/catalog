@@ -339,48 +339,36 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 /* ─── Attention Block ────────────────────────────────────────────────────── */
 .attention-block {
   background: var(--orange-10);
-  border: 1px solid var(--orange-60);
+  border: 1px solid var(--orange-20);
   border-radius: var(--cr-sm);
   padding: var(--sp-md);
 }
 .attention-header {
   display: flex;
   align-items: center;
-  gap: var(--sp-xsm);
   margin-bottom: var(--sp-sm);
 }
 .attention-title {
   font-size: 14px;
-  font-weight: var(--fw-medium);
-  color: var(--orange-70);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
   flex: 1;
 }
-.badge {
-  display: inline-flex;
+.attention-dismiss {
+  width: 28px;
+  height: 28px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 var(--sp-3xsm);
-  border-radius: var(--cr-rounded);
-  font-size: 11px;
-  font-weight: var(--fw-semibold);
-  background: var(--orange-60);
-  color: #fff;
-}
-.attention-dismiss {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--orange-70);
-  font-size: 18px;
-  line-height: 1;
-  padding: 0 var(--sp-3xsm);
-  border-radius: var(--cr-4xsm);
-  transition: background 0.1s;
-  font-family: var(--font);
+  color: var(--text-secondary);
+  border-radius: var(--cr-3xsm);
+  transition: background 0.1s, color 0.1s;
+  flex-shrink: 0;
 }
-.attention-dismiss:hover { background: var(--orange-20); }
+.attention-dismiss:hover { background: var(--orange-20); color: var(--text-primary); }
 .attention-list {
   display: flex;
   flex-direction: column;
@@ -391,21 +379,43 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   align-items: center;
   gap: var(--sp-sm);
   padding: var(--sp-2xsm) var(--sp-xsm);
-  background: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.55);
   border-radius: var(--cr-2xsm);
-  font-size: 13px;
 }
-.attention-item-title { flex: 1; font-weight: var(--fw-medium); color: var(--text-primary); }
-.attention-item-artist { color: var(--text-secondary); }
+.attention-thumb {
+  flex-shrink: 0;
+  border-radius: var(--cr-3xsm);
+  overflow: hidden;
+  width: 36px;
+  height: 36px;
+}
+.attention-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.attention-item-title {
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.attention-item-artist {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
 .attention-link {
   color: var(--orange-70);
   font-weight: var(--fw-medium);
   font-size: 13px;
   text-decoration: none;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 2px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 .attention-link:hover { color: var(--orange-60); text-decoration: underline; }
 
@@ -1071,23 +1081,27 @@ td {
     <!-- Attention Block -->
     <div class="attention-block" id="attentionBlock">
       <div class="attention-header">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#e67828" stroke-width="1.5"><path d="M8 2L1 14h14L8 2z"/><path d="M8 6v4M8 11v1" stroke-linecap="round"/></svg>
-        <span class="attention-title">Requires your attention</span>
-        <span class="badge">2</span>
-        <button class="attention-dismiss" onclick="document.getElementById('attentionBlock').classList.add('hidden')" title="Dismiss">×</button>
+        <span class="attention-title">Tracks Requiring Action</span>
+        <button class="attention-dismiss" onclick="document.getElementById('attentionBlock').classList.add('hidden')" title="Dismiss">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+        </button>
       </div>
       <div class="attention-list">
         <div class="attention-item">
-          <span class="release-title" style="flex:1">Midnight Frequencies</span>
-          <span class="attention-item-artist">Nyx Collective</span>
-          <span class="chip chip-orange">Need action</span>
-          <a class="attention-link" href="#">Review →</a>
+          <div class="attention-thumb" id="thumb-7"></div>
+          <div class="attention-info">
+            <span class="attention-item-title">Midnight Frequencies</span>
+            <span class="attention-item-artist">Neon Waves</span>
+          </div>
+          <a class="attention-link" href="#">Review now →</a>
         </div>
         <div class="attention-item">
-          <span class="release-title" style="flex:1">Tessellate</span>
-          <span class="attention-item-artist">Éclat</span>
-          <span class="chip chip-orange">Need action</span>
-          <a class="attention-link" href="#">Review →</a>
+          <div class="attention-thumb" id="thumb-8"></div>
+          <div class="attention-info">
+            <span class="attention-item-title">Tessellate</span>
+            <span class="attention-item-artist">Éclat</span>
+          </div>
+          <a class="attention-link" href="#">Review now →</a>
         </div>
       </div>
     </div>
@@ -2262,6 +2276,12 @@ function applyCustomDate() {
   renderTable();
   closeDateModal();
 }
+
+// ─── Attention block thumbnails ───────────────────────────────────────────
+[{id:7,hue:220},{id:8,hue:345}].forEach(({id,hue}) => {
+  const el = document.getElementById('thumb-' + id);
+  if (el) el.innerHTML = coverSVG(hue, 36);
+});
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 // Stamp year data attrs on year buttons
