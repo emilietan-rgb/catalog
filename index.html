@@ -25,6 +25,10 @@
   --red-60: #ff3e5c;
   --red-70: #e63a52;
   --red-10: #ffecef;
+  --red-20: #ffd9de;
+  --purple-70: #7a57e2;
+  --purple-10: #f3efff;
+  --purple-20: #e8dfff;
   --neutral-10: #fffefd;
   --neutral-20: #f9fafc;
   --neutral-30: #f3f4f8;
@@ -429,19 +433,21 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-3xsm);
-  padding: 2px var(--sp-2xsm);
-  border-radius: var(--cr-rounded);
-  font-size: 11px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-family: var(--font);
+  font-size: 12px;
   font-weight: var(--fw-medium);
+  line-height: 16px;
   white-space: nowrap;
-  line-height: 1.4;
 }
-.chip-neutral { background: var(--neutral-40); color: var(--neutral-140); }
-.chip-accent { background: var(--accent-10); color: var(--accent-70); }
-.chip-green { background: var(--green-10); color: var(--green-80); }
+.chip-neutral { background: var(--neutral-40); color: var(--neutral-140); border: 1px solid var(--neutral-60); }
+.chip-accent { background: var(--accent-10); color: var(--accent-70); border: 1px solid var(--accent-20, #c8e4fe); }
+.chip-green { background: var(--green-10); color: var(--green-80); border: 1px solid var(--green-20, #b6eacc); }
 .chip-orange { background: var(--orange-10); color: var(--orange-70); border: 1px solid var(--orange-20); }
-.chip-red { background: var(--red-10); color: var(--red-70); }
+.chip-red { background: var(--red-10); color: var(--red-70); border: 1px solid var(--red-20); }
+.chip-purple { background: var(--purple-10); color: var(--purple-70); border: 1px solid var(--purple-20); }
 
 /* ─── Toolbar ────────────────────────────────────────────────────────────── */
 .toolbar {
@@ -1331,7 +1337,7 @@ td {
       <button class="pill active" data-status="all">All (40)</button>
       <button class="pill" data-status="draft">Draft (2)</button>
       <button class="pill" data-status="processing">Processing (4)</button>
-      <button class="pill" data-status="delivered">Delivered (30)</button>
+      <button class="pill" data-status="delivered">Live (30)</button>
       <button class="pill" data-status="need-action">Need action (2)</button>
       <button class="pill" data-status="unsellable">Unsellable (2)</button>
     </div>
@@ -1431,7 +1437,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-05-30",
     upc: "196871000201",
-    status: "processing",
+    status: "under-review",
     type: "Album",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 185,
@@ -1455,7 +1461,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-05-15",
     upc: "196871000202",
-    status: "processing",
+    status: "under-review",
     type: "Single",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 38,
@@ -1471,7 +1477,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-05-08",
     upc: "196871000203",
-    status: "processing",
+    status: "approved-sent",
     type: "EP",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 155,
@@ -1489,7 +1495,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-04-28",
     upc: "196871000204",
-    status: "processing",
+    status: "approved-sent",
     type: "Album",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 330,
@@ -2173,11 +2179,13 @@ let openPanelId = null;
 // ─── Helpers ──────────────────────────────────────────────────────────────
 function statusChip(status) {
   const map = {
-    "draft":       ["chip-neutral",  "Draft"],
-    "processing":  ["chip-accent",   "Processing"],
-    "delivered":   ["chip-green",    "Delivered"],
-    "need-action": ["chip-orange",   "Need action"],
-    "unsellable":  ["chip-neutral",  "Unsellable"],
+    "draft":          ["chip-neutral",  "Draft"],
+    "processing":     ["chip-orange",   "Processing"],
+    "under-review":   ["chip-purple",   "Under review"],
+    "approved-sent":  ["chip-purple",   "Approved & Sent"],
+    "delivered":      ["chip-green",    "Live"],
+    "need-action":    ["chip-orange",   "Need action"],
+    "unsellable":     ["chip-red",      "Taken down"],
   };
   const [cls, label] = map[status] || ["chip-neutral", status];
   return `<span class="chip ${cls}">${label}</span>`;
@@ -2230,7 +2238,10 @@ function filteredReleases() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const now = new Date();
   return releases.filter(r => {
-    const matchStatus = activeFilter === 'all' || r.status === activeFilter;
+    const processingGroup = new Set(['processing', 'under-review', 'approved-sent']);
+    const matchStatus = activeFilter === 'all'
+      || r.status === activeFilter
+      || (activeFilter === 'processing' && processingGroup.has(r.status));
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
     const matchArtist = selectedArtists.size === 0 || selectedArtists.has(r.artist);
     let matchDate = true;
