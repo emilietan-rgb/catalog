@@ -1174,8 +1174,8 @@ td {
   flex-shrink: 0;
 }
 .star-btn:hover { color: var(--neutral-120); background: var(--neutral-40); }
-.star-btn.starred { color: #f5a623; }
-.star-btn.starred:hover { color: #d4891a; background: var(--neutral-40); }
+.star-btn.starred { color: var(--neutral-120); }
+.star-btn.starred:hover { color: var(--neutral-120); background: var(--neutral-40); }
 .watchlist-btn {
   display: inline-flex;
   align-items: center;
@@ -1194,8 +1194,8 @@ td {
   white-space: nowrap;
 }
 .watchlist-btn:hover { background: var(--neutral-40); border-color: var(--neutral-70); }
-.watchlist-btn.active { background: #fef9ec; border-color: #f5a623; color: #d4891a; }
-.watchlist-btn.active:hover { background: #fdf3d6; }
+.watchlist-btn.active { background: var(--neutral-30); border-color: var(--neutral-70); color: var(--neutral-120); }
+.watchlist-btn.active:hover { background: var(--neutral-40); }
 .watchlist-badge {
   display: inline-flex;
   align-items: center;
@@ -2812,16 +2812,11 @@ function updateWatchlistBtn() {
 }
 
 // ─── Artist Filter ────────────────────────────────────────────────────────
-const artistData = [
-  { name: "Aurélie Dumas",    releases: 6, pinned: true  },
-  { name: "Null Pointer",     releases: 6, pinned: true  },
-  { name: "Neon Waves",       releases: 5, pinned: true  },
-  { name: "Doux Rêve",        releases: 5, pinned: false },
-  { name: "Solange Mireille", releases: 5, pinned: false },
-  { name: "Cassian Bleu",     releases: 5, pinned: false },
-  { name: "Marco & The Drift",releases: 4, pinned: false },
-  { name: "Éclat",            releases: 4, pinned: false },
-];
+const artistCounts = {};
+releases.forEach(r => { artistCounts[r.artist] = (artistCounts[r.artist] || 0) + 1; });
+const artistData = Object.entries(artistCounts)
+  .map(([name, count]) => ({ name, releases: count, pinned: count >= 2 }))
+  .sort((a, b) => b.releases - a.releases || a.name.localeCompare(b.name));
 
 let selectedArtists = new Set();
 let pendingArtists  = new Set();
@@ -3103,8 +3098,7 @@ renderTable();
   </div>
   <div class="artist-modal-body" id="artistModalBody"></div>
   <div class="artist-modal-footer">
-    <button class="btn btn-outline" onclick="clearArtistSelection()">Clear All</button>
-    <button class="btn btn-dark" onclick="applyArtistFilter()">Apply</button>
+    <button class="btn btn-dark" onclick="applyArtistFilter()" style="flex:1">Apply</button>
   </div>
 </div>
 
@@ -3130,8 +3124,10 @@ renderTable();
     <label class="modal-label" for="customDateInput">Or select a custom date</label>
     <div class="modal-date-row">
       <input type="date" class="modal-date-input" id="customDateInput">
-      <button class="btn btn-primary" onclick="applyCustomDate()">Apply</button>
     </div>
+  </div>
+  <div class="artist-modal-footer" style="padding:0">
+    <button class="btn btn-dark" onclick="applyCustomDate()" style="flex:1">Apply</button>
   </div>
 </div>
 </body>
