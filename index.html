@@ -356,15 +356,17 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   border: 1px solid var(--orange-20);
   border-radius: var(--cr-sm);
   padding: var(--sp-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
 }
 .attention-header {
   display: flex;
   align-items: center;
-  margin-bottom: var(--sp-sm);
 }
 .attention-title {
   font-size: 14px;
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-medium);
   color: var(--text-primary);
   flex: 1;
 }
@@ -384,30 +386,29 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 .attention-dismiss:hover { background: var(--orange-20); color: var(--text-primary); }
 .attention-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2xsm);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-sm);
 }
 .attention-item {
   display: flex;
   align-items: center;
   gap: var(--sp-sm);
   padding: var(--sp-2xsm) var(--sp-xsm);
-  background: rgba(255,255,255,0.55);
   border-radius: var(--cr-2xsm);
 }
 .attention-thumb {
   flex-shrink: 0;
   border-radius: var(--cr-3xsm);
   overflow: hidden;
-  width: 36px;
-  height: 36px;
+  width: 80px;
+  height: 80px;
 }
 .attention-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: var(--sp-3xsm);
   min-width: 0;
 }
 .attention-item-title {
@@ -428,8 +429,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   font-size: 13px;
   text-decoration: none;
   white-space: nowrap;
-  flex-shrink: 0;
-  margin-left: auto;
+  align-self: flex-start;
 }
 .attention-link:hover { color: var(--orange-60); text-decoration: underline; }
 
@@ -1503,7 +1503,6 @@ td {
     <div class="page-header">
       <div class="page-header-left">
         <h1>Releases</h1>
-        <p class="subtitle">40 releases</p>
       </div>
       <button class="btn btn-ghost" onclick="void(0)">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 7l3 3 3-3M2.5 12v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1"/></svg>
@@ -3079,8 +3078,8 @@ function renderAttentionBlock() {
       <div class="attention-info">
         <span class="attention-item-title">${r.title}</span>
         <span class="attention-item-artist">${r.artist}</span>
+        <a class="attention-link" href="#">Review →</a>
       </div>
-      <a class="attention-link" href="#">Review now →</a>
     </div>
   `).join('');
 }
