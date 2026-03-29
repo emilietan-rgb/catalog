@@ -1127,6 +1127,7 @@ td {
   overflow: hidden;
 }
 .release-cover-svg { width: 40px; height: 40px; border-radius: var(--cr-2xsm); flex-shrink: 0; }
+.release-cover-img { width: 48px; height: 48px; border-radius: var(--cr-2xsm); flex-shrink: 0; object-fit: cover; display: block; }
 .release-info { min-width: 0; flex: 1; }
 .release-title {
   font-weight: var(--fw-medium);
@@ -1518,24 +1519,7 @@ td {
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
         </button>
       </div>
-      <div class="attention-list">
-        <div class="attention-item">
-          <div class="attention-thumb" id="thumb-7"></div>
-          <div class="attention-info">
-            <span class="attention-item-title">Midnight Frequencies</span>
-            <span class="attention-item-artist">Neon Waves</span>
-          </div>
-          <a class="attention-link" href="#">Review now →</a>
-        </div>
-        <div class="attention-item">
-          <div class="attention-thumb" id="thumb-8"></div>
-          <div class="attention-info">
-            <span class="attention-item-title">Tessellate</span>
-            <span class="attention-item-artist">Éclat</span>
-          </div>
-          <a class="attention-link" href="#">Review now →</a>
-        </div>
-      </div>
+      <div class="attention-list" id="attentionList"></div>
     </div>
 
     <!-- Toolbar -->
@@ -2431,6 +2415,101 @@ const releases = [
   },
 ];
 
+// Assign unique Unsplash cover images
+const coverUrls = [
+  'https://images.unsplash.com/photo-1667833966178-f98135a582f8?q=80&w=400',
+  'https://images.unsplash.com/photo-1619376269004-7e287504b323?q=80&w=400',
+  'https://images.unsplash.com/photo-1614302102862-16c84d59f855?q=80&w=400',
+  'https://images.unsplash.com/photo-1565437919135-fd813caf3540?q=80&w=400',
+  'https://images.unsplash.com/photo-1579284209845-8476c2eb0fde?q=80&w=400',
+  'https://images.unsplash.com/photo-1666185761628-00a3655f4f7b?q=80&w=400',
+  'https://images.unsplash.com/photo-1646464824553-879b506b7a2d?q=80&w=400',
+  'https://images.unsplash.com/photo-1677468679328-732c647338e9?q=80&w=400',
+  'https://images.unsplash.com/photo-1771795530901-7b569b8e585d?q=80&w=400',
+  'https://images.unsplash.com/photo-1654303440866-a53cd1285cc3?q=80&w=400',
+  'https://images.unsplash.com/photo-1690993660127-1a7cdd87ec9e?q=80&w=400',
+  'https://images.unsplash.com/photo-1634149135793-7e8027d3ce20?q=80&w=400',
+  'https://images.unsplash.com/photo-1604955123743-3bcf76e1f486?q=80&w=400',
+  'https://images.unsplash.com/photo-1625513035102-fb52db47979b?q=80&w=400',
+  'https://images.unsplash.com/photo-1639490204002-e38aef42e021?q=80&w=400',
+  'https://images.unsplash.com/photo-1633872908246-8525af262f76?q=80&w=400',
+  'https://images.unsplash.com/photo-1559825195-0cebb6ea1d18?q=80&w=400',
+  'https://images.unsplash.com/photo-1574158622682-e40e69881006?q=80&w=400',
+  'https://images.unsplash.com/photo-1639746292626-690a884030b5?q=80&w=400',
+  'https://images.unsplash.com/photo-1601518296869-26176c7d9436?q=80&w=400',
+  'https://images.unsplash.com/photo-1744058589034-1894cbcd4065?q=80&w=400',
+  'https://images.unsplash.com/photo-1607059991241-58ea9e39fd1b?q=80&w=400',
+  'https://images.unsplash.com/photo-1508865896381-9e8a88f5ec94?q=80&w=400',
+  'https://images.unsplash.com/photo-1590642956346-d2c9095f0bf1?q=80&w=400',
+  'https://images.unsplash.com/photo-1600180073523-fa4a48f9b8b3?q=80&w=400',
+  'https://images.unsplash.com/photo-1769451741805-65e173d9a084?q=80&w=400',
+  'https://images.unsplash.com/photo-1705249541174-64d3e3113bcd?q=80&w=400',
+  'https://images.unsplash.com/photo-1617597628547-6f9e223c99fe?q=80&w=400',
+  'https://images.unsplash.com/photo-1603845419385-feb55c1f0b69?q=80&w=400',
+  'https://images.unsplash.com/photo-1627773725585-87dd714c62e3?q=80&w=400',
+  'https://images.unsplash.com/photo-1415886541506-6efc5e4b1786?q=80&w=400',
+  'https://images.unsplash.com/photo-1533711539834-ebcee9ed4975?q=80&w=400',
+  'https://images.unsplash.com/photo-1543379344-402b42ddbe8a?q=80&w=400',
+  'https://images.unsplash.com/photo-1484589065579-248aad0d8b13?q=80&w=400',
+  'https://images.unsplash.com/photo-1698086502859-83cbc687a17c?q=80&w=400',
+  'https://images.unsplash.com/photo-1610021543456-a144820019bb?q=80&w=400',
+  'https://images.unsplash.com/photo-1666315570254-9bf5eb48df46?q=80&w=400',
+  'https://images.unsplash.com/photo-1531012451721-432c0ae74527?q=80&w=400',
+  'https://images.unsplash.com/flagged/photo-1572392640988-ba48d1a74457?q=80&w=400',
+  'https://images.unsplash.com/photo-1573184426556-05c59aca2e3b?q=80&w=400',
+];
+releases.forEach((r, i) => { r.coverImg = coverUrls[i]; });
+
+// Artist & title overrides
+const releaseOverrides = {
+   1: { artist: 'Zara Bloom',    title: 'Midnight Echo' },
+   2: { artist: 'Marcus Dae',    title: 'Street Psalms' },
+   3: { artist: 'Neon Drift',    title: 'Ultraviolet' },
+   4: { artist: 'Léa Soleil',    title: 'Lumière Noire' },
+   5: { artist: 'KZR',           title: 'Zone 7' },
+   6: { artist: 'Ivory Skies',   title: 'Dissolve' },
+   7: { artist: 'Theo Vance',    title: 'Raw Cut' },
+   8: { artist: 'Amara Nyx',     title: 'Silk & Smoke' },
+   9: { artist: 'Fold',          title: 'Patterns' },
+  10: { artist: 'Jade Rivers',   title: 'Still Water' },
+  11: { artist: 'Echo Park',     title: 'Frequency' },
+  12: { artist: 'Sana Moon',     title: 'Night Ritual' },
+  13: { artist: 'Drift State',   title: 'Formless' },
+  14: { artist: 'Kira Voss',     title: 'Glass Heart' },
+  15: { artist: 'BLVK',          title: 'No Signal' },
+  16: { artist: 'Maëva Cruz',    title: 'Saudade' },
+  17: { artist: 'Void Theory',   title: 'Collapse' },
+  18: { artist: 'Lena Maris',    title: 'Breathe Again' },
+  19: { artist: 'Abstract Kid',  title: 'Memory Leak' },
+  20: { artist: 'Solène',        title: 'Entre Deux' },
+  21: { artist: 'Jay Novak',     title: 'Concrete Dreams' },
+  22: { artist: 'Pale Wave',     title: 'Horizon' },
+  23: { artist: 'Remy Fox',      title: 'Gravel & Gold' },
+  24: { artist: 'Luna Park',     title: 'Soft Chaos' },
+  25: { artist: 'Axis',          title: 'Tension' },
+  26: { artist: 'Célia Vox',     title: 'Résonance' },
+  27: { artist: 'Ghost Static',  title: 'White Noise' },
+  28: { artist: 'Mila Stern',    title: 'Velvet Underground' },
+  29: { artist: 'Dark Matter',   title: 'Event Horizon' },
+  30: { artist: 'Kai Bennet',    title: 'Slow Burn' },
+  31: { artist: 'Nova Flux',     title: 'Cascade' },
+  32: { artist: 'Ines Mora',     title: 'Tierra' },
+  33: { artist: 'Static Blue',   title: 'Overload' },
+  34: { artist: 'Yara',          title: 'Golden Hour' },
+  35: { artist: 'Drift Code',    title: 'System Failure' },
+  36: { artist: 'Camille Noir',  title: 'Shadows' },
+  37: { artist: 'RXMVN',         title: 'Outro' },
+  38: { artist: 'Elara',         title: 'Bloom' },
+  39: { artist: 'Phase One',     title: 'Signal Lost' },
+  40: { artist: 'Vera Souls',    title: 'Clarity' },
+};
+releases.forEach(r => {
+  if (releaseOverrides[r.id]) {
+    r.title  = releaseOverrides[r.id].title;
+    r.artist = releaseOverrides[r.id].artist;
+  }
+});
+
 // ─── State ────────────────────────────────────────────────────────────────
 let activeFilter = "all";
 let expandedRows = new Set();
@@ -2573,7 +2652,7 @@ function renderTable() {
     tr.innerHTML = `
       <td>
         <div class="release-cell">
-          ${coverSVG(r.coverHue)}
+          <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy">
           <div class="release-info">
             <div class="release-title">${r.title}</div>
             <div class="release-artist">${r.artist}</div>
@@ -2659,7 +2738,7 @@ function openPanel(id) {
   openPanelId = id;
 
   document.getElementById('panelTitle').textContent = r.title;
-  document.getElementById('panelCover').innerHTML = coverSVGLarge(r.coverHue);
+  document.getElementById('panelCover').innerHTML = `<img src="${r.coverImg}" alt="${r.title}" style="display:block;width:100%;height:100%;object-fit:cover;">`;
   document.getElementById('panelRelTitle').textContent = r.title;
   document.getElementById('panelRelArtist').textContent = r.artist;
   document.getElementById('panelStatusWrap').innerHTML = statusChip(r.status);
@@ -2910,7 +2989,7 @@ function renderGrid() {
     card.className = 'release-card';
     card.innerHTML = `
       <div class="release-card-cover">
-        ${coverSVGCard(r.coverHue)}
+        <img src="${r.coverImg}" alt="${r.title}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;">
         <button class="card-star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}"
           onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)"
           title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}">
@@ -2985,11 +3064,27 @@ function applyCustomDate() {
   closeDateModal();
 }
 
-// ─── Attention block thumbnails ───────────────────────────────────────────
-[{id:7,hue:220},{id:8,hue:345}].forEach(({id,hue}) => {
-  const el = document.getElementById('thumb-' + id);
-  if (el) el.innerHTML = coverSVG(hue, 36);
-});
+// ─── Attention block ──────────────────────────────────────────────────────
+function renderAttentionBlock() {
+  const needAction = releases.filter(r => r.status === 'need-action');
+  const block = document.getElementById('attentionBlock');
+  const list  = document.getElementById('attentionList');
+  if (!needAction.length) { block.classList.add('hidden'); return; }
+  block.classList.remove('hidden');
+  list.innerHTML = needAction.map(r => `
+    <div class="attention-item">
+      <div class="attention-thumb">
+        <img src="${r.coverImg}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div class="attention-info">
+        <span class="attention-item-title">${r.title}</span>
+        <span class="attention-item-artist">${r.artist}</span>
+      </div>
+      <a class="attention-link" href="#">Review now →</a>
+    </div>
+  `).join('');
+}
+renderAttentionBlock();
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 renderTable();
