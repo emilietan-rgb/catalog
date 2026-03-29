@@ -871,8 +871,8 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .artist-row:hover { background: var(--neutral-30); }
 .artist-row.selected { background: var(--neutral-30); }
 .artist-avatar {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -881,7 +881,9 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   font-weight: var(--fw-semibold);
   color: #fff;
   flex-shrink: 0;
+  overflow: hidden;
 }
+.artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .artist-row-info { flex: 1; min-width: 0; }
 .artist-row-name {
   font-size: 14px;
@@ -2832,6 +2834,36 @@ const artistData = Object.entries(artistCounts)
   .sort((a, b) => b.releases - a.releases || a.name.localeCompare(b.name));
 const pinnedArtistsSet = new Set(artistData.filter(a => a.releases >= 2).map(a => a.name));
 
+const _avatarUrls = [
+  'https://images.unsplash.com/photo-1595422656857-ced3a4a0ce25?q=80&w=400',
+  'https://images.unsplash.com/photo-1571310100246-e0676f359b42?q=80&w=400',
+  'https://images.unsplash.com/photo-1625957454212-6831a9bf582a?q=80&w=400',
+  'https://images.unsplash.com/photo-1675972463384-9166f49fd748?q=80&w=400',
+  'https://images.unsplash.com/photo-1549780101-f42a412c768b?q=80&w=400',
+  'https://images.unsplash.com/photo-1548527121-52781ea7929f?q=80&w=400',
+  'https://images.unsplash.com/photo-1678047824716-9bbc93c63d72?q=80&w=400',
+  'https://images.unsplash.com/photo-1773698403328-e6891737b7dd?q=80&w=400',
+  'https://images.unsplash.com/photo-1645305783356-f9d958f6413c?q=80&w=400',
+  'https://images.unsplash.com/photo-1533711539834-ebcee9ed4975?q=80&w=400',
+  'https://plus.unsplash.com/premium_photo-1709142797615-c039c3a8970c?q=80&w=400',
+  'https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?q=80&w=400',
+  'https://images.unsplash.com/flagged/photo-1595514191830-3e96a518989b?q=80&w=400',
+  'https://plus.unsplash.com/premium_photo-1664533227571-cb18551cac82?q=80&w=400',
+  'https://images.unsplash.com/photo-1567784177951-6fa58317e16b?q=80&w=400',
+  'https://plus.unsplash.com/premium_photo-1663100749349-14687e320b5c?q=80&w=400',
+  'https://images.unsplash.com/photo-1531123414780-f74242c2b052?q=80&w=400',
+  'https://images.unsplash.com/photo-1617188017502-fc2882a4a09f?q=80&w=400',
+];
+const _artistOrder = [
+  'Zara Bloom','Marcus Dae','Neon Drift','Léa Soleil','KZR','Ivory Skies','Theo Vance','Amara Nyx',
+  'Fold','Jade Rivers','Echo Park','Sana Moon','Drift State','Kira Voss','BLVK','Maëva Cruz',
+  'Void Theory','Lena Maris','Abstract Kid','Solène','Jay Novak','Pale Wave','Remy Fox','Luna Park',
+  'Axis','Célia Vox','Ghost Static','Mila Stern','Dark Matter','Kai Bennet','Nova Flux','Ines Mora',
+  'Static Blue','Yara','Drift Code','Camille Noir','RXMVN','Elara','Phase One','Vera Souls',
+];
+const artistAvatarMap = {};
+_artistOrder.forEach((name, i) => { artistAvatarMap[name] = _avatarUrls[i % _avatarUrls.length]; });
+
 let selectedArtists = new Set();
 let pendingArtists  = new Set();
 
@@ -2857,8 +2889,13 @@ function renderArtistList(query = '') {
     const sel = pendingArtists.has(a.name) ? 'selected' : '';
     const isPinned = pinnedArtistsSet.has(a.name);
     const safeName = a.name.replace(/'/g,"\\'");
+    const avatarUrl = artistAvatarMap[a.name];
+    const avatarInner = avatarUrl
+      ? `<img src="${avatarUrl}" alt="${a.name}" loading="lazy">`
+      : initials;
+    const avatarBg = avatarUrl ? '' : `style="background:hsl(${hue},55%,52%)"`;
     return `<div class="artist-row ${sel}" onclick="toggleArtistRow('${safeName}', this)">
-      <div class="artist-avatar" style="background:hsl(${hue},55%,52%)">${initials}</div>
+      <div class="artist-avatar" ${avatarBg}>${avatarInner}</div>
       <div class="artist-row-info">
         <div class="artist-row-name">${a.name}</div>
         <div class="artist-row-count">${a.releases} release${a.releases > 1 ? 's' : ''}</div>
