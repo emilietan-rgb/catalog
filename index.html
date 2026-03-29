@@ -453,18 +453,154 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .toolbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--sp-xsm);
 }
-.toolbar-filters {
+.toolbar-left {
   display: flex;
   align-items: center;
   gap: var(--sp-xsm);
-  margin-left: auto;
+  flex: 1;
+  min-width: 0;
 }
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  flex-shrink: 0;
+}
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--neutral-60);
+  margin: 0 2px;
+}
+
+/* Add filters popper */
+.add-filters-wrap { position: relative; }
+.add-filters-popper {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 224px;
+  background: var(--bg-primary);
+  border: 1px solid var(--neutral-50);
+  border-radius: var(--cr-2xsm);
+  box-shadow: 0 4px 16px -4px rgba(16,24,40,0.10), 0 2px 6px -2px rgba(16,24,40,0.06);
+  padding: 0 0 var(--sp-2xsm);
+  z-index: 300;
+}
+.popper-search-wrap {
+  padding: var(--sp-xsm);
+  border-bottom: 1px solid var(--neutral-40);
+  margin-bottom: var(--sp-3xsm);
+}
+.popper-search {
+  width: 100%;
+  height: 30px;
+  padding: 0 var(--sp-xsm);
+  border: 1px solid var(--neutral-60);
+  border-radius: var(--cr-3xsm);
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+}
+.popper-search::placeholder { color: var(--text-secondary); }
+.popper-section-label {
+  padding: var(--sp-3xsm) var(--sp-sm) 2px;
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.popper-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xsm);
+  width: 100%;
+  padding: 5px var(--sp-sm);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+.popper-item:hover { background: var(--neutral-30); }
+.popper-item input[type="checkbox"] { accent-color: var(--neutral-190); cursor: pointer; width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Active filter chips (from Add filters) */
+.active-chips { display: flex; align-items: center; gap: var(--sp-3xsm); flex-wrap: wrap; }
+.active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+  padding: 0 6px 0 8px;
+  border-radius: var(--cr-rounded);
+  background: var(--accent-10);
+  border: 1px solid var(--accent-60);
+  color: var(--accent-70);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+.active-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--accent-60);
+}
+.active-chip-remove:hover { background: var(--accent-60); color: #fff; }
+
+/* Inline clear × inside filter buttons */
+.filter-btn-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--accent-60);
+  margin-left: 1px;
+}
+.filter-btn-clear:hover { background: var(--accent-60); color: #fff; }
+
+/* List/Grid view toggle */
+.view-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: var(--bg-secondary);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+.view-btn + .view-btn { border-left: 1px solid var(--border-primary); }
+.view-btn:hover { background: var(--neutral-40); color: var(--text-primary); }
+.view-btn.active { background: var(--neutral-40); color: var(--text-primary); }
 .search-input-wrap {
   position: relative;
-  width: 400px;
-  max-width: 400px;
+  width: 300px;
+  max-width: 300px;
   flex-shrink: 0;
 }
 .search-input-wrap svg {
@@ -607,12 +743,12 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   margin: calc(-1 * var(--sp-xsm)) 0 0;
   line-height: 18px;
 }
-.modal-quick-years {
+.modal-quick-filters {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-2xsm);
 }
-.year-btn {
+.quick-filter-btn {
   height: 32px;
   padding: 0 var(--sp-sm);
   border: 1px solid var(--neutral-60);
@@ -626,8 +762,8 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   transition: background 0.1s, border-color 0.1s, color 0.1s;
   white-space: nowrap;
 }
-.year-btn:hover { background: var(--neutral-30); border-color: var(--neutral-70); }
-.year-btn.active { background: var(--accent-60); border-color: var(--accent-60); color: #fff; }
+.quick-filter-btn:hover { background: var(--neutral-30); border-color: var(--neutral-70); }
+.quick-filter-btn.active { background: var(--accent-60); border-color: var(--accent-60); color: #fff; }
 .modal-divider { height: 1px; background: var(--neutral-40); }
 .modal-custom-date { display: flex; flex-direction: column; gap: var(--sp-xsm); }
 .modal-label { font-size: 13px; font-weight: var(--fw-medium); color: var(--text-secondary); }
@@ -782,6 +918,12 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .artist-modal-footer .btn { flex: 1; justify-content: center; }
 
 /* ─── Status Tabs (Harmony Secondary Tabs) ───────────────────────────────── */
+.pills-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-xsm);
+}
 .status-pills {
   display: flex;
   align-items: center;
@@ -1305,41 +1447,72 @@ td {
 
     <!-- Toolbar -->
     <div class="toolbar">
-      <div class="search-input-wrap">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
-        <input type="text" class="search-input" placeholder="Search by title, artist, label or UPC…" id="searchInput">
-      </div>
-      <div class="toolbar-filters">
-        <div class="date-filter-wrap" id="dateFilterWrap">
-          <button class="filter-btn" id="dateFilterBtn" onclick="toggleDateDropdown(event)">
-            <span id="dateFilterLabel">Release date</span> <span class="filter-arrow">▾</span>
+      <div class="toolbar-left">
+        <div class="add-filters-wrap" id="addFiltersWrap">
+          <button class="filter-btn" id="addFiltersBtn" onclick="toggleAddFiltersPopper(event)">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1.5 4h13M4.5 8h7M7 12h2"/></svg>
+            Add filters
           </button>
-          <div class="date-dropdown hidden" id="dateDropdown">
-            <button class="dd-item dd-item-check" data-quick="all" onclick="applyQuickDate('all')"><span class="dd-check" id="chk-all">✓</span>All time</button>
-            <button class="dd-item dd-item-check" data-quick="days7" onclick="applyQuickDate('days7')"><span class="dd-check" id="chk-days7"></span>Last 7 days</button>
-            <button class="dd-item dd-item-check" data-quick="month" onclick="applyQuickDate('month')"><span class="dd-check" id="chk-month"></span>Last month</button>
-            <button class="dd-item dd-item-check" data-quick="months3" onclick="applyQuickDate('months3')"><span class="dd-check" id="chk-months3"></span>Last 3 months</button>
-            <div class="dd-sep"></div>
-            <button class="dd-item" onclick="openDateModal()">Before… <span class="dd-arrow">›</span></button>
+          <div class="add-filters-popper hidden" id="addFiltersPopper">
+            <div class="popper-search-wrap">
+              <input type="text" class="popper-search" placeholder="Search filters…">
+            </div>
+            <div class="popper-section-label">Account</div>
+            <label class="popper-item"><input type="checkbox"> Sub-label</label>
+            <label class="popper-item"><input type="checkbox"> Country</label>
+            <div class="popper-section-label">Contract</div>
+            <label class="popper-item"><input type="checkbox"> Contract type</label>
+            <label class="popper-item"><input type="checkbox"> Royalty rate</label>
+            <div class="popper-section-label">Release</div>
+            <label class="popper-item"><input type="checkbox"> Format</label>
+            <label class="popper-item"><input type="checkbox"> Genre</label>
+            <label class="popper-item"><input type="checkbox"> Language</label>
           </div>
         </div>
-        <button class="filter-btn" id="artistFilterBtn" onclick="openArtistModal()"><span id="artistFilterLabel">Artist</span> <span class="filter-arrow">▾</span></button>
-        <button class="filter-btn">More filters <span class="filter-arrow">▾</span></button>
+        <div class="active-chips" id="activeChips"></div>
+      </div>
+
+      <div class="toolbar-right">
+        <button class="filter-btn" id="dateFilterBtn" onclick="openDateModal()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M5 1v3M11 1v3M2 7h12"/></svg>
+          <span id="dateFilterLabel">Release date</span>
+          <span class="filter-btn-clear hidden" id="dateClearBtn" onclick="clearDateFilter(event)">×</span>
+        </button>
+        <button class="filter-btn" id="artistFilterBtn" onclick="openArtistModal()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 13.5c0-2.5 2.5-4.5 5.5-4.5s5.5 2 5.5 4.5"/></svg>
+          <span id="artistFilterLabel">Artists</span>
+          <span class="filter-btn-clear hidden" id="artistClearBtn" onclick="clearArtistFilter(event)">×</span>
+        </button>
+        <div class="toolbar-divider"></div>
         <button class="watchlist-btn" id="watchlistBtn" onclick="toggleWatchlistFilter()">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
           <span id="watchlistBtnLabel">Watchlist</span>
         </button>
+        <div class="view-toggle">
+          <button class="view-btn active" id="listViewBtn" onclick="setView('list')" title="List view">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+          </button>
+          <button class="view-btn" id="gridViewBtn" onclick="setView('grid')" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Status Tabs -->
-    <div class="status-pills" id="statusPills">
-      <button class="pill active" data-status="all">All (40)</button>
-      <button class="pill" data-status="draft">Draft (2)</button>
-      <button class="pill" data-status="processing">Processing (4)</button>
-      <button class="pill" data-status="delivered">Live (30)</button>
-      <button class="pill" data-status="need-action">Need action (2)</button>
-      <button class="pill" data-status="unsellable">Unsellable (2)</button>
+    <!-- Status Tabs + Search -->
+    <div class="pills-row">
+      <div class="status-pills" id="statusPills">
+        <button class="pill active" data-status="all">All (40)</button>
+        <button class="pill" data-status="draft">Draft (2)</button>
+        <button class="pill" data-status="processing">Processing (4)</button>
+        <button class="pill" data-status="delivered">Live (30)</button>
+        <button class="pill" data-status="need-action">Need action (2)</button>
+        <button class="pill" data-status="unsellable">Unsellable (2)</button>
+      </div>
+      <div class="search-input-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+        <input type="text" class="search-input" placeholder="Search by name or ID…" id="searchInput">
+      </div>
     </div>
 
     <!-- Table -->
@@ -1348,6 +1521,7 @@ td {
         <thead>
           <tr>
             <th style="width:300px"><div class="th-inner">Release</div></th>
+            <th style="width:72px"><div class="th-inner">Format</div></th>
             <th><div class="th-inner">Release date
               <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
             </div></th>
@@ -1407,7 +1581,6 @@ const releases = [
     coverHue: 210,
     tracks: [
       { num: 1, title: "Lueurs", artists: "Aurélie Dumas", isrc: "" },
-      { num: 2, title: "Lueurs (Instrumental)", artists: "Aurélie Dumas", isrc: "" },
     ]
   },
   {
@@ -1466,8 +1639,7 @@ const releases = [
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 38,
     tracks: [
-      { num: 1, title: "Dérives",              artists: "Marco & The Drift", isrc: "FRLM12500401" },
-      { num: 2, title: "Dérives (Club Mix)",   artists: "Marco & The Drift", isrc: "FRLM12500402" },
+      { num: 1, title: "Dérives", artists: "Marco & The Drift", isrc: "FRLM12500401" },
     ]
   },
   {
@@ -1504,8 +1676,9 @@ const releases = [
       { num: 2, title: "La chaleur en mai", artists: "Solange Mireille", isrc: "FRLM12500602" },
       { num: 3, title: "Janvier bleu",      artists: "Solange Mireille", isrc: "FRLM12500603" },
       { num: 4, title: "Carreaux de lune",  artists: "Solange Mireille", isrc: "FRLM12500604" },
-      { num: 5, title: "Le bord du monde",  artists: "Solange Mireille", isrc: "FRLM12500605" },
+      { num: 5, title: "Le bord du monde",   artists: "Solange Mireille", isrc: "FRLM12500605" },
       { num: 6, title: "Solstice (Reprise)", artists: "Solange Mireille", isrc: "FRLM12500606" },
+      { num: 7, title: "Dernier soleil",     artists: "Solange Mireille", isrc: "FRLM12500607" },
     ]
   },
 
@@ -1569,8 +1742,9 @@ const releases = [
       { num: 2, title: "Chambre obscure",  artists: "Cassian Bleu", isrc: "FRLM12100902" },
       { num: 3, title: "Analogique",       artists: "Cassian Bleu", isrc: "FRLM12100903" },
       { num: 4, title: "Diaphragme",       artists: "Cassian Bleu", isrc: "FRLM12100904" },
-      { num: 5, title: "Mise au point",    artists: "Cassian Bleu", isrc: "FRLM12100905" },
-      { num: 6, title: "Négatif",          artists: "Cassian Bleu", isrc: "FRLM12100906" },
+      { num: 5, title: "Mise au point", artists: "Cassian Bleu", isrc: "FRLM12100905" },
+      { num: 6, title: "Négatif",       artists: "Cassian Bleu", isrc: "FRLM12100906" },
+      { num: 7, title: "Développement", artists: "Cassian Bleu", isrc: "FRLM12100907" },
     ]
   },
   {
@@ -1585,8 +1759,7 @@ const releases = [
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 200,
     tracks: [
-      { num: 1, title: "Première Lumière",              artists: "Aurélie Dumas", isrc: "FRLM12001001" },
-      { num: 2, title: "Première Lumière (Acoustic)",   artists: "Aurélie Dumas", isrc: "FRLM12001002" },
+      { num: 1, title: "Première Lumière", artists: "Aurélie Dumas", isrc: "FRLM12001001" },
     ]
   },
 
@@ -1603,9 +1776,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 178, warn: null },
     coverHue: 208,
     tracks: [
-      { num: 1, title: "Cascade",               artists: "Aurélie Dumas", isrc: "FRLM12501101" },
-      { num: 2, title: "Cascade (Radio Edit)",   artists: "Aurélie Dumas", isrc: "FRLM12501102" },
-      { num: 3, title: "Cascade (Instrumental)", artists: "Aurélie Dumas", isrc: "FRLM12501103" },
+      { num: 1, title: "Cascade", artists: "Aurélie Dumas", isrc: "FRLM12501101" },
     ]
   },
   {
@@ -1664,8 +1835,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 220, warn: null },
     coverHue: 175,
     tracks: [
-      { num: 1, title: "Chrome",          artists: "Neon Waves", isrc: "FRLM12401401" },
-      { num: 2, title: "Chrome (Remix)",  artists: "Neon Waves", isrc: "FRLM12401402" },
+      { num: 1, title: "Chrome", artists: "Neon Waves", isrc: "FRLM12401401" },
     ]
   },
   {
@@ -1782,8 +1952,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 215, warn: null },
     coverHue: 145,
     tracks: [
-      { num: 1, title: "404",               artists: "Null Pointer", isrc: "FRLM12402001" },
-      { num: 2, title: "404 (Dub Version)", artists: "Null Pointer", isrc: "FRLM12402002" },
+      { num: 1, title: "404", artists: "Null Pointer", isrc: "FRLM12402001" },
     ]
   },
   {
@@ -1819,8 +1988,7 @@ const releases = [
     platforms: { count: 40, total: 42, territories: 190, warn: null },
     coverHue: 310,
     tracks: [
-      { num: 1, title: "Velours",              artists: "Solange Mireille", isrc: "FRLM12302201" },
-      { num: 2, title: "Velours (Version duo)", artists: "Solange Mireille", isrc: "FRLM12302202" },
+      { num: 1, title: "Velours", artists: "Solange Mireille", isrc: "FRLM12302201" },
     ]
   },
   {
@@ -1914,8 +2082,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 205, warn: null },
     coverHue: 215,
     tracks: [
-      { num: 1, title: "Particules",              artists: "Aurélie Dumas", isrc: "FRLM12302701" },
-      { num: 2, title: "Particules (Extended)",   artists: "Aurélie Dumas", isrc: "FRLM12302702" },
+      { num: 1, title: "Particules", artists: "Aurélie Dumas", isrc: "FRLM12302701" },
     ]
   },
   {
@@ -1995,8 +2162,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 222, warn: null },
     coverHue: 168,
     tracks: [
-      { num: 1, title: "Chlore",           artists: "Null Pointer", isrc: "FRLM12303101" },
-      { num: 2, title: "Chlore (Alt Mix)", artists: "Null Pointer", isrc: "FRLM12303102" },
+      { num: 1, title: "Chlore", artists: "Null Pointer", isrc: "FRLM12303101" },
     ]
   },
   {
@@ -2053,8 +2219,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 160, warn: null },
     coverHue: 290,
     tracks: [
-      { num: 1, title: "Rosée",               artists: "Doux Rêve", isrc: "FRLM12303401" },
-      { num: 2, title: "Rosée (Night Edit)",  artists: "Doux Rêve", isrc: "FRLM12303402" },
+      { num: 1, title: "Rosée", artists: "Doux Rêve", isrc: "FRLM12303401" },
     ]
   },
   {
@@ -2073,8 +2238,9 @@ const releases = [
       { num: 2,  title: "Grain",         artists: "Cassian Bleu", isrc: "FRLM12303502" },
       { num: 3,  title: "Texture",       artists: "Cassian Bleu", isrc: "FRLM12303503" },
       { num: 4,  title: "Rugosité",      artists: "Cassian Bleu", isrc: "FRLM12303504" },
-      { num: 5,  title: "Poli",          artists: "Cassian Bleu", isrc: "FRLM12303505" },
-      { num: 6,  title: "Mat",           artists: "Cassian Bleu", isrc: "FRLM12303506" },
+      { num: 5,  title: "Poli",  artists: "Cassian Bleu", isrc: "FRLM12303505" },
+      { num: 6,  title: "Mat",   artists: "Cassian Bleu", isrc: "FRLM12303506" },
+      { num: 7,  title: "Éclat", artists: "Cassian Bleu", isrc: "FRLM12303507" },
     ]
   },
   {
@@ -2128,8 +2294,7 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 228, warn: null },
     coverHue: 350,
     tracks: [
-      { num: 1, title: "Tropique",            artists: "Solange Mireille", isrc: "FRLM12403801" },
-      { num: 2, title: "Tropique (Acoustic)", artists: "Solange Mireille", isrc: "FRLM12403802" },
+      { num: 1, title: "Tropique", artists: "Solange Mireille", isrc: "FRLM12403801" },
     ]
   },
   {
@@ -2165,8 +2330,7 @@ const releases = [
     platforms: { count: 40, total: 42, territories: 138, warn: null },
     coverHue: 42,
     tracks: [
-      { num: 1, title: "Ambre",          artists: "Cassian Bleu", isrc: "FRLM12304001" },
-      { num: 2, title: "Ambre (Soir)",   artists: "Cassian Bleu", isrc: "FRLM12304002" },
+      { num: 1, title: "Ambre", artists: "Cassian Bleu", isrc: "FRLM12304001" },
     ]
   },
 ];
@@ -2177,6 +2341,12 @@ let expandedRows = new Set();
 let openPanelId = null;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
+function releaseFormat(n) {
+  if (n === 1) return 'Single';
+  if (n <= 6)  return 'EP';
+  return 'Album';
+}
+
 function statusChip(status) {
   const map = {
     "draft":          ["chip-neutral",  "Draft"],
@@ -2250,11 +2420,20 @@ function filteredReleases() {
       if (activeDateFilter.type === 'days7') {
         const cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 7);
         matchDate = d >= cutoff;
+      } else if (activeDateFilter.type === 'days14') {
+        const cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 14);
+        matchDate = d >= cutoff;
       } else if (activeDateFilter.type === 'month') {
         const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 1);
         matchDate = d >= cutoff;
       } else if (activeDateFilter.type === 'months3') {
         const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 3);
+        matchDate = d >= cutoff;
+      } else if (activeDateFilter.type === 'months6') {
+        const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 6);
+        matchDate = d >= cutoff;
+      } else if (activeDateFilter.type === 'year') {
+        const cutoff = new Date(now); cutoff.setFullYear(cutoff.getFullYear() - 1);
         matchDate = d >= cutoff;
       } else if (activeDateFilter.type === 'before' && activeDateFilter.value) {
         matchDate = d < activeDateFilter.value;
@@ -2272,7 +2451,7 @@ function renderTable() {
   tbody.innerHTML = '';
 
   if (data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
     return;
   }
 
@@ -2295,6 +2474,7 @@ function renderTable() {
           </div>
         </div>
       </td>
+      <td style="font-size:13px;color:var(--text-secondary)">${releaseFormat(r.tracks.length)}</td>
       <td class="date-cell">${formatDate(r.date)}</td>
       <td><span class="mono">${r.upc}</span></td>
       <td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>
@@ -2318,7 +2498,7 @@ function renderTable() {
     if (isExpanded) {
       const subTr = document.createElement('tr');
       subTr.classList.add('sub-row');
-      subTr.innerHTML = `<td colspan="8">
+      subTr.innerHTML = `<td colspan="9">
         <div class="sub-table-wrap">
           <table class="sub-table">
             <thead>
@@ -2546,15 +2726,19 @@ function applyArtistFilter() {
 function updateArtistFilterBtn() {
   const btn = document.getElementById('artistFilterBtn');
   const label = document.getElementById('artistFilterLabel');
+  const clearBtn = document.getElementById('artistClearBtn');
   if (selectedArtists.size === 0) {
-    label.textContent = 'Artist';
+    label.textContent = 'Artists';
     btn.classList.remove('active-filter');
+    clearBtn.classList.add('hidden');
   } else if (selectedArtists.size === 1) {
     label.textContent = [...selectedArtists][0];
     btn.classList.add('active-filter');
+    clearBtn.classList.remove('hidden');
   } else {
     label.textContent = `${selectedArtists.size} artists`;
     btn.classList.add('active-filter');
+    clearBtn.classList.remove('hidden');
   }
 }
 
@@ -2565,59 +2749,69 @@ document.getElementById('artistSearchInput')?.addEventListener('input', e => {
 // ─── Date Filter ──────────────────────────────────────────────────────────
 let activeDateFilter = { type: 'all', value: null };
 
-function toggleDateDropdown(e) {
+function toggleAddFiltersPopper(e) {
   e.stopPropagation();
-  document.getElementById('dateDropdown').classList.toggle('hidden');
+  document.getElementById('addFiltersPopper').classList.toggle('hidden');
 }
 
 document.addEventListener('click', e => {
-  if (!document.getElementById('dateFilterWrap').contains(e.target)) {
-    document.getElementById('dateDropdown').classList.add('hidden');
+  const wrap = document.getElementById('addFiltersWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('addFiltersPopper')?.classList.add('hidden');
   }
 });
 
-function applyQuickDate(type) {
-  activeDateFilter = { type, value: null };
-  document.getElementById('dateDropdown').classList.add('hidden');
+function clearDateFilter(e) {
+  e.stopPropagation();
+  activeDateFilter = { type: 'all', value: null };
   updateDateFilterUI();
   renderTable();
 }
 
+function clearArtistFilter(e) {
+  e.stopPropagation();
+  selectedArtists.clear();
+  pendingArtists.clear();
+  updateArtistFilterBtn();
+  renderTable();
+}
+
+function setView(v) {
+  document.getElementById('listViewBtn').classList.toggle('active', v === 'list');
+  document.getElementById('gridViewBtn').classList.toggle('active', v === 'grid');
+}
+
 function updateDateFilterUI() {
-  const labels = { all: 'Release date', days7: 'Last 7 days', month: 'Last month', months3: 'Last 3 months' };
   const btn = document.getElementById('dateFilterBtn');
   const labelEl = document.getElementById('dateFilterLabel');
+  const clearBtn = document.getElementById('dateClearBtn');
+  const labels = { days7: 'Last 7 days', days14: 'Last 14 days', month: 'Last month', months3: 'Last 3 months', months6: 'Last 6 months', year: 'Last year' };
+  const isActive = activeDateFilter.type !== 'all';
 
-  // Update checkmarks
-  ['all','days7','month','months3'].forEach(k => {
-    const el = document.getElementById('chk-' + k);
-    if (el) el.textContent = activeDateFilter.type === k ? '✓' : '';
-  });
-
-  // Update button label + active state
-  if (activeDateFilter.type === 'before') {
+  if (activeDateFilter.type === 'before' && activeDateFilter.value) {
     const d = activeDateFilter.value;
     labelEl.textContent = 'Before ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    btn.classList.add('active-filter');
-  } else {
+  } else if (labels[activeDateFilter.type]) {
     labelEl.textContent = labels[activeDateFilter.type];
-    btn.classList.toggle('active-filter', activeDateFilter.type !== 'all');
+  } else {
+    labelEl.textContent = 'Release date';
   }
+  btn.classList.toggle('active-filter', isActive);
+  clearBtn.classList.toggle('hidden', !isActive);
 
-  // Highlight active year btn in modal
-  document.querySelectorAll('.year-btn').forEach(b => {
-    const yr = parseInt(b.dataset.year);
-    b.classList.toggle('active', activeDateFilter.type === 'before' && activeDateFilter.value && activeDateFilter.value.getFullYear() === yr);
+  // Highlight active quick filter btn in modal
+  document.querySelectorAll('.quick-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.type === activeDateFilter.type);
   });
 }
 
 function openDateModal() {
-  document.getElementById('dateDropdown').classList.add('hidden');
   document.getElementById('dateModalOverlay').classList.remove('hidden');
   document.getElementById('dateModal').classList.remove('hidden');
   if (activeDateFilter.type === 'before' && activeDateFilter.value) {
-    const d = activeDateFilter.value;
-    document.getElementById('customDateInput').value = d.toISOString().split('T')[0];
+    document.getElementById('customDateInput').value = activeDateFilter.value.toISOString().split('T')[0];
+  } else {
+    document.getElementById('customDateInput').value = '';
   }
   updateDateFilterUI();
 }
@@ -2627,8 +2821,8 @@ function closeDateModal() {
   document.getElementById('dateModal').classList.add('hidden');
 }
 
-function applyBeforeYear(year) {
-  activeDateFilter = { type: 'before', value: new Date(year, 0, 1) };
+function applyQuickDate(type) {
+  activeDateFilter = { type, value: null };
   updateDateFilterUI();
   renderTable();
   closeDateModal();
@@ -2650,11 +2844,6 @@ function applyCustomDate() {
 });
 
 // ─── Init ─────────────────────────────────────────────────────────────────
-// Stamp year data attrs on year buttons
-document.querySelectorAll('.year-btn').forEach(b => {
-  const m = b.textContent.match(/\d{4}/);
-  if (m) b.dataset.year = m[0];
-});
 renderTable();
 </script>
 <!-- Artist Modal -->
@@ -2686,15 +2875,13 @@ renderTable();
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
     </button>
   </div>
-  <p class="modal-subtitle">Show all releases before a specific date</p>
-  <div class="modal-quick-years">
-    <button class="year-btn" onclick="applyBeforeYear(2026)">Before 2026</button>
-    <button class="year-btn" onclick="applyBeforeYear(2025)">Before 2025</button>
-    <button class="year-btn" onclick="applyBeforeYear(2024)">Before 2024</button>
-    <button class="year-btn" onclick="applyBeforeYear(2023)">Before 2023</button>
-    <button class="year-btn" onclick="applyBeforeYear(2022)">Before 2022</button>
-    <button class="year-btn" onclick="applyBeforeYear(2021)">Before 2021</button>
-    <button class="year-btn" onclick="applyBeforeYear(2020)">Before 2020</button>
+  <div class="modal-quick-filters">
+    <button class="quick-filter-btn" data-type="days7"   onclick="applyQuickDate('days7')">Last 7 days</button>
+    <button class="quick-filter-btn" data-type="days14"  onclick="applyQuickDate('days14')">Last 14 days</button>
+    <button class="quick-filter-btn" data-type="month"   onclick="applyQuickDate('month')">Last month</button>
+    <button class="quick-filter-btn" data-type="months3"  onclick="applyQuickDate('months3')">Last 3 months</button>
+    <button class="quick-filter-btn" data-type="months6"  onclick="applyQuickDate('months6')">Last 6 months</button>
+    <button class="quick-filter-btn" data-type="year"     onclick="applyQuickDate('year')">Last year</button>
   </div>
   <div class="modal-divider"></div>
   <div class="modal-custom-date">
