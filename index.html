@@ -936,6 +936,108 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 .artist-modal-footer .btn { flex: 1; justify-content: center; }
 
+/* ─── Track Details Modal ────────────────────────────────────────────────── */
+.track-modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-primary);
+  border: 1px solid var(--neutral-50);
+  border-radius: var(--cr-md);
+  box-shadow: 0 8px 32px -8px rgba(16,24,40,0.18), 0 4px 12px -4px rgba(16,24,40,0.10);
+  width: 480px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 401;
+  overflow: hidden;
+}
+.track-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-md) var(--sp-md) var(--sp-md) var(--sp-xlg);
+  border-bottom: 1px solid var(--neutral-40);
+  flex-shrink: 0;
+}
+.track-modal-title {
+  font-size: 16px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.track-modal-body { flex: 1; overflow-y: auto; }
+.track-modal-section {
+  padding: var(--sp-md) var(--sp-xlg);
+  border-bottom: 1px solid var(--neutral-40);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.track-modal-section:last-child { border-bottom: none; }
+.track-modal-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-sm) var(--sp-xlg);
+}
+.track-modal-field { display: flex; flex-direction: column; gap: 2px; }
+.track-modal-field-label {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.track-modal-field-value {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: var(--fw-medium);
+}
+.track-modal-section-title {
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.track-modal-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.isrc-usage-list { display: flex; flex-direction: column; gap: 0; }
+.isrc-usage-group-label {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: var(--sp-2xsm) 0;
+}
+.isrc-usage-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-2xsm) 0;
+  border-bottom: 1px solid var(--neutral-30);
+  cursor: pointer;
+}
+.isrc-usage-row:last-child { border-bottom: none; }
+.isrc-usage-row input[type="checkbox"] {
+  width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; accent-color: var(--neutral-190);
+}
+.isrc-usage-info { flex: 1; min-width: 0; }
+.isrc-usage-release { font-size: 13px; font-weight: var(--fw-medium); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.isrc-usage-artist { font-size: 12px; color: var(--text-secondary); }
+.track-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-xsm);
+  padding: var(--sp-sm) var(--sp-xlg);
+  border-top: 1px solid var(--neutral-40);
+  flex-shrink: 0;
+}
+.btn-danger { background: #d92d20; color: #fff; border: none; }
+.btn-danger:hover:not(:disabled) { background: #b42318; }
+.btn-danger:disabled { background: var(--neutral-40); color: var(--text-secondary); cursor: not-allowed; }
+
 /* ─── Status Tabs (Harmony Secondary Tabs) ───────────────────────────────── */
 .pills-row {
   display: flex;
@@ -1304,8 +1406,8 @@ td {
 .date-cell { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
 
 /* ─── Sub-table (tracks) ─────────────────────────────────────────────────── */
-.sub-row { background: var(--bg-secondary) !important; cursor: default !important; }
-.sub-row:hover { background: var(--bg-secondary) !important; }
+.sub-row { background: var(--bg-primary) !important; cursor: default !important; }
+.sub-row:hover { background: var(--bg-primary) !important; }
 .sub-table-wrap { padding: 0 var(--sp-md) var(--sp-sm); }
 .sub-table {
   width: 100%;
@@ -2741,18 +2843,21 @@ function renderTable() {
               </tr>
             </thead>
             <tbody>
-              ${r.tracks.map(t => `<tr>
+              ${r.tracks.map(t => {
+                const safeTitle   = t.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                const safeArtists = t.artists.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                return `<tr>
                 <td class="track-num">${t.num}</td>
                 <td style="font-weight:500">${t.title}</td>
                 <td style="color:var(--text-secondary)">${t.artists}</td>
                 <td>
                   <div class="isrc-wrap">
-                    <span class="mono isrc-text" ${t.isrc ? `onclick="event.stopPropagation();copyISRC('${t.isrc}',this)"` : ''}>${t.isrc || '—'}</span>
+                    <span class="mono isrc-text" ${t.isrc ? `onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
                     ${t.isrc ? `<button class="copy-btn" onclick="event.stopPropagation();copyISRC('${t.isrc}',this)">copy</button>` : ''}
-                    ${t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openSoundRecording('${t.isrc}')">Shared</span>` : ''}
+                    ${t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : ''}
                   </div>
                 </td>
-              </tr>`).join('')}
+              </tr>`;}).join('')}
             </tbody>
           </table>
         </div>
@@ -2778,13 +2883,117 @@ function copyISRC(isrc, btn) {
   });
 }
 
-// ─── Sound Recording Dialog ───────────────────────────────────────────────
-function openSoundRecording(isrc) {
-  const uses = [];
+// ─── Track Details Modal ──────────────────────────────────────────────────
+function openTrackModal(isrc, trackTitle, trackArtists, currentReleaseId) {
+  const currentRelease = releases.find(r => r.id === currentReleaseId);
+
+  // Collect all individual track occurrences with this ISRC
+  const usedTracks = [];
   releases.forEach(r => {
-    r.tracks.forEach(t => { if (t.isrc === isrc) uses.push({ release: r.title, artist: r.artist, track: t.title }); });
+    r.tracks.forEach(t => {
+      if (t.isrc === isrc) usedTracks.push({ track: t, release: r });
+    });
   });
-  alert(`Sound recording: ${isrc}\nUsed in ${uses.length} release${uses.length > 1 ? 's' : ''}:\n${uses.map(u => `• ${u.release} — "${u.track}"`).join('\n')}`);
+
+  // Track info section
+  let html = `<div class="track-modal-section">
+    <div class="track-modal-fields">
+      <div class="track-modal-field">
+        <span class="track-modal-field-label">Track</span>
+        <span class="track-modal-field-value">${trackTitle}</span>
+      </div>
+      <div class="track-modal-field">
+        <span class="track-modal-field-label">ISRC</span>
+        <span class="track-modal-field-value mono">${isrc}</span>
+      </div>
+      <div class="track-modal-field">
+        <span class="track-modal-field-label">Artist(s)</span>
+        <span class="track-modal-field-value">${trackArtists}</span>
+      </div>
+      <div class="track-modal-field">
+        <span class="track-modal-field-label">Release</span>
+        <span class="track-modal-field-value">${currentRelease ? currentRelease.title : '—'}</span>
+      </div>
+    </div>
+  </div>`;
+
+  // Sound recording usage section
+  html += `<div class="track-modal-section">
+    <span class="track-modal-section-title">Sound recording usage</span>`;
+
+  if (usedTracks.length <= 1) {
+    html += `<span class="track-modal-hint">This sound recording is only used in this release.</span>`;
+  } else {
+    const distinctReleaseCount = new Set(usedTracks.map(u => u.release.id)).size;
+    html += `<span class="track-modal-hint">This sound recording appears in ${usedTracks.length} tracks across ${distinctReleaseCount} release${distinctReleaseCount > 1 ? 's' : ''}.</span>`;
+
+    const currentTracks = usedTracks.filter(({ track: t, release: r }) => r.id === currentReleaseId && t.title === trackTitle);
+    const otherTracks   = usedTracks.filter(({ track: t, release: r }) => !(r.id === currentReleaseId && t.title === trackTitle));
+
+    function usageRow({ track: t, release: r }, checked) {
+      return `<label class="isrc-usage-row">
+        <input type="checkbox" class="isrc-usage-check" data-release-id="${r.id}" ${checked ? 'checked' : ''} onchange="updateTakedownBtn()">
+        <div class="isrc-usage-info">
+          <div class="isrc-usage-release">${t.title} <span style="color:var(--text-secondary);font-weight:400">· ${r.title}</span></div>
+          <div class="isrc-usage-artist">${t.artists}</div>
+        </div>
+        ${statusChip(r.status)}
+      </label>`;
+    }
+
+    html += `<div class="isrc-usage-list">
+      <div class="isrc-usage-group-label">This track</div>
+      ${currentTracks.map(u => usageRow(u, true)).join('')}`;
+    if (otherTracks.length) {
+      html += `<div class="isrc-usage-group-label" style="margin-top:var(--sp-xsm)">Other uses</div>
+      ${otherTracks.map(u => usageRow(u, false)).join('')}`;
+    }
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('trackModalBody').innerHTML = html;
+  updateTakedownBtn();
+  document.getElementById('trackModalOverlay').classList.remove('hidden');
+  document.getElementById('trackModal').classList.remove('hidden');
+}
+
+function closeTrackModal() {
+  document.getElementById('trackModalOverlay').classList.add('hidden');
+  document.getElementById('trackModal').classList.add('hidden');
+}
+
+function updateTakedownBtn() {
+  const anyChecked = document.querySelectorAll('.isrc-usage-check:checked').length > 0;
+  document.getElementById('takedownBtn').disabled = !anyChecked;
+}
+
+function executeTakedown() {
+  document.querySelectorAll('.isrc-usage-check:checked').forEach(cb => {
+    const r = releases.find(r => r.id === parseInt(cb.dataset.releaseId));
+    if (r) r.status = 'unsellable';
+  });
+  closeTrackModal();
+  refreshPills();
+  renderTable();
+  renderAttentionBlock();
+}
+
+function refreshPills() {
+  const processingStatuses = new Set(['processing', 'under-review', 'approved-sent']);
+  const counts = {
+    all:        releases.length,
+    draft:      releases.filter(r => r.status === 'draft').length,
+    processing: releases.filter(r => processingStatuses.has(r.status)).length,
+    delivered:  releases.filter(r => r.status === 'delivered').length,
+    'need-action': releases.filter(r => r.status === 'need-action').length,
+    unsellable: releases.filter(r => r.status === 'unsellable').length,
+  };
+  const labels = { all: 'All', draft: 'Draft', processing: 'Processing', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
+  document.querySelectorAll('#statusPills .pill').forEach(pill => {
+    const s = pill.dataset.status;
+    pill.textContent = `${labels[s]} (${counts[s]})`;
+  });
 }
 
 // ─── Side Panel ───────────────────────────────────────────────────────────
@@ -3210,6 +3419,20 @@ renderTable();
   <div class="artist-modal-body" id="artistModalBody"></div>
   <div class="artist-modal-footer">
     <button class="btn btn-dark" onclick="applyArtistFilter()" style="flex:1">Apply</button>
+  </div>
+</div>
+
+<!-- Track Details Modal -->
+<div class="modal-overlay hidden" id="trackModalOverlay" onclick="closeTrackModal()"></div>
+<div class="track-modal hidden" id="trackModal">
+  <div class="track-modal-header">
+    <span class="track-modal-title">Track details</span>
+    <button class="modal-close" onclick="closeTrackModal()">×</button>
+  </div>
+  <div class="track-modal-body" id="trackModalBody"></div>
+  <div class="track-modal-footer">
+    <button class="btn btn-ghost" onclick="closeTrackModal()">Cancel</button>
+    <button class="btn btn-danger" id="takedownBtn" disabled onclick="executeTakedown()">Take down selected</button>
   </div>
 </div>
 
