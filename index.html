@@ -1529,6 +1529,8 @@ td {
 .panel-hero-info { display: flex; flex-direction: column; gap: var(--sp-3xsm); }
 .panel-hero-title { font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
 .panel-hero-artist { font-size: 13px; color: var(--text-secondary); }
+.drawer-track-row { border-radius: var(--cr-4xsm); transition: background 0.1s; }
+.drawer-track-row.drawer-track-playing { background: var(--neutral-20); }
 .track-play-btn {
   width: 28px; height: 28px;
   border-radius: 50%;
@@ -1743,7 +1745,7 @@ td {
             <label class="popper-item"><input type="checkbox"> Contract type</label>
             <label class="popper-item"><input type="checkbox"> Royalty rate</label>
             <div class="popper-section-label">Release</div>
-            <label class="popper-item"><input type="checkbox"> Format</label>
+            <label class="popper-item"><input type="checkbox"> #Tracks</label>
             <label class="popper-item"><input type="checkbox"> Genre</label>
             <label class="popper-item"><input type="checkbox"> Language</label>
           </div>
@@ -1800,7 +1802,7 @@ td {
         <thead>
           <tr>
             <th style="width:300px"><div class="th-inner">Release</div></th>
-            <th style="width:72px"><div class="th-inner">Format</div></th>
+            <th style="width:72px"><div class="th-inner">#Tracks</div></th>
             <th><div class="th-inner">Release date
               <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
             </div></th>
@@ -2893,7 +2895,7 @@ function renderTable() {
           </div>
         </div>
       </td>
-      <td style="font-size:13px;color:var(--text-secondary)">${releaseFormat(r.tracks.length)}</td>
+      <td style="font-size:13px;color:var(--text-secondary)">${r.tracks.length}</td>
       <td class="date-cell">${formatDate(r.date)}</td>
       <td><span class="mono">${r.upc}</span></td>
       <td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>
@@ -2933,7 +2935,7 @@ function renderTable() {
                 const safeTitle   = t.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
                 const safeArtists = t.artists.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
                 const noDialog = new Set(['under-review','approved-sent','unsellable','need-action']).has(r.status);
-                return `<tr>
+                return `<tr style="cursor:pointer" onclick="event.stopPropagation();openPanelAndPlay(${r.id},${t.num})">
                 <td class="track-num">${t.num}</td>
                 <td style="font-weight:500">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</td>
                 <td style="color:var(--text-secondary)">${t.artists}</td>
@@ -2953,6 +2955,13 @@ function renderTable() {
       tbody.appendChild(subTr);
     }
   });
+}
+
+function openPanelAndPlay(id, trackNum) {
+  openPanel(id);
+  toggleDrawerPlay(trackNum);
+  const row = document.querySelector(`.drawer-track-row[data-track-num="${trackNum}"]`);
+  if (row) row.scrollIntoView({ block: 'nearest' });
 }
 
 // ─── Toggle expand ────────────────────────────────────────────────────────
@@ -3152,7 +3161,7 @@ function openPanel(id) {
     <div class="panel-meta-row"><span class="panel-meta-label">Tracks</span><span class="panel-meta-value">${r.tracks.length}</span></div>
   `;
   document.getElementById('panelTracks').innerHTML = r.tracks.map(t =>
-    `<div style="display:flex;align-items:center;gap:var(--sp-xsm);padding:var(--sp-3xsm) 0;border-bottom:1px solid var(--divider);font-size:12px">
+    `<div class="drawer-track-row" data-track-num="${t.num}" style="display:flex;align-items:center;gap:var(--sp-xsm);padding:var(--sp-3xsm) 0;border-bottom:1px solid var(--divider);font-size:12px">
       <button class="track-play-btn" data-track-num="${t.num}" onclick="toggleDrawerPlay(${t.num})" title="Play">
         <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>
       </button>
@@ -3210,6 +3219,7 @@ function toggleDrawerPlay(num) {
     btn.innerHTML = _playIcon;
     btn.title = 'Play';
   });
+  document.querySelectorAll('.drawer-track-row').forEach(row => row.classList.remove('drawer-track-playing'));
   _stopTone();
   if (prev === num) {
     _drawerPlayingNum = null;
@@ -3217,6 +3227,8 @@ function toggleDrawerPlay(num) {
     _drawerPlayingNum = num;
     const btn = document.querySelector(`.track-play-btn[data-track-num="${num}"]`);
     if (btn) { btn.classList.add('playing'); btn.innerHTML = _pauseIcon; btn.title = 'Pause'; }
+    const row = document.querySelector(`.drawer-track-row[data-track-num="${num}"]`);
+    if (row) row.classList.add('drawer-track-playing');
     _startTone();
   }
   // Sync cover overlay
@@ -3498,7 +3510,7 @@ function renderGrid() {
 
   data.forEach(r => {
     const isStarred = watchlist.has(r.id);
-    const fmt = releaseFormat(r.tracks.length);
+    const fmt = r.tracks.length + (r.tracks.length !== 1 ? ' tracks' : ' track');
     const card = document.createElement('div');
     card.className = 'release-card';
     card.innerHTML = `
