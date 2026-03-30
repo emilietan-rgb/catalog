@@ -1512,7 +1512,20 @@ td {
   overflow: hidden;
   background: var(--neutral-40);
 }
+.panel-hero-cover { cursor: pointer; position: relative; }
 .panel-hero-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.panel-cover-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0);
+  transition: background 0.15s;
+  border-radius: inherit;
+}
+.panel-hero-cover:hover .panel-cover-overlay { background: rgba(0,0,0,0.28); }
+.panel-cover-overlay svg { opacity: 0; transform: scale(0.85); transition: opacity 0.15s, transform 0.15s; }
+.panel-hero-cover:hover .panel-cover-overlay svg { opacity: 1; transform: scale(1); }
+.panel-hero-cover.cover-playing .panel-cover-overlay { background: rgba(0,0,0,0.18); }
+.panel-hero-cover.cover-playing .panel-cover-overlay svg { opacity: 1; transform: scale(1); }
 .panel-hero-info { display: flex; flex-direction: column; gap: var(--sp-3xsm); }
 .panel-hero-title { font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
 .panel-hero-artist { font-size: 13px; color: var(--text-secondary); }
@@ -3120,7 +3133,13 @@ function openPanel(id) {
   switchPanelTab('tracks');
 
   document.getElementById('panelTitle').textContent = r.title;
-  document.getElementById('panelCover').innerHTML = `<img src="${r.coverImg}" alt="${r.title}" style="display:block;width:100%;height:100%;object-fit:cover;">`;
+  const coverEl = document.getElementById('panelCover');
+  coverEl.className = 'panel-hero-cover';
+  coverEl.onclick = () => toggleDrawerPlay(1);
+  coverEl.innerHTML = `<img src="${r.coverImg}" alt="${r.title}" style="display:block;width:100%;height:100%;object-fit:cover;">
+    <div class="panel-cover-overlay" id="panelCoverOverlay">
+      <svg width="32" height="32" viewBox="0 0 16 16" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
+    </div>`;
   document.getElementById('panelRelTitle').textContent = r.title;
   document.getElementById('panelRelArtist').textContent = r.artist;
   document.getElementById('panelStatusWrap').innerHTML = statusChip(r.status);
@@ -3149,6 +3168,7 @@ function openPanel(id) {
 function closePanel() {
   openPanelId = null;
   _drawerPlayingNum = null;
+  _stopTone();
   document.getElementById('sidePanel').classList.add('hidden');
 }
 
@@ -3156,20 +3176,58 @@ let _drawerPlayingNum = null;
 const _playIcon  = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>`;
 const _pauseIcon = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/></svg>`;
 
+let _audioCtx = null;
+let _oscillator = null;
+let _gainNode = null;
+
+function _stopTone() {
+  if (_oscillator) {
+    try { _oscillator.stop(); } catch(e) {}
+    _oscillator.disconnect();
+    _oscillator = null;
+  }
+  if (_gainNode) { _gainNode.disconnect(); _gainNode = null; }
+}
+
+function _startTone() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  _gainNode = _audioCtx.createGain();
+  _gainNode.gain.setValueAtTime(0, _audioCtx.currentTime);
+  _gainNode.gain.linearRampToValueAtTime(0.08, _audioCtx.currentTime + 0.05);
+  _gainNode.connect(_audioCtx.destination);
+  _oscillator = _audioCtx.createOscillator();
+  _oscillator.type = 'sine';
+  _oscillator.frequency.setValueAtTime(80, _audioCtx.currentTime);
+  _oscillator.connect(_gainNode);
+  _oscillator.start();
+}
+
 function toggleDrawerPlay(num) {
   const prev = _drawerPlayingNum;
-  // Reset all buttons
   document.querySelectorAll('.track-play-btn').forEach(btn => {
     btn.classList.remove('playing');
     btn.innerHTML = _playIcon;
     btn.title = 'Play';
   });
+  _stopTone();
   if (prev === num) {
-    _drawerPlayingNum = null; // same track → pause
+    _drawerPlayingNum = null;
   } else {
     _drawerPlayingNum = num;
     const btn = document.querySelector(`.track-play-btn[data-track-num="${num}"]`);
     if (btn) { btn.classList.add('playing'); btn.innerHTML = _pauseIcon; btn.title = 'Pause'; }
+    _startTone();
+  }
+  // Sync cover overlay
+  const coverEl = document.getElementById('panelCover');
+  const overlayIcon = document.querySelector('#panelCoverOverlay svg');
+  if (coverEl && overlayIcon) {
+    const isPlayingFirst = _drawerPlayingNum === 1;
+    coverEl.classList.toggle('cover-playing', isPlayingFirst);
+    overlayIcon.outerHTML = isPlayingFirst
+      ? `<svg width="32" height="32" viewBox="0 0 16 16" fill="#fff"><rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/></svg>`
+      : `<svg width="32" height="32" viewBox="0 0 16 16" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>`;
   }
 }
 
