@@ -2884,7 +2884,10 @@ function copyISRC(isrc, btn) {
 }
 
 // ─── Track Details Modal ──────────────────────────────────────────────────
+let _trackModalReleaseId = null;
+
 function openTrackModal(isrc, trackTitle, trackArtists, currentReleaseId) {
+  _trackModalReleaseId = currentReleaseId;
   const currentRelease = releases.find(r => r.id === currentReleaseId);
 
   // Collect all individual track occurrences with this ISRC
@@ -2918,11 +2921,14 @@ function openTrackModal(isrc, trackTitle, trackArtists, currentReleaseId) {
   </div>`;
 
   // Sound recording usage section
-  html += `<div class="track-modal-section">
+  const isShared = usedTracks.length > 1;
+  if (isShared) {
+    html += `<div class="track-modal-section">
     <span class="track-modal-section-title">Sound recording usage</span>`;
+  }
 
-  if (usedTracks.length <= 1) {
-    html += `<span class="track-modal-hint">This sound recording is only used in this release.</span>`;
+  if (!isShared) {
+    // no section rendered — button handles it
   } else {
     const distinctReleaseCount = new Set(usedTracks.map(u => u.release.id)).size;
     html += `<span class="track-modal-hint">This sound recording appears in ${usedTracks.length} tracks across ${distinctReleaseCount} release${distinctReleaseCount > 1 ? 's' : ''}.</span>`;
@@ -2950,10 +2956,17 @@ function openTrackModal(isrc, trackTitle, trackArtists, currentReleaseId) {
     }
     html += `</div>`;
   }
-  html += `</div>`;
+  if (isShared) html += `</div>`;
 
   document.getElementById('trackModalBody').innerHTML = html;
-  updateTakedownBtn();
+  const btn = document.getElementById('takedownBtn');
+  if (isShared) {
+    btn.textContent = 'Take down selected';
+    updateTakedownBtn();
+  } else {
+    btn.textContent = 'Take down this track';
+    btn.disabled = false;
+  }
   document.getElementById('trackModalOverlay').classList.remove('hidden');
   document.getElementById('trackModal').classList.remove('hidden');
 }
@@ -2969,10 +2982,16 @@ function updateTakedownBtn() {
 }
 
 function executeTakedown() {
-  document.querySelectorAll('.isrc-usage-check:checked').forEach(cb => {
-    const r = releases.find(r => r.id === parseInt(cb.dataset.releaseId));
+  const checks = document.querySelectorAll('.isrc-usage-check:checked');
+  if (checks.length > 0) {
+    checks.forEach(cb => {
+      const r = releases.find(r => r.id === parseInt(cb.dataset.releaseId));
+      if (r) r.status = 'unsellable';
+    });
+  } else {
+    const r = releases.find(r => r.id === _trackModalReleaseId);
     if (r) r.status = 'unsellable';
-  });
+  }
   closeTrackModal();
   refreshPills();
   renderTable();
