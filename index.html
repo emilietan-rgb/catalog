@@ -1434,7 +1434,8 @@ td {
 .track-num { color: var(--text-tertiary); font-weight: var(--fw-medium); width: 24px; }
 .isrc-wrap { display: flex; align-items: center; gap: var(--sp-3xsm); }
 .isrc-text { cursor: default; }
-.isrc-text:hover { text-decoration: underline; cursor: pointer; }
+.isrc-text[onclick] { cursor: pointer; }
+.isrc-text[onclick]:hover { text-decoration: none; }
 .isrc-shared-chip {
   display: inline-flex; align-items: center;
   padding: 1px 6px;
@@ -2846,15 +2847,17 @@ function renderTable() {
               ${r.tracks.map(t => {
                 const safeTitle   = t.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
                 const safeArtists = t.artists.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                const noDialog = new Set(['under-review','approved-sent','unsellable','need-action']).has(r.status);
                 return `<tr>
                 <td class="track-num">${t.num}</td>
-                <td style="font-weight:500">${t.title}</td>
+                <td style="font-weight:500">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</td>
                 <td style="color:var(--text-secondary)">${t.artists}</td>
                 <td>
                   <div class="isrc-wrap">
-                    <span class="mono isrc-text" ${t.isrc ? `onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
+                    <span class="mono isrc-text" ${t.isrc && !noDialog ? `onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
                     ${t.isrc ? `<button class="copy-btn" onclick="event.stopPropagation();copyISRC('${t.isrc}',this)">copy</button>` : ''}
-                    ${t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : ''}
+                    ${t.isrc && (isrcReleaseCount[t.isrc] > 1) && !noDialog ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip">Shared</span>` : ''}
+                    ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}
                   </div>
                 </td>
               </tr>`;}).join('')}
@@ -2885,14 +2888,19 @@ function copyISRC(isrc, btn) {
 
 // ─── Track Details Modal ──────────────────────────────────────────────────
 let _trackModalReleaseId = null;
+let _trackModalIsrc      = null;
+let _trackModalTitle     = null;
 
 function openTrackModal(isrc, trackTitle, trackArtists, currentReleaseId) {
   _trackModalReleaseId = currentReleaseId;
+  _trackModalIsrc      = isrc;
+  _trackModalTitle     = trackTitle;
   const currentRelease = releases.find(r => r.id === currentReleaseId);
 
-  // Collect all individual track occurrences with this ISRC
+  // Collect all individual track occurrences with this ISRC, Live releases only
   const usedTracks = [];
   releases.forEach(r => {
+    if (r.status !== 'delivered') return;
     r.tracks.forEach(t => {
       if (t.isrc === isrc) usedTracks.push({ track: t, release: r });
     });
@@ -2982,16 +2990,26 @@ function updateTakedownBtn() {
 }
 
 function executeTakedown() {
+  const affectedIds = new Set();
   const checks = document.querySelectorAll('.isrc-usage-check:checked');
   if (checks.length > 0) {
     checks.forEach(cb => {
       const r = releases.find(r => r.id === parseInt(cb.dataset.releaseId));
-      if (r) r.status = 'unsellable';
+      if (r) { r.tracks.forEach(t => { if (t.isrc === _trackModalIsrc) t.takenDown = true; }); affectedIds.add(r.id); }
     });
   } else {
     const r = releases.find(r => r.id === _trackModalReleaseId);
-    if (r) r.status = 'unsellable';
+    if (r) {
+      const t = r.tracks.find(t => t.title === _trackModalTitle);
+      if (t) t.takenDown = true;
+      affectedIds.add(r.id);
+    }
   }
+  // If all tracks in a release are taken down, mark the release as taken down
+  affectedIds.forEach(id => {
+    const r = releases.find(r => r.id === id);
+    if (r && r.tracks.every(t => t.takenDown)) r.status = 'unsellable';
+  });
   closeTrackModal();
   refreshPills();
   renderTable();
