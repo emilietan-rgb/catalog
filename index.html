@@ -1473,6 +1473,7 @@ td {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   box-shadow: none;
   transition: transform 0.2s ease;
 }
@@ -1483,6 +1484,7 @@ td {
   justify-content: space-between;
   padding: var(--sp-md) var(--sp-md) var(--sp-sm);
   border-bottom: 1px solid var(--divider);
+  flex-shrink: 0;
 }
 .panel-header-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .panel-header-title { font-size: 14px; font-weight: var(--fw-semibold); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1500,13 +1502,18 @@ td {
   transition: background 0.1s;
 }
 .panel-close:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
 .panel-hero {
   display: flex;
   flex-direction: column;
   gap: var(--sp-sm);
   padding: var(--sp-md);
   border-bottom: 1px solid var(--divider);
-  flex-shrink: 0;
 }
 .panel-hero-cover {
   width: 100%;
@@ -1568,7 +1575,7 @@ td {
 }
 .panel-tab:hover { color: var(--text-primary); }
 .panel-tab.active { color: var(--text-primary); border-bottom-color: var(--neutral-190); }
-.panel-body { flex: 1; overflow-y: auto; }
+.panel-body { flex: 1; }
 .panel-tab-content { display: none; padding: var(--sp-md); }
 .panel-tab-content.active { display: block; }
 .panel-cover {
@@ -1843,27 +1850,29 @@ td {
     </div>
     <button class="panel-close" onclick="closePanel()">×</button>
   </div>
-  <div class="panel-hero">
-    <div class="panel-hero-cover" id="panelCover"></div>
-  </div>
-  <div class="panel-tabs">
-    <button class="panel-tab active" data-tab="tracks" onclick="switchPanelTab('tracks')">Tracks</button>
-    <button class="panel-tab" data-tab="information" onclick="switchPanelTab('information')">Information</button>
-    <button class="panel-tab" data-tab="distribution" onclick="switchPanelTab('distribution')">Distribution</button>
-    <button class="panel-tab" data-tab="history" onclick="switchPanelTab('history')">History</button>
-  </div>
-  <div class="panel-body">
-    <div class="panel-tab-content active" id="panelTabTracks">
-      <div id="panelTracks"></div>
+  <div class="panel-scroll">
+    <div class="panel-hero">
+      <div class="panel-hero-cover" id="panelCover"></div>
     </div>
-    <div class="panel-tab-content" id="panelTabInformation">
-      <div class="panel-meta" id="panelMeta"></div>
+    <div class="panel-tabs">
+      <button class="panel-tab active" data-tab="tracks" onclick="switchPanelTab('tracks')">Tracks</button>
+      <button class="panel-tab" data-tab="information" onclick="switchPanelTab('information')">Information</button>
+      <button class="panel-tab" data-tab="distribution" onclick="switchPanelTab('distribution')">Distribution</button>
+      <button class="panel-tab" data-tab="history" onclick="switchPanelTab('history')">History</button>
     </div>
-    <div class="panel-tab-content" id="panelTabDistribution">
-      <div class="panel-placeholder">Platform distribution details coming soon.</div>
-    </div>
-    <div class="panel-tab-content" id="panelTabHistory">
-      <div class="panel-placeholder">History coming soon.</div>
+    <div class="panel-body">
+      <div class="panel-tab-content active" id="panelTabTracks">
+        <div id="panelTracks"></div>
+      </div>
+      <div class="panel-tab-content" id="panelTabInformation">
+        <div class="panel-meta" id="panelMeta"></div>
+      </div>
+      <div class="panel-tab-content" id="panelTabDistribution">
+        <div class="panel-placeholder">Platform distribution details coming soon.</div>
+      </div>
+      <div class="panel-tab-content" id="panelTabHistory">
+        <div class="panel-placeholder">History coming soon.</div>
+      </div>
     </div>
   </div>
 </div>
