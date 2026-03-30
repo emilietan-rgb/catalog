@@ -1484,7 +1484,10 @@ td {
   padding: var(--sp-md) var(--sp-md) var(--sp-sm);
   border-bottom: 1px solid var(--divider);
 }
-.panel-title { font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.panel-header-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.panel-header-title { font-size: 14px; font-weight: var(--fw-semibold); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.panel-header-sub { display: flex; align-items: center; gap: var(--sp-xsm); font-size: 12px; color: var(--text-secondary); }
+.panel-header-sub #panelHeaderArtist { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel-close {
   background: none;
   border: none;
@@ -1831,16 +1834,17 @@ td {
 <!-- ═══ SIDE PANEL ══════════════════════════════════════════════════════════ -->
 <div class="side-panel hidden" id="sidePanel">
   <div class="panel-header">
-    <span class="panel-title" id="panelTitle">Release details</span>
+    <div class="panel-header-info">
+      <div class="panel-header-title" id="panelTitle"></div>
+      <div class="panel-header-sub">
+        <span id="panelHeaderArtist"></span>
+        <span id="panelHeaderStatus"></span>
+      </div>
+    </div>
     <button class="panel-close" onclick="closePanel()">×</button>
   </div>
   <div class="panel-hero">
     <div class="panel-hero-cover" id="panelCover"></div>
-    <div class="panel-hero-info">
-      <div class="panel-hero-title" id="panelRelTitle"></div>
-      <div class="panel-hero-artist" id="panelRelArtist"></div>
-      <div id="panelStatusWrap"></div>
-    </div>
   </div>
   <div class="panel-tabs">
     <button class="panel-tab active" data-tab="tracks" onclick="switchPanelTab('tracks')">Tracks</button>
@@ -3142,6 +3146,8 @@ function openPanel(id) {
   switchPanelTab('tracks');
 
   document.getElementById('panelTitle').textContent = r.title;
+  document.getElementById('panelHeaderArtist').textContent = r.artist;
+  document.getElementById('panelHeaderStatus').innerHTML = statusChip(r.status);
   const coverEl = document.getElementById('panelCover');
   coverEl.className = 'panel-hero-cover';
   coverEl.onclick = () => toggleDrawerPlay(1);
@@ -3149,9 +3155,7 @@ function openPanel(id) {
     <div class="panel-cover-overlay" id="panelCoverOverlay">
       <svg width="32" height="32" viewBox="0 0 16 16" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
     </div>`;
-  document.getElementById('panelRelTitle').textContent = r.title;
-  document.getElementById('panelRelArtist').textContent = r.artist;
-  document.getElementById('panelStatusWrap').innerHTML = statusChip(r.status);
+
   document.getElementById('panelMeta').innerHTML = `
     <div class="panel-meta-row"><span class="panel-meta-label">Label</span><span class="panel-meta-value">${r.label}</span></div>
     <div class="panel-meta-row"><span class="panel-meta-label">Release date</span><span class="panel-meta-value">${formatDate(r.date)}</span></div>
