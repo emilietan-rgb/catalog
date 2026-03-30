@@ -1497,7 +1497,50 @@ td {
   transition: background 0.1s;
 }
 .panel-close:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-.panel-body { flex: 1; overflow-y: auto; padding: var(--sp-md); }
+.panel-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  padding: var(--sp-md);
+  border-bottom: 1px solid var(--divider);
+  flex-shrink: 0;
+}
+.panel-hero-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--cr-sm);
+  overflow: hidden;
+  background: var(--neutral-40);
+}
+.panel-hero-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.panel-hero-info { display: flex; flex-direction: column; gap: var(--sp-3xsm); }
+.panel-hero-title { font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.panel-hero-artist { font-size: 13px; color: var(--text-secondary); }
+.panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--divider);
+  padding: 0 var(--sp-md);
+  flex-shrink: 0;
+  gap: var(--sp-xsm);
+}
+.panel-tab {
+  padding: var(--sp-xsm) var(--sp-sm);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color 0.1s, border-color 0.1s;
+  white-space: nowrap;
+}
+.panel-tab:hover { color: var(--text-primary); }
+.panel-tab.active { color: var(--text-primary); border-bottom-color: var(--neutral-190); }
+.panel-body { flex: 1; overflow-y: auto; }
+.panel-tab-content { display: none; padding: var(--sp-md); }
+.panel-tab-content.active { display: block; }
 .panel-cover {
   width: 100%;
   aspect-ratio: 1;
@@ -1764,16 +1807,33 @@ td {
     <span class="panel-title" id="panelTitle">Release details</span>
     <button class="panel-close" onclick="closePanel()">×</button>
   </div>
-  <div class="panel-body" id="panelBody">
-    <div class="panel-cover" id="panelCover"></div>
-    <div class="panel-release-title" id="panelRelTitle"></div>
-    <div class="panel-artist" id="panelRelArtist"></div>
-    <div id="panelStatusWrap"></div>
-    <div class="panel-meta" id="panelMeta"></div>
-    <div class="panel-section-title">Distribution</div>
-    <div class="panel-placeholder">Platform distribution details coming soon.</div>
-    <div class="panel-section-title">Tracks</div>
-    <div class="panel-placeholder" id="panelTracks"></div>
+  <div class="panel-hero">
+    <div class="panel-hero-cover" id="panelCover"></div>
+    <div class="panel-hero-info">
+      <div class="panel-hero-title" id="panelRelTitle"></div>
+      <div class="panel-hero-artist" id="panelRelArtist"></div>
+      <div id="panelStatusWrap"></div>
+    </div>
+  </div>
+  <div class="panel-tabs">
+    <button class="panel-tab active" data-tab="tracks" onclick="switchPanelTab('tracks')">Tracks</button>
+    <button class="panel-tab" data-tab="information" onclick="switchPanelTab('information')">Information</button>
+    <button class="panel-tab" data-tab="distribution" onclick="switchPanelTab('distribution')">Distribution</button>
+    <button class="panel-tab" data-tab="history" onclick="switchPanelTab('history')">History</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-tab-content active" id="panelTabTracks">
+      <div id="panelTracks"></div>
+    </div>
+    <div class="panel-tab-content" id="panelTabInformation">
+      <div class="panel-meta" id="panelMeta"></div>
+    </div>
+    <div class="panel-tab-content" id="panelTabDistribution">
+      <div class="panel-placeholder">Platform distribution details coming soon.</div>
+    </div>
+    <div class="panel-tab-content" id="panelTabHistory">
+      <div class="panel-placeholder">History coming soon.</div>
+    </div>
   </div>
 </div>
 
@@ -3034,10 +3094,18 @@ function refreshPills() {
 }
 
 // ─── Side Panel ───────────────────────────────────────────────────────────
+function switchPanelTab(tab) {
+  document.querySelectorAll('.panel-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.panel-tab-content').forEach(c => {
+    c.classList.toggle('active', c.id === `panelTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+  });
+}
+
 function openPanel(id) {
   const r = releases.find(x => x.id === id);
   if (!r) return;
   openPanelId = id;
+  switchPanelTab('tracks');
 
   document.getElementById('panelTitle').textContent = r.title;
   document.getElementById('panelCover').innerHTML = `<img src="${r.coverImg}" alt="${r.title}" style="display:block;width:100%;height:100%;object-fit:cover;">`;
