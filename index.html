@@ -1882,8 +1882,8 @@ td {
     <div class="panel-tabs">
       <button class="panel-tab active" data-tab="tracks" onclick="switchPanelTab('tracks')">Tracks</button>
       <button class="panel-tab" data-tab="information" onclick="switchPanelTab('information')">Information</button>
-      <button class="panel-tab" data-tab="distribution" onclick="switchPanelTab('distribution')">Distribution</button>
-      <button class="panel-tab" data-tab="history" onclick="switchPanelTab('history')">History</button>
+      <button class="panel-tab" data-tab="distribution" onclick="switchPanelTab('distribution')">Platforms</button>
+      <button class="panel-tab" data-tab="territories" onclick="switchPanelTab('territories')">Territories</button>
     </div>
     <div class="panel-body">
       <div class="panel-tab-content active" id="panelTabTracks">
@@ -1895,8 +1895,8 @@ td {
       <div class="panel-tab-content" id="panelTabDistribution">
         <div id="panelDistribution"></div>
       </div>
-      <div class="panel-tab-content" id="panelTabHistory">
-        <div class="panel-placeholder">History coming soon.</div>
+      <div class="panel-tab-content" id="panelTabTerritories">
+        <div id="panelTerritories"></div>
       </div>
     </div>
   </div>
@@ -3247,24 +3247,6 @@ function renderDistribution() {
   const topSection = topFiltered.length ? `<div class="dist-section-label">Top stores</div><div>${topFiltered.map(storeRow).join('')}</div>` : '';
   const allSection = allFiltered.length ? `<div class="dist-section-label">All stores</div><div>${allFiltered.map(storeRow).join('')}</div>` : '';
 
-  const terrHtml = DIST_TERRITORIES.map(({ region, countries }) => {
-    const filtered = _distFilter === 'all' ? countries : countries.filter(c => c.status === _distFilter);
-    if (!filtered.length) return '';
-    const isOpen = !_collapsedRegions.has(region);
-    return `<div>
-      <div class="dist-region-header" onclick="toggleDistRegion('${region}')">
-        <span class="dist-region-name">${region}</span>
-        <span class="dist-region-chevron${isOpen ? ' open' : ''}">${chevronSvg}</span>
-      </div>
-      ${isOpen ? `<div>${filtered.map(c => `
-        <div class="dist-country-row">
-          <span class="dist-country-flag">${c.flag}</span>
-          <span class="dist-country-name">${c.name}</span>
-          ${distChip(c.status)}
-        </div>`).join('')}</div>` : ''}
-    </div>`;
-  }).join('');
-
   const filterBtns = ['all', 'delivered', 'not-delivered', 'challenged'].map(f => {
     const labels = { all: 'All', delivered: 'Delivered', 'not-delivered': 'Not delivered', challenged: 'Challenged' };
     return `<button class="dist-filter-btn${_distFilter === f ? ' active' : ''}" onclick="setDistFilter('${f}')">${labels[f]}</button>`;
@@ -3273,18 +3255,33 @@ function renderDistribution() {
   document.getElementById('panelDistribution').innerHTML = `
     <div class="dist-filter-bar">${filterBtns}</div>
     ${topSection}
-    ${allSection}
-    <div class="dist-territories-section">
-      <div class="dist-section-label">Territories</div>
-      ${terrHtml}
+    ${allSection}`;
+}
+
+function renderTerritories() {
+  const chevronSvg = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const html = DIST_TERRITORIES.map(({ region, countries }) => {
+    const isOpen = !_collapsedRegions.has(region);
+    return `<div>
+      <div class="dist-region-header" onclick="toggleDistRegion('${region}')">
+        <span class="dist-region-name">${region}</span>
+        <span class="dist-region-chevron${isOpen ? ' open' : ''}">${chevronSvg}</span>
+      </div>
+      ${isOpen ? `<div>${countries.map(c => `
+        <div class="dist-country-row">
+          <span class="dist-country-flag">${c.flag}</span>
+          <span class="dist-country-name">${c.name}</span>
+        </div>`).join('')}</div>` : ''}
     </div>`;
+  }).join('');
+  document.getElementById('panelTerritories').innerHTML = html;
 }
 
 function setDistFilter(f) { _distFilter = f; renderDistribution(); }
 function toggleDistRegion(region) {
   if (_collapsedRegions.has(region)) _collapsedRegions.delete(region);
   else _collapsedRegions.add(region);
-  renderDistribution();
+  renderTerritories();
 }
 
 // ─── Side Panel ───────────────────────────────────────────────────────────
@@ -3334,6 +3331,7 @@ function openPanel(id) {
   _distFilter = 'all';
   _collapsedRegions.clear();
   renderDistribution();
+  renderTerritories();
   document.getElementById('sidePanel').classList.remove('hidden');
 }
 
