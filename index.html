@@ -1331,6 +1331,23 @@ td {
 .sub-table tr:last-child td { border-bottom: none; }
 .track-num { color: var(--text-tertiary); font-weight: var(--fw-medium); width: 24px; }
 .isrc-wrap { display: flex; align-items: center; gap: var(--sp-3xsm); }
+.isrc-text { cursor: default; }
+.isrc-text:hover { text-decoration: underline; cursor: pointer; }
+.isrc-shared-chip {
+  display: inline-flex; align-items: center;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--neutral-30);
+  border: 1px solid var(--neutral-50);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+  line-height: 16px;
+}
+.isrc-shared-chip:hover { background: var(--neutral-40); border-color: var(--neutral-70); color: var(--text-primary); }
 .copy-btn {
   background: none;
   border: 1px solid var(--border-primary);
@@ -1598,7 +1615,7 @@ td {
         <button class="pill" data-status="processing">Processing (4)</button>
         <button class="pill" data-status="delivered">Live (30)</button>
         <button class="pill" data-status="need-action">Need action (2)</button>
-        <button class="pill" data-status="unsellable">Unsellable (2)</button>
+        <button class="pill" data-status="unsellable">Taken down (2)</button>
       </div>
       <div class="search-input-wrap">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
@@ -1870,7 +1887,8 @@ const releases = [
     platforms: { count: 42, total: 42, territories: 178, warn: null },
     coverHue: 208,
     tracks: [
-      { num: 1, title: "Cascade", artists: "Aurélie Dumas", isrc: "FRLM12501101" },
+      { num: 1, title: "Cascade", artists: "Echo Park, Sana Moon", isrc: "FRLM12501101" },
+      { num: 2, title: "Cascade (Instrumental)", artists: "Echo Park", isrc: "FRLM12501101" },
     ]
   },
   {
@@ -1893,6 +1911,7 @@ const releases = [
       { num: 6,  title: "Horizon",             artists: "Aurélie Dumas", isrc: "FRLM12401206" },
       { num: 7,  title: "La dernière vague",   artists: "Aurélie Dumas", isrc: "FRLM12401207" },
       { num: 8,  title: "Coda",                artists: "Aurélie Dumas", isrc: "FRLM12401208" },
+      { num: 9,  title: "Cascade",             artists: "Echo Park, Sana Moon", isrc: "FRLM12501101" },
     ]
   },
   {
@@ -2519,9 +2538,21 @@ const releaseOverrides = {
 };
 releases.forEach(r => {
   if (releaseOverrides[r.id]) {
+    const origArtist = r.artist;
     r.title  = releaseOverrides[r.id].title;
     r.artist = releaseOverrides[r.id].artist;
+    r.tracks.forEach(t => {
+      if (t.artists === origArtist) t.artists = r.artist;
+    });
   }
+});
+
+// ─── ISRC usage map ───────────────────────────────────────────────────────
+const isrcReleaseCount = {};
+releases.forEach(r => {
+  r.tracks.forEach(t => {
+    if (t.isrc) isrcReleaseCount[t.isrc] = (isrcReleaseCount[t.isrc] || 0) + 1;
+  });
 });
 
 // ─── State ────────────────────────────────────────────────────────────────
@@ -2611,7 +2642,8 @@ function filteredReleases() {
       || r.status === activeFilter
       || (activeFilter === 'processing' && processingGroup.has(r.status));
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
-    const matchArtist = selectedArtists.size === 0 || selectedArtists.has(r.artist);
+    const matchArtist = selectedArtists.size === 0 || selectedArtists.has(r.artist)
+      || r.tracks.some(t => t.artists.split(',').some(a => selectedArtists.has(a.trim())));
     let matchDate = true;
     if (activeDateFilter.type !== 'all' && r.date) {
       const d = new Date(r.date + 'T00:00:00');
@@ -2715,8 +2747,9 @@ function renderTable() {
                 <td style="color:var(--text-secondary)">${t.artists}</td>
                 <td>
                   <div class="isrc-wrap">
-                    <span class="mono">${t.isrc || '—'}</span>
+                    <span class="mono isrc-text" ${t.isrc ? `onclick="event.stopPropagation();copyISRC('${t.isrc}',this)"` : ''}>${t.isrc || '—'}</span>
                     ${t.isrc ? `<button class="copy-btn" onclick="event.stopPropagation();copyISRC('${t.isrc}',this)">copy</button>` : ''}
+                    ${t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openSoundRecording('${t.isrc}')">Shared</span>` : ''}
                   </div>
                 </td>
               </tr>`).join('')}
@@ -2743,6 +2776,15 @@ function copyISRC(isrc, btn) {
     btn.textContent = '✓';
     setTimeout(() => btn.textContent = orig, 1200);
   });
+}
+
+// ─── Sound Recording Dialog ───────────────────────────────────────────────
+function openSoundRecording(isrc) {
+  const uses = [];
+  releases.forEach(r => {
+    r.tracks.forEach(t => { if (t.isrc === isrc) uses.push({ release: r.title, artist: r.artist, track: t.title }); });
+  });
+  alert(`Sound recording: ${isrc}\nUsed in ${uses.length} release${uses.length > 1 ? 's' : ''}:\n${uses.map(u => `• ${u.release} — "${u.track}"`).join('\n')}`);
 }
 
 // ─── Side Panel ───────────────────────────────────────────────────────────
@@ -2828,7 +2870,11 @@ function updateWatchlistBtn() {
 
 // ─── Artist Filter ────────────────────────────────────────────────────────
 const artistCounts = {};
-releases.forEach(r => { artistCounts[r.artist] = (artistCounts[r.artist] || 0) + 1; });
+releases.forEach(r => {
+  const names = new Set([r.artist]);
+  r.tracks.forEach(t => t.artists.split(',').forEach(a => { const n = a.trim(); if (n) names.add(n); }));
+  names.forEach(n => { artistCounts[n] = (artistCounts[n] || 0) + 1; });
+});
 const artistData = Object.entries(artistCounts)
   .map(([name, count]) => ({ name, releases: count }))
   .sort((a, b) => b.releases - a.releases || a.name.localeCompare(b.name));
