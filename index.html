@@ -1607,6 +1607,31 @@ td {
   margin-top: var(--sp-xsm);
 }
 
+/* ─── Distribution Tab ──────────────────────────────────────────────────── */
+.dist-filter-bar { display: flex; gap: var(--sp-3xsm); padding: var(--sp-sm) 0 var(--sp-md); flex-wrap: wrap; }
+.dist-filter-btn { padding: 3px var(--sp-xsm); font-size: 12px; font-weight: var(--fw-medium); border: 1px solid var(--border-primary); border-radius: var(--cr-4xsm); background: transparent; color: var(--text-secondary); cursor: pointer; transition: background 0.1s, color 0.1s, border-color 0.1s; }
+.dist-filter-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+.dist-filter-btn.active { background: var(--neutral-190); color: #fff; border-color: var(--neutral-190); }
+.dist-section-label { font-size: 11px; font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); padding: var(--sp-sm) 0 var(--sp-3xsm); }
+.dist-store-row { display: flex; align-items: flex-start; gap: var(--sp-sm); padding: var(--sp-xsm) 0; border-bottom: 1px solid var(--divider); }
+.dist-store-row:last-child { border-bottom: none; }
+.dist-store-icon { width: 28px; height: 28px; border-radius: var(--cr-4xsm); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: var(--fw-semibold); color: #fff; flex-shrink: 0; }
+.dist-store-info { flex: 1; min-width: 0; }
+.dist-store-name { font-size: 13px; font-weight: var(--fw-medium); color: var(--text-primary); }
+.dist-store-reason { font-size: 11px; color: var(--orange-70); margin-top: 1px; }
+.dist-store-meta { display: flex; align-items: center; gap: var(--sp-3xsm); flex-shrink: 0; align-self: center; }
+.dist-store-date { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+.dist-link-btn { background: none; border: none; padding: 0; cursor: pointer; color: var(--text-tertiary); display: flex; align-items: center; transition: color 0.1s; }
+.dist-link-btn:hover { color: var(--text-primary); }
+.dist-region-header { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-xsm) 0; cursor: pointer; user-select: none; border-bottom: 1px solid var(--divider); }
+.dist-region-name { font-size: 12px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.dist-region-chevron { color: var(--text-tertiary); transition: transform 0.15s; flex-shrink: 0; display: flex; }
+.dist-region-chevron.open { transform: rotate(180deg); }
+.dist-country-row { display: flex; align-items: center; gap: var(--sp-sm); padding: var(--sp-3xsm) 0 var(--sp-3xsm) var(--sp-xsm); border-bottom: 1px solid var(--divider); font-size: 12px; }
+.dist-country-row:last-child { border-bottom: none; }
+.dist-country-flag { font-size: 14px; line-height: 1; }
+.dist-country-name { flex: 1; color: var(--text-primary); }
+
 /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -1868,7 +1893,7 @@ td {
         <div class="panel-meta" id="panelMeta"></div>
       </div>
       <div class="panel-tab-content" id="panelTabDistribution">
-        <div class="panel-placeholder">Platform distribution details coming soon.</div>
+        <div id="panelDistribution"></div>
       </div>
       <div class="panel-tab-content" id="panelTabHistory">
         <div class="panel-placeholder">History coming soon.</div>
@@ -2758,6 +2783,48 @@ releases.forEach(r => {
   });
 });
 
+// ─── Distribution mock data ───────────────────────────────────────────────
+const DIST_STORES_TOP = [
+  { id: 'spotify',  name: 'Spotify',      status: 'delivered',     date: 'Mar 14, 2025', link: true,  color: '#1DB954', initials: 'Sp' },
+  { id: 'apple',    name: 'Apple Music',  status: 'delivered',     date: 'Mar 14, 2025', link: true,  color: '#FC3C44', initials: 'AM' },
+  { id: 'amazon',   name: 'Amazon Music', status: 'not-delivered', date: 'Mar 12, 2025', link: false, color: '#00A8E1', initials: 'Az' },
+  { id: 'deezer',   name: 'Deezer',       status: 'challenged',    date: 'Mar 10, 2025', link: false, color: '#A238FF', initials: 'Dz', reason: 'Artwork rejected' },
+];
+const DIST_STORES_ALL = [
+  { id: 'youtube',    name: 'YouTube Music', status: 'delivered',     date: 'Mar 14, 2025', link: true,  color: '#FF0000', initials: 'YT' },
+  { id: 'tidal',      name: 'Tidal',         status: 'delivered',     date: 'Mar 13, 2025', link: true,  color: '#1a1a1a', initials: 'Ti' },
+  { id: 'soundcloud', name: 'SoundCloud',    status: 'not-delivered', date: 'Mar 11, 2025', link: false, color: '#FF5500', initials: 'Sc' },
+  { id: 'napster',    name: 'Napster',       status: 'delivered',     date: 'Mar 14, 2025', link: false, color: '#009BDE', initials: 'Na' },
+  { id: 'anghami',    name: 'Anghami',       status: 'challenged',    date: 'Mar 9, 2025',  link: false, color: '#7B2FBE', initials: 'An', reason: 'Metadata issue' },
+  { id: 'boomplay',   name: 'Boomplay',      status: 'delivered',     date: 'Mar 14, 2025', link: false, color: '#E51E25', initials: 'Bp' },
+  { id: 'kkbox',      name: 'KKBOX',         status: 'not-delivered', date: 'Mar 12, 2025', link: false, color: '#009AD1', initials: 'KK' },
+  { id: 'melon',      name: 'Melon',         status: 'delivered',     date: 'Mar 14, 2025', link: false, color: '#00C73C', initials: 'Me' },
+];
+const DIST_TERRITORIES = [
+  { region: 'Europe', countries: [
+    { flag: '🇫🇷', name: 'France',          status: 'delivered' },
+    { flag: '🇩🇪', name: 'Germany',         status: 'delivered' },
+    { flag: '🇬🇧', name: 'United Kingdom',  status: 'delivered' },
+    { flag: '🇪🇸', name: 'Spain',           status: 'not-delivered' },
+  ]},
+  { region: 'Americas', countries: [
+    { flag: '🇺🇸', name: 'United States',   status: 'delivered' },
+    { flag: '🇧🇷', name: 'Brazil',          status: 'delivered' },
+    { flag: '🇨🇦', name: 'Canada',          status: 'not-delivered' },
+  ]},
+  { region: 'Asia Pacific', countries: [
+    { flag: '🇯🇵', name: 'Japan',           status: 'delivered' },
+    { flag: '🇰🇷', name: 'South Korea',     status: 'delivered' },
+    { flag: '🇦🇺', name: 'Australia',       status: 'not-delivered' },
+    { flag: '🇮🇳', name: 'India',           status: 'delivered' },
+  ]},
+  { region: 'Middle East & Africa', countries: [
+    { flag: '🇸🇦', name: 'Saudi Arabia',         status: 'delivered' },
+    { flag: '🇿🇦', name: 'South Africa',         status: 'not-delivered' },
+    { flag: '🇦🇪', name: 'United Arab Emirates', status: 'delivered' },
+  ]},
+];
+
 // ─── State ────────────────────────────────────────────────────────────────
 let activeFilter = "all";
 let expandedRows = new Set();
@@ -3140,6 +3207,86 @@ function refreshPills() {
   });
 }
 
+// ─── Distribution Tab ─────────────────────────────────────────────────────
+let _distFilter = 'all';
+const _collapsedRegions = new Set();
+
+function distChip(status) {
+  if (status === 'delivered')    return '<span class="chip chip-green"  style="font-size:10px;padding:1px 6px">Delivered</span>';
+  if (status === 'challenged')   return '<span class="chip chip-orange" style="font-size:10px;padding:1px 6px">Challenged</span>';
+  return '<span class="chip chip-neutral" style="font-size:10px;padding:1px 6px">Not delivered</span>';
+}
+
+function renderDistribution() {
+  const linkSvg    = `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9"/><path d="M10 2h4v4"/><path d="M14 2L7 9" stroke-linecap="round"/></svg>`;
+  const chevronSvg = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  function filterStores(stores) {
+    if (_distFilter === 'all') return stores;
+    return stores.filter(s => s.status === _distFilter);
+  }
+
+  function storeRow(s) {
+    return `<div class="dist-store-row">
+      <div class="dist-store-icon" style="background:${s.color}">${s.initials}</div>
+      <div class="dist-store-info">
+        <div class="dist-store-name">${s.name}</div>
+        ${s.reason ? `<div class="dist-store-reason">${s.reason}</div>` : ''}
+      </div>
+      <div class="dist-store-meta">
+        ${s.date ? `<span class="dist-store-date">${s.date}</span>` : ''}
+        ${distChip(s.status)}
+        ${s.link ? `<button class="dist-link-btn" title="Open in store">${linkSvg}</button>` : ''}
+      </div>
+    </div>`;
+  }
+
+  const topFiltered = filterStores(DIST_STORES_TOP);
+  const allFiltered = filterStores(DIST_STORES_ALL);
+
+  const topSection = topFiltered.length ? `<div class="dist-section-label">Top stores</div><div>${topFiltered.map(storeRow).join('')}</div>` : '';
+  const allSection = allFiltered.length ? `<div class="dist-section-label">All stores</div><div>${allFiltered.map(storeRow).join('')}</div>` : '';
+
+  const terrHtml = DIST_TERRITORIES.map(({ region, countries }) => {
+    const filtered = _distFilter === 'all' ? countries : countries.filter(c => c.status === _distFilter);
+    if (!filtered.length) return '';
+    const isOpen = !_collapsedRegions.has(region);
+    return `<div>
+      <div class="dist-region-header" onclick="toggleDistRegion('${region}')">
+        <span class="dist-region-name">${region}</span>
+        <span class="dist-region-chevron${isOpen ? ' open' : ''}">${chevronSvg}</span>
+      </div>
+      ${isOpen ? `<div>${filtered.map(c => `
+        <div class="dist-country-row">
+          <span class="dist-country-flag">${c.flag}</span>
+          <span class="dist-country-name">${c.name}</span>
+          ${distChip(c.status)}
+        </div>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  const filterBtns = ['all', 'delivered', 'not-delivered', 'challenged'].map(f => {
+    const labels = { all: 'All', delivered: 'Delivered', 'not-delivered': 'Not delivered', challenged: 'Challenged' };
+    return `<button class="dist-filter-btn${_distFilter === f ? ' active' : ''}" onclick="setDistFilter('${f}')">${labels[f]}</button>`;
+  }).join('');
+
+  document.getElementById('panelDistribution').innerHTML = `
+    <div class="dist-filter-bar">${filterBtns}</div>
+    ${topSection}
+    ${allSection}
+    <div class="dist-territories-section">
+      <div class="dist-section-label">Territories</div>
+      ${terrHtml}
+    </div>`;
+}
+
+function setDistFilter(f) { _distFilter = f; renderDistribution(); }
+function toggleDistRegion(region) {
+  if (_collapsedRegions.has(region)) _collapsedRegions.delete(region);
+  else _collapsedRegions.add(region);
+  renderDistribution();
+}
+
 // ─── Side Panel ───────────────────────────────────────────────────────────
 function switchPanelTab(tab) {
   document.querySelectorAll('.panel-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
@@ -3184,6 +3331,9 @@ function openPanel(id) {
     </div>`
   ).join('');
 
+  _distFilter = 'all';
+  _collapsedRegions.clear();
+  renderDistribution();
   document.getElementById('sidePanel').classList.remove('hidden');
 }
 
