@@ -1516,6 +1516,18 @@ td {
 .panel-hero-info { display: flex; flex-direction: column; gap: var(--sp-3xsm); }
 .panel-hero-title { font-size: 15px; font-weight: var(--fw-semibold); color: var(--text-primary); }
 .panel-hero-artist { font-size: 13px; color: var(--text-secondary); }
+.track-play-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+}
+.track-play-btn:hover { background: var(--neutral-40); color: var(--text-primary); }
+.track-play-btn.playing { color: var(--neutral-190); }
 .panel-tabs {
   display: flex;
   border-bottom: 1px solid var(--divider);
@@ -1555,8 +1567,8 @@ td {
 .panel-cover-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .panel-release-title { font-size: 18px; font-weight: var(--fw-semibold); margin-bottom: 4px; }
 .panel-artist { font-size: 14px; color: var(--text-secondary); margin-bottom: var(--sp-sm); }
-.panel-meta { display: flex; flex-direction: column; gap: var(--sp-xsm); margin-top: var(--sp-md); }
-.panel-meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.panel-meta { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-sm) var(--sp-md); }
+.panel-meta-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; font-size: 12px; }
 .panel-meta-label { color: var(--text-secondary); }
 .panel-meta-value { font-weight: var(--fw-medium); color: var(--text-primary); }
 .panel-section-title { font-size: 11px; font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin: var(--sp-md) 0 var(--sp-xsm); }
@@ -3121,7 +3133,10 @@ function openPanel(id) {
     <div class="panel-meta-row"><span class="panel-meta-label">Tracks</span><span class="panel-meta-value">${r.tracks.length}</span></div>
   `;
   document.getElementById('panelTracks').innerHTML = r.tracks.map(t =>
-    `<div style="display:flex;justify-content:space-between;align-items:center;padding:var(--sp-3xsm) 0;border-bottom:1px solid var(--divider);font-size:12px">
+    `<div style="display:flex;align-items:center;gap:var(--sp-xsm);padding:var(--sp-3xsm) 0;border-bottom:1px solid var(--divider);font-size:12px">
+      <button class="track-play-btn" data-track-num="${t.num}" onclick="toggleDrawerPlay(${t.num})" title="Play">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>
+      </button>
       <span style="color:var(--text-tertiary);width:20px">${t.num}</span>
       <span style="flex:1;font-weight:500">${t.title}</span>
       <span class="mono" style="color:var(--text-secondary)">${t.isrc || '—'}</span>
@@ -3133,7 +3148,29 @@ function openPanel(id) {
 
 function closePanel() {
   openPanelId = null;
+  _drawerPlayingNum = null;
   document.getElementById('sidePanel').classList.add('hidden');
+}
+
+let _drawerPlayingNum = null;
+const _playIcon  = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>`;
+const _pauseIcon = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/></svg>`;
+
+function toggleDrawerPlay(num) {
+  const prev = _drawerPlayingNum;
+  // Reset all buttons
+  document.querySelectorAll('.track-play-btn').forEach(btn => {
+    btn.classList.remove('playing');
+    btn.innerHTML = _playIcon;
+    btn.title = 'Play';
+  });
+  if (prev === num) {
+    _drawerPlayingNum = null; // same track → pause
+  } else {
+    _drawerPlayingNum = num;
+    const btn = document.querySelector(`.track-play-btn[data-track-num="${num}"]`);
+    if (btn) { btn.classList.add('playing'); btn.innerHTML = _pauseIcon; btn.title = 'Pause'; }
+  }
 }
 
 // ─── Status pills ─────────────────────────────────────────────────────────
