@@ -1627,6 +1627,123 @@ td {
   margin-top: var(--sp-xsm);
 }
 
+/* ─── Release Page ───────────────────────────────────────────────────────── */
+#release-page {
+  display: flex; flex-direction: column;
+  flex: 1; min-height: 0; background: #fff; overflow: hidden;
+}
+#release-page.hidden { display: none; }
+#catalogue-view.hidden { display: none; }
+.rp-topbar {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  padding: 10px var(--sp-xlg);
+  border-bottom: 1px solid var(--border-primary);
+  flex-shrink: 0;
+}
+.rp-back {
+  display: flex; align-items: center; gap: var(--sp-3xsm);
+  background: none; border: none; cursor: pointer;
+  font-size: 13px; font-family: var(--font); color: var(--text-secondary);
+  padding: 4px var(--sp-xsm); border-radius: var(--cr-4xsm);
+  transition: background 0.1s, color 0.1s; white-space: nowrap;
+}
+.rp-back:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.rp-breadcrumb {
+  flex: 1; font-size: 13px; color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+.rp-breadcrumb strong { color: var(--text-primary); font-weight: var(--fw-medium); }
+.rp-topbar-actions { display: flex; align-items: center; gap: var(--sp-3xsm); flex-shrink: 0; }
+.rp-kebab { min-width: unset !important; padding: 0 var(--sp-xsm) !important; font-size: 18px; letter-spacing: 1px; }
+.rp-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.rp-header {
+  display: flex; align-items: center; gap: var(--sp-md);
+  padding: var(--sp-xlg); flex-shrink: 0;
+}
+.rp-cover {
+  width: 64px; height: 64px; border-radius: var(--cr-2xsm);
+  border: 1px solid var(--border-primary); object-fit: cover; flex-shrink: 0;
+  background: var(--neutral-40);
+}
+.rp-header-info { display: flex; flex-direction: column; gap: var(--sp-3xsm); min-width: 0; }
+.rp-title { font-size: 20px; font-weight: var(--fw-semibold); color: var(--text-primary); line-height: 1.25; }
+.rp-artist { font-size: 14px; color: var(--text-secondary); }
+.rp-tabs {
+  display: flex; border-bottom: 1px solid var(--border-primary);
+  padding: 0 var(--sp-xlg); flex-shrink: 0; gap: 0;
+}
+.rp-tab {
+  padding: var(--sp-xsm) var(--sp-sm);
+  font-size: 13px; font-weight: var(--fw-medium); font-family: var(--font);
+  color: var(--text-secondary); background: none; border: none;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  cursor: pointer; white-space: nowrap; transition: color 0.1s;
+}
+.rp-tab:hover { color: var(--text-primary); }
+.rp-tab.active { color: var(--text-primary); border-bottom-color: var(--neutral-190); }
+.rp-content {
+  flex: 1; padding: var(--sp-xlg);
+  display: flex; flex-direction: column; gap: var(--sp-md);
+}
+.rp-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--purple-10); border-radius: var(--cr-2xsm);
+  padding: var(--sp-sm) var(--sp-md); gap: var(--sp-sm);
+}
+.rp-banner.hidden { display: none; }
+.rp-banner-left { display: flex; align-items: center; gap: var(--sp-sm); flex: 1; min-width: 0; }
+.rp-banner-icon { color: var(--purple-70); flex-shrink: 0; display: flex; }
+.rp-banner-title { font-size: 13px; font-weight: var(--fw-semibold); color: var(--text-primary); }
+.rp-banner-sub { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+.rp-banner-right { display: flex; align-items: center; gap: var(--sp-3xsm); flex-shrink: 0; }
+.rp-banner-close {
+  background: none; border: none; cursor: pointer;
+  font-size: 16px; color: var(--text-tertiary); padding: 0 4px; line-height: 1;
+  transition: color 0.1s;
+}
+.rp-banner-close:hover { color: var(--text-primary); }
+.rp-secondary-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border-primary);
+}
+.rp-sec-tab {
+  padding: var(--sp-3xsm) var(--sp-xsm);
+  font-size: 12px; font-weight: var(--fw-medium); font-family: var(--font);
+  color: var(--text-secondary); background: none; border: none;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  cursor: pointer; white-space: nowrap; transition: color 0.1s;
+}
+.rp-sec-tab:hover { color: var(--text-primary); }
+.rp-sec-tab.active { color: var(--text-primary); border-bottom-color: var(--neutral-190); }
+.rp-placeholder-box {
+  min-height: 350px; display: flex; align-items: center; justify-content: center;
+  background: var(--purple-10); border: 1.5px dashed var(--neutral-60);
+  border-radius: var(--cr-2xsm); color: var(--text-secondary); font-size: 14px;
+}
+
+/* ─── Release Page Tab Content ──────────────────────────────────────────── */
+.rp-track-row {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  padding: var(--sp-xsm) 0; border-bottom: 1px solid var(--divider); font-size: 13px;
+}
+.rp-track-row:last-child { border-bottom: none; }
+.rp-track-num { color: var(--text-tertiary); width: 20px; text-align: right; flex-shrink: 0; font-size: 12px; }
+.rp-track-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.rp-track-title { font-weight: var(--fw-medium); color: var(--text-primary); }
+.rp-track-artist { font-size: 12px; color: var(--text-secondary); }
+.rp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-md) var(--sp-2xlg); }
+.rp-info-item { display: flex; flex-direction: column; gap: 3px; }
+.rp-info-label { font-size: 11px; color: var(--text-secondary); font-weight: var(--fw-medium); text-transform: uppercase; letter-spacing: 0.4px; }
+.rp-info-value { font-size: 13px; color: var(--text-primary); font-weight: var(--fw-medium); }
+.rp-history-list { display: flex; flex-direction: column; }
+.rp-history-item { display: flex; gap: var(--sp-sm); padding: var(--sp-xsm) 0; position: relative; }
+.rp-history-item:not(:last-child)::before { content: ''; position: absolute; left: 11px; top: 28px; bottom: 0; width: 1px; background: var(--divider); }
+.rp-history-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; }
+.rp-history-body { flex: 1; padding-top: 3px; }
+.rp-history-label { font-size: 13px; font-weight: var(--fw-medium); color: var(--text-primary); display: block; }
+.rp-history-detail { font-weight: var(--fw-regular); color: var(--orange-70); }
+.rp-history-date { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; display: block; }
+
 /* ─── Distribution Tab ──────────────────────────────────────────────────── */
 .dist-filter-bar { display: flex; gap: var(--sp-3xsm); padding: var(--sp-sm) 0 var(--sp-md); flex-wrap: wrap; }
 .dist-filter-btn { padding: 3px var(--sp-xsm); font-size: 12px; font-weight: var(--fw-medium); border: 1px solid var(--border-primary); border-radius: var(--cr-4xsm); background: transparent; color: var(--text-secondary); cursor: pointer; transition: background 0.1s, color 0.1s, border-color 0.1s; }
@@ -1757,17 +1874,13 @@ td {
 
 <!-- ═══ MAIN ════════════════════════════════════════════════════════════════ -->
 <div class="main">
-  <div class="content" id="mainContent">
+  <div class="content" id="catalogue-view">
 
     <!-- Page Header -->
     <div class="page-header">
       <div class="page-header-left">
         <h1>Releases</h1>
       </div>
-      <button class="btn btn-ghost" onclick="void(0)">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 7l3 3 3-3M2.5 12v1a.5.5 0 00.5.5h10a.5.5 0 00.5-.5v-1"/></svg>
-        Export
-      </button>
     </div>
 
     <!-- Attention Block -->
@@ -1881,6 +1994,41 @@ td {
     <div class="releases-grid hidden" id="releasesGrid"></div>
 
   </div>
+
+  <!-- ═══ RELEASE PAGE ══════════════════════════════════════════════════════ -->
+  <div id="release-page" class="hidden">
+    <div class="rp-topbar">
+      <button class="rp-back" onclick="backToCatalogue()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+        Back to catalogue
+      </button>
+      <div class="rp-breadcrumb" id="rpBreadcrumb"></div>
+      <div class="rp-topbar-actions">
+        <button class="btn btn-ghost" style="font-size:13px">Edit release</button>
+        <button class="btn btn-ghost rp-kebab">⋮</button>
+      </div>
+    </div>
+    <div class="rp-scroll">
+      <div class="rp-header">
+        <img class="rp-cover" id="rpCover" src="" alt="">
+        <div class="rp-header-info">
+          <div class="rp-title" id="rpTitle"></div>
+          <div class="rp-artist" id="rpArtist"></div>
+        </div>
+      </div>
+      <div class="rp-tabs">
+        <button class="rp-tab active" data-rptab="information"  onclick="switchReleasePage('information')">Information</button>
+        <button class="rp-tab" data-rptab="tracks"      onclick="switchReleasePage('tracks')">Tracks</button>
+        <button class="rp-tab" data-rptab="distribution" onclick="switchReleasePage('distribution')">Distribution</button>
+        <button class="rp-tab" data-rptab="territories"  onclick="switchReleasePage('territories')">Territories</button>
+        <button class="rp-tab" data-rptab="platforms"    onclick="switchReleasePage('platforms')">Platforms</button>
+        <button class="rp-tab" data-rptab="promotion"    onclick="switchReleasePage('promotion')">Promotion</button>
+        <button class="rp-tab" data-rptab="history"      onclick="switchReleasePage('history')">History</button>
+      </div>
+      <div class="rp-content" id="rpTabContent"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ═══ SIDE PANEL ══════════════════════════════════════════════════════════ -->
@@ -3013,7 +3161,7 @@ function renderTable() {
         </button>
       </td>
     `;
-    tr.addEventListener('click', () => openPanel(r.id));
+    tr.addEventListener('click', () => openReleasePage(r.id));
     tbody.appendChild(tr);
 
     // Sub-row (tracks)
@@ -3059,10 +3207,7 @@ function renderTable() {
 }
 
 function openPanelAndPlay(id, trackNum) {
-  openPanel(id);
-  toggleDrawerPlay(trackNum);
-  const row = document.querySelector(`.drawer-track-row[data-track-num="${trackNum}"]`);
-  if (row) row.scrollIntoView({ block: 'nearest' });
+  openReleasePage(id);
 }
 
 // ─── Toggle expand ────────────────────────────────────────────────────────
@@ -3674,6 +3819,208 @@ function clearArtistFilter(e) {
   renderTable();
 }
 
+// ─── Release Page ─────────────────────────────────────────────────────────
+let appView = 'list'; // 'list' | 'release'
+let selectedRelease = null;
+
+function openReleasePage(id) {
+  const r = releases.find(x => x.id === id);
+  if (!r) return;
+  selectedRelease = r;
+  appView = 'release';
+  _rpDistFilter = 'all';
+  _rpCollapsedRegions.clear();
+  const titleTrunc = r.title.length > 20 ? r.title.slice(0, 20) + '…' : r.title;
+  document.getElementById('rpBreadcrumb').innerHTML = `Lumière Records / <strong>${titleTrunc}</strong>`;
+  document.getElementById('rpTitle').textContent = r.title;
+  document.getElementById('rpArtist').textContent = r.artist;
+  const cover = document.getElementById('rpCover');
+  cover.src = r.coverImg || '';
+  cover.alt = r.title;
+  switchReleasePage('information');
+  if (openPanelId) closePanel();
+  document.getElementById('catalogue-view').classList.add('hidden');
+  document.getElementById('release-page').classList.remove('hidden');
+}
+
+function backToCatalogue() {
+  appView = 'list';
+  selectedRelease = null;
+  _stopTone();
+  document.getElementById('release-page').classList.add('hidden');
+  document.getElementById('catalogue-view').classList.remove('hidden');
+}
+
+function switchReleasePage(tab) {
+  document.querySelectorAll('.rp-tab').forEach(t => t.classList.toggle('active', t.dataset.rptab === tab));
+  renderRpTab(tab);
+}
+
+// ─── Release Page: tab renderers ──────────────────────────────────────────
+let _rpDistFilter = 'all';
+const _rpCollapsedRegions = new Set();
+
+function renderRpTab(tab) {
+  const r = selectedRelease;
+  if (!r) return;
+  const el = document.getElementById('rpTabContent');
+
+  if (tab === 'tracks') {
+    const noDialog = new Set(['under-review','approved-by-believe','sent-to-platforms','unsellable','need-action']).has(r.status);
+    el.innerHTML = r.tracks.map(t => {
+      const safeTitle   = t.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      const safeArtists = t.artists.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      const isrcShared  = t.isrc && (isrcReleaseCount[t.isrc] > 1);
+      return `<div class="rp-track-row drawer-track-row" data-track-num="${t.num}">
+        <button class="track-play-btn" data-track-num="${t.num}" onclick="toggleDrawerPlay(${t.num})" title="Play">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>
+        </button>
+        <span class="rp-track-num">${t.num}</span>
+        <div class="rp-track-info">
+          <span class="rp-track-title">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</span>
+          <span class="rp-track-artist">${t.artists}</span>
+        </div>
+        <div class="isrc-wrap">
+          <span class="mono isrc-text"${t.isrc && !noDialog ? ` onclick="openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
+          ${t.isrc ? `<button class="copy-btn" onclick="copyISRC('${t.isrc}',this)">copy</button>` : ''}
+          ${isrcShared && !noDialog ? `<span class="isrc-shared-chip" onclick="openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : isrcShared ? `<span class="isrc-shared-chip">Shared</span>` : ''}
+          ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  else if (tab === 'information') {
+    const fields = [
+      ['Label',             r.label],
+      ['UPC',               r.upc],
+      ['Release date',      formatDate(r.date)],
+      ['Pre-order date',    'Apr 1, 2025'],
+      ['Copyright',         '© 2025 Lumière Records'],
+      ['Producer',          'Antoine Moreau'],
+      ['Production year',   '2025'],
+      ['Catalog reference', `LR-${r.upc.slice(-4)}`],
+      ['Genre',             'Electronic'],
+      ['Explicit lyrics',   'No'],
+      ['Total duration',    `${r.tracks.length * 3}:${String((r.tracks.length * 47) % 60).padStart(2,'0')}`],
+      ['Audio quality',     '16-bit / 44.1 kHz'],
+      ['Distribution type', 'Commercial'],
+      ['Creation date',     formatDate(r.date)],
+    ];
+    el.innerHTML = `<div class="rp-info-grid">${fields.map(([label, value]) =>
+      `<div class="rp-info-item"><span class="rp-info-label">${label}</span><span class="rp-info-value">${value}</span></div>`
+    ).join('')}</div>`;
+  }
+
+  else if (tab === 'distribution') {
+    el.innerHTML = `<div id="rpDistContainer"></div>`;
+    renderRpDistribution();
+  }
+
+  else if (tab === 'territories') {
+    el.innerHTML = `<div id="rpTerrContainer"></div>`;
+    renderRpTerritories();
+  }
+
+  else if (tab === 'history') {
+    const events = [
+      { date: 'Mar 14, 2025', time: '09:42', label: 'Release submitted for validation',  type: 'submit' },
+      { date: 'Mar 15, 2025', time: '11:20', label: 'Validated by Believe',               type: 'validate' },
+      { date: 'Mar 16, 2025', time: '08:00', label: 'Delivered to Spotify',               type: 'deliver' },
+      { date: 'Mar 16, 2025', time: '08:01', label: 'Delivered to Apple Music',           type: 'deliver' },
+      { date: 'Mar 17, 2025', time: '09:15', label: 'Delivered to Deezer',                type: 'deliver' },
+      { date: 'Mar 17, 2025', time: '09:16', label: 'Delivered to YouTube Music',         type: 'deliver' },
+      { date: 'Mar 18, 2025', time: '14:03', label: 'Challenged by Amazon Music', detail: 'Artwork rejected', type: 'challenge' },
+      { date: 'Mar 20, 2025', time: '10:00', label: 'Correction submitted',               type: 'correction' },
+      { date: 'Mar 21, 2025', time: '08:30', label: 'Delivered to Amazon Music',          type: 'deliver' },
+    ];
+    const icons = {
+      submit:     `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v9M5 8l3 3 3-3"/><path d="M3 13h10"/></svg>`,
+      validate:   `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8l3.5 3.5L13 4"/></svg>`,
+      deliver:    `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8l3.5 3.5L13 4"/></svg>`,
+      challenge:  `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 4v4M8 10v1.5"/></svg>`,
+      correction: `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h7M7 5l3 3-3 3"/></svg>`,
+    };
+    const colors = { submit: 'var(--neutral-120)', validate: 'var(--green-70)', deliver: 'var(--green-70)', challenge: 'var(--orange-70)', correction: 'var(--accent-60)' };
+    el.innerHTML = `<div class="rp-history-list">${events.map(e =>
+      `<div class="rp-history-item">
+        <div class="rp-history-dot" style="background:${colors[e.type]}">${icons[e.type]}</div>
+        <div class="rp-history-body">
+          <span class="rp-history-label">${e.label}${e.detail ? ` <span class="rp-history-detail">(${e.detail})</span>` : ''}</span>
+          <span class="rp-history-date">${e.date} · ${e.time}</span>
+        </div>
+      </div>`
+    ).join('')}</div>`;
+  }
+
+  else {
+    el.innerHTML = `<div class="panel-placeholder">${tab.charAt(0).toUpperCase() + tab.slice(1)} coming soon.</div>`;
+  }
+}
+
+function renderRpDistribution() {
+  const el = document.getElementById('rpDistContainer');
+  if (!el) return;
+  const r = selectedRelease;
+  if (!r || r.status !== 'delivered') {
+    el.innerHTML = `<div class="panel-placeholder">No platform data available for this release.</div>`;
+    return;
+  }
+  const linkSvg = `<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9"/><path d="M10 2h4v4"/><path d="M14 2L7 9" stroke-linecap="round"/></svg>`;
+  function filterStores(stores) { return _rpDistFilter === 'all' ? stores : stores.filter(s => s.status === _rpDistFilter); }
+  function storeRow(s) {
+    return `<div class="dist-store-row">
+      <div class="dist-store-icon" style="background:${s.color}">${s.initials}</div>
+      <div class="dist-store-info">
+        <div class="dist-store-name">${s.name}</div>
+        ${s.reason ? `<div class="dist-store-reason">${s.reason}</div>` : ''}
+      </div>
+      <div class="dist-store-meta">
+        ${s.date ? `<span class="dist-store-date">${s.date}</span>` : ''}
+        ${distChip(s.status)}
+        ${s.link ? `<button class="dist-link-btn" title="Open in store">${linkSvg}</button>` : ''}
+      </div>
+    </div>`;
+  }
+  const topFiltered = filterStores(DIST_STORES_TOP);
+  const allFiltered = filterStores(DIST_STORES_ALL);
+  const topSection  = topFiltered.length ? `<div class="dist-section-label">Top stores</div><div>${topFiltered.map(storeRow).join('')}</div>` : '';
+  const allSection  = allFiltered.length ? `<div class="dist-section-label">All stores</div><div>${allFiltered.map(storeRow).join('')}</div>` : '';
+  const filterBtns  = ['all', 'delivered', 'not-delivered', 'challenged'].map(f => {
+    const labels = { all: 'All', delivered: 'Delivered', 'not-delivered': 'Not delivered', challenged: 'Challenged' };
+    return `<button class="dist-filter-btn${_rpDistFilter === f ? ' active' : ''}" onclick="setRpDistFilter('${f}')">${labels[f]}</button>`;
+  }).join('');
+  el.innerHTML = `<div class="dist-filter-bar">${filterBtns}</div>${topSection}${allSection}`;
+}
+
+function setRpDistFilter(f) { _rpDistFilter = f; renderRpDistribution(); }
+
+function renderRpTerritories() {
+  const el = document.getElementById('rpTerrContainer');
+  if (!el) return;
+  const chevronSvg = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  el.innerHTML = DIST_TERRITORIES.map(({ region, countries }) => {
+    const isOpen = !_rpCollapsedRegions.has(region);
+    return `<div>
+      <div class="dist-region-header" onclick="toggleRpRegion('${region}')">
+        <span class="dist-region-name">${region}</span>
+        <span class="dist-region-chevron${isOpen ? ' open' : ''}">${chevronSvg}</span>
+      </div>
+      ${isOpen ? `<div>${countries.map(c =>
+        `<div class="dist-country-row">
+          <span class="dist-country-flag">${c.flag}</span>
+          <span class="dist-country-name">${c.name}</span>
+        </div>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleRpRegion(region) {
+  if (_rpCollapsedRegions.has(region)) _rpCollapsedRegions.delete(region);
+  else _rpCollapsedRegions.add(region);
+  renderRpTerritories();
+}
+
 let currentView = 'list';
 
 function setView(v) {
@@ -3716,7 +4063,7 @@ function renderGrid() {
         <div class="card-footer">${statusChip(r.status)}</div>
       </div>
     `;
-    card.addEventListener('click', () => openPanel(r.id));
+    card.addEventListener('click', () => openReleasePage(r.id));
     grid.appendChild(card);
   });
 }
