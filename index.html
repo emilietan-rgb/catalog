@@ -350,88 +350,42 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 .btn-dark:hover { background: var(--neutral-170); border-color: var(--neutral-170); }
 
-/* ─── Attention Block ────────────────────────────────────────────────────── */
-.attention-block {
-  background: var(--orange-10);
-  border: 1px solid var(--orange-20);
-  border-radius: var(--cr-sm);
-  padding: var(--sp-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-md);
-}
-.attention-header {
+/* ─── Need-action Alert Banner ───────────────────────────────────────────── */
+#need-action-alert {
   display: flex;
   align-items: center;
-}
-.attention-title {
-  font-size: 14px;
-  font-weight: var(--fw-medium);
-  color: var(--text-primary);
-  flex: 1;
-}
-.attention-dismiss {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-secondary);
-  border-radius: var(--cr-3xsm);
-  transition: background 0.1s, color 0.1s;
-  flex-shrink: 0;
-}
-.attention-dismiss:hover { background: var(--orange-20); color: var(--text-primary); }
-.attention-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--sp-sm);
-}
-.attention-item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-sm);
-  padding: var(--sp-2xsm) var(--sp-xsm);
+  gap: var(--sp-xsm);
+  background: #FFF8EC;
+  border-left: 3px solid #F59E0B;
   border-radius: var(--cr-2xsm);
+  padding: var(--sp-sm) var(--sp-md);
+  font-size: 14px;
 }
-.attention-thumb {
-  flex-shrink: 0;
-  border-radius: var(--cr-3xsm);
-  overflow: hidden;
-  width: 80px;
-  height: 80px;
+#need-action-alert.hidden { display: none; }
+.alert-icon { font-size: 15px; flex-shrink: 0; line-height: 1; }
+.alert-text { color: var(--text-primary); flex: 1; }
+.alert-text strong { font-weight: var(--fw-semibold); }
+.alert-cta {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font); font-size: 14px; font-weight: var(--fw-medium);
+  color: var(--accent-60); padding: 0; white-space: nowrap;
+  transition: color 0.1s;
 }
-.attention-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3xsm);
-  min-width: 0;
+.alert-cta:hover { color: var(--accent-70); }
+.alert-dismiss {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: var(--text-secondary); padding: 0 0 0 var(--sp-3xsm);
+  line-height: 1; flex-shrink: 0; transition: color 0.1s; margin-left: auto;
 }
-.attention-item-title {
-  font-size: 13px;
-  font-weight: var(--fw-semibold);
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.alert-dismiss:hover { color: var(--text-primary); }
+.need-action-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #F59E0B; color: #fff;
+  font-size: 11px; font-weight: var(--fw-semibold);
+  border-radius: 999px; padding: 1px 6px; margin-left: 4px;
+  vertical-align: middle; line-height: 1.4;
 }
-.attention-item-artist {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-.attention-link {
-  color: var(--orange-70);
-  font-weight: var(--fw-medium);
-  font-size: 13px;
-  text-decoration: none;
-  white-space: nowrap;
-  align-self: flex-start;
-}
-.attention-link:hover { color: var(--orange-60); text-decoration: underline; }
+.need-action-badge.hidden { display: none; }
 
 /* ─── Chips ──────────────────────────────────────────────────────────────── */
 .chip {
@@ -1058,47 +1012,44 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .btn-danger:hover:not(:disabled) { background: #b42318; }
 .btn-danger:disabled { background: var(--neutral-40); color: var(--text-secondary); cursor: not-allowed; }
 
-/* ─── Status Tabs (Harmony Secondary Tabs) ───────────────────────────────── */
+/* ─── Status Tabs ────────────────────────────────────────────────────────── */
 .pills-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-xsm);
 }
 .status-pills {
   display: flex;
-  align-items: center;
   gap: 0;
-  flex-wrap: wrap;
-  min-height: 32px;
+  border-bottom: 1px solid var(--border-primary);
+  margin-bottom: 16px;
+  padding: 0;
+  width: 100%;
 }
 .pill {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: var(--sp-3xsm);
-  padding: 0 var(--sp-sm);
-  min-height: 32px;
-  min-width: 64px;
-  border-radius: var(--cr-rounded);
+  padding: 10px 16px;
   font-family: var(--font);
   font-size: 14px;
   font-weight: var(--fw-medium);
-  line-height: 18px;
-  cursor: pointer;
+  color: var(--text-secondary);
+  background: none;
   border: none;
-  background: transparent;
-  color: var(--neutral-120);
-  transition: background 0.12s, color 0.12s;
-  user-select: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
   white-space: nowrap;
+  transition: color 0.12s;
+  user-select: none;
 }
-.pill:hover { background: var(--neutral-30); color: var(--neutral-160); }
+.pill:hover { color: var(--text-primary); }
 .pill.active {
-  background: var(--neutral-30);
-  color: var(--neutral-160);
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--text-primary);
+  font-weight: var(--fw-semibold);
 }
-.pill-count { font-weight: var(--fw-medium); }
+.pill-count { font-weight: var(--fw-medium); color: var(--text-secondary); }
 
 /* ─── Table Card ─────────────────────────────────────────────────────────── */
 .table-card {
@@ -1780,6 +1731,265 @@ td {
 .flex { display: flex; }
 .items-center { align-items: center; }
 .gap-xsm { gap: var(--sp-xsm); }
+
+/* ─── Filter Bar ─────────────────────────────────────────────────────────── */
+#filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-primary);
+  margin-bottom: 16px;
+}
+.filter-bar-search {
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.filter-bar-search .search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 13px;
+  pointer-events: none;
+  line-height: 1;
+}
+#main-search {
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0 32px 0 36px;
+  font-size: 14px;
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  outline: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+#main-search::placeholder { color: var(--text-secondary); }
+#main-search:focus { border-color: var(--accent-60); box-shadow: 0 0 0 3px var(--accent-10); }
+.search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 2px;
+  line-height: 1;
+  transition: color 0.1s;
+}
+.search-clear:hover { color: var(--text-primary); }
+.filter-bar-chips {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fb-chip-wrap { position: relative; }
+.filter-chip {
+  height: 36px;
+  min-width: 120px;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background 0.1s, border-color 0.1s;
+}
+.filter-chip:hover { background: var(--neutral-30); border-color: var(--neutral-70); }
+.filter-chip.active {
+  background: var(--accent-10);
+  border-color: var(--accent-60);
+  color: var(--accent-70);
+  font-weight: var(--fw-medium);
+}
+.chip-caret { font-size: 11px; color: var(--text-secondary); }
+.filter-chip.active .chip-caret { color: var(--accent-60); }
+.chip-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+  background: var(--accent-60);
+  color: #fff;
+  margin-left: 1px;
+  cursor: pointer;
+}
+.chip-clear:hover { background: var(--accent-70); }
+.filter-bar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-primary);
+  align-self: center;
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+.filter-bar-actions {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.filter-bar-actions .view-toggle {
+  width: 32px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: background 0.1s, color 0.1s;
+}
+.filter-bar-actions .view-toggle + .view-toggle { border-left: 1px solid var(--border-primary); }
+.filter-bar-actions .view-toggle:hover { background: var(--neutral-40); color: var(--text-primary); }
+.filter-bar-actions .view-toggle.active { background: var(--neutral-40); color: var(--text-primary); }
+
+/* ─── Filter Dropdowns ───────────────────────────────────────────────────── */
+.fb-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 12px;
+  min-width: 240px;
+  z-index: 100;
+}
+.fb-dropdown.hidden { display: none; }
+.fb-dropdown-label {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.fb-quick-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+.fb-quick-btn {
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--neutral-60);
+  border-radius: 20px;
+  background: var(--bg-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+  white-space: nowrap;
+}
+.fb-quick-btn:hover { background: var(--neutral-30); border-color: var(--neutral-70); }
+.fb-quick-btn.active { background: var(--accent-60); border-color: var(--accent-60); color: #fff; }
+.fb-sep { height: 1px; background: var(--neutral-40); margin: 10px 0; }
+.fb-range-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+.fb-date-input {
+  flex: 1;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  outline: none;
+}
+.fb-date-input:focus { border-color: var(--accent-60); }
+.fb-apply-btn {
+  width: 100%;
+  height: 32px;
+  background: var(--neutral-190);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.fb-apply-btn:hover { background: var(--neutral-170); }
+#fb-artist-dropdown {
+  min-width: 300px;
+  max-height: 420px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+#fb-artist-dropdown .artist-search-wrap {
+  padding: 10px 10px 6px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--neutral-40);
+}
+#fb-artist-dropdown .artist-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--sp-3xsm);
+  min-height: 0;
+}
+#fb-artist-dropdown .artist-modal-footer {
+  border-top: 1px solid var(--neutral-40);
+  padding: 8px 10px;
+  flex-shrink: 0;
+}
+.fb-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.fb-toggle-btn {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+}
+.fb-toggle-btn.active { background: var(--neutral-190); color: #fff; border-color: var(--neutral-190); }
+.fb-label-input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  outline: none;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+.fb-label-input:focus { border-color: var(--accent-60); }
 </style>
 </head>
 <body>
@@ -1883,84 +2093,90 @@ td {
       </div>
     </div>
 
-    <!-- Attention Block -->
-    <div class="attention-block" id="attentionBlock">
-      <div class="attention-header">
-        <span class="attention-title">Tracks Requiring Action</span>
-        <button class="attention-dismiss" onclick="document.getElementById('attentionBlock').classList.add('hidden')" title="Dismiss">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
-        </button>
-      </div>
-      <div class="attention-list" id="attentionList"></div>
+    <!-- Need-action Alert Banner -->
+    <div id="need-action-alert">
+      <span class="alert-icon">⚠️</span>
+      <span class="alert-text"><strong id="needActionCount"></strong> <span id="needActionText"></span></span>
+      <button class="alert-cta" onclick="document.querySelector('.pill[data-status=\'need-action\']').click()">View all →</button>
+      <button class="alert-dismiss" aria-label="Dismiss" onclick="document.getElementById('need-action-alert').style.display='none'">✕</button>
     </div>
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <div class="add-filters-wrap" id="addFiltersWrap">
-          <button class="filter-btn" id="addFiltersBtn" onclick="toggleAddFiltersPopper(event)">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1.5 4h13M4.5 8h7M7 12h2"/></svg>
-            Add filters
-          </button>
-          <div class="add-filters-popper hidden" id="addFiltersPopper">
-            <div class="popper-search-wrap">
-              <input type="text" class="popper-search" placeholder="Search filters…">
-            </div>
-            <div class="popper-section-label">Account</div>
-            <label class="popper-item"><input type="checkbox"> Sub-label</label>
-            <label class="popper-item"><input type="checkbox"> Country</label>
-            <div class="popper-section-label">Contract</div>
-            <label class="popper-item"><input type="checkbox"> Contract type</label>
-            <label class="popper-item"><input type="checkbox"> Royalty rate</label>
-            <div class="popper-section-label">Release</div>
-            <label class="popper-item"><input type="checkbox"> #Tracks</label>
-            <label class="popper-item"><input type="checkbox"> Genre</label>
-            <label class="popper-item"><input type="checkbox"> Language</label>
-          </div>
-        </div>
-        <div class="active-chips" id="activeChips"></div>
-      </div>
-
-      <div class="toolbar-right">
-        <button class="filter-btn" id="dateFilterBtn" onclick="openDateModal()">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M5 1v3M11 1v3M2 7h12"/></svg>
-          <span id="dateFilterLabel">Release date</span>
-          <span class="filter-btn-clear hidden" id="dateClearBtn" onclick="clearDateFilter(event)">×</span>
-        </button>
-        <button class="filter-btn" id="artistFilterBtn" onclick="openArtistModal()">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 13.5c0-2.5 2.5-4.5 5.5-4.5s5.5 2 5.5 4.5"/></svg>
-          <span id="artistFilterLabel">Artists</span>
-          <span class="filter-btn-clear hidden" id="artistClearBtn" onclick="clearArtistFilter(event)">×</span>
-        </button>
-        <div class="toolbar-divider"></div>
-        <button class="watchlist-btn" id="watchlistBtn" onclick="toggleWatchlistFilter()">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
-          <span id="watchlistBtnLabel">Watchlist</span>
-        </button>
-        <div class="view-toggle">
-          <button class="view-btn active" id="listViewBtn" onclick="setView('list')" title="List view">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
-          </button>
-          <button class="view-btn" id="gridViewBtn" onclick="setView('grid')" title="Grid view">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Status Tabs + Search -->
+    <!-- Status Tabs -->
     <div class="pills-row">
       <div class="status-pills" id="statusPills">
         <button class="pill active" data-status="all">All</button>
         <button class="pill" data-status="draft">Draft</button>
         <button class="pill" data-status="processing">Processing</button>
         <button class="pill" data-status="delivered">Live</button>
-        <button class="pill" data-status="need-action">Need action</button>
+        <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
         <button class="pill" data-status="unsellable">Taken down</button>
+        <button class="pill" data-status="watchlist">☆ Watchlist</button>
       </div>
-      <div class="search-input-wrap">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
-        <input type="text" class="search-input" placeholder="Search by name or ID…" id="searchInput">
+    </div>
+
+    <!-- Filter Bar -->
+    <div id="filter-bar">
+      <div class="filter-bar-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="main-search" placeholder="Search by title, artist or UPC..." autocomplete="off">
+        <button class="search-clear" id="search-clear" aria-label="Clear" style="display:none">✕</button>
+      </div>
+
+      <div class="filter-bar-chips">
+        <div class="fb-chip-wrap">
+          <button class="filter-chip" id="chip-date" onclick="toggleFbDropdown('fb-date-dropdown')">
+            Release date <span class="chip-caret">▾</span>
+          </button>
+          <div class="fb-dropdown hidden" id="fb-date-dropdown">
+            <div class="fb-quick-btns">
+              <button class="fb-quick-btn" data-type="days7"   onclick="applyFbDate('days7')">This week</button>
+              <button class="fb-quick-btn" data-type="month"   onclick="applyFbDate('month')">This month</button>
+              <button class="fb-quick-btn" data-type="months3" onclick="applyFbDate('months3')">Last 3 months</button>
+              <button class="fb-quick-btn" data-type="year"    onclick="applyFbDate('year')">This year</button>
+            </div>
+            <div class="fb-sep"></div>
+            <div class="fb-dropdown-label">Custom range</div>
+            <div class="fb-range-row">
+              <input type="date" class="fb-date-input" id="fb-date-from">
+              <span style="color:var(--text-tertiary);font-size:12px">→</span>
+              <input type="date" class="fb-date-input" id="fb-date-to">
+            </div>
+            <button class="fb-apply-btn" onclick="applyFbDateRange()">Apply</button>
+          </div>
+        </div>
+
+        <div class="fb-chip-wrap">
+          <button class="filter-chip" id="chip-artist" onclick="toggleFbDropdown('fb-artist-dropdown')">
+            Artist <span class="chip-caret">▾</span>
+          </button>
+          <div class="fb-dropdown hidden" id="fb-artist-dropdown">
+            <div class="artist-search-wrap">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+              <input type="text" class="artist-search-input" id="fbArtistSearchInput" placeholder="Search artists…">
+            </div>
+            <div class="artist-modal-body" id="fbArtistModalBody"></div>
+            <div class="artist-modal-footer">
+              <button class="btn btn-dark" onclick="applyFbArtistFilter()" style="flex:1">Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fb-chip-wrap">
+          <button class="filter-chip filter-chip-more" id="chip-more" onclick="toggleFbDropdown('fb-more-dropdown')">
+            + Filters
+          </button>
+          <div class="fb-dropdown hidden" id="fb-more-dropdown">
+            <div class="fb-dropdown-label">Label</div>
+            <input type="text" class="fb-label-input" id="fb-label-input" placeholder="Filter by label…">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-bar-divider"></div>
+
+      <div class="filter-bar-actions">
+        <button class="view-toggle active" id="view-list" onclick="setView('list')" title="List view">≡</button>
+        <button class="view-toggle" id="view-grid" onclick="setView('grid')" title="Grid view">⊞</button>
       </div>
     </div>
 
@@ -3072,17 +3288,27 @@ function formatDate(iso) {
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-function filteredReleases() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
+const processingGroup = new Set(['processing', 'under-review', 'approved-by-believe', 'sent-to-platforms']);
+
+function getFilteredReleases(statusOverride) {
+  const tab = statusOverride !== undefined ? statusOverride : activeFilter;
+  const q      = (document.getElementById('main-search')?.value || '').toLowerCase();
+  const labelQ = (document.getElementById('fb-label-input')?.value || '').toLowerCase();
   const now = new Date();
   return releases.filter(r => {
-    const processingGroup = new Set(['processing', 'under-review', 'approved-by-believe', 'sent-to-platforms']);
-    const matchStatus = activeFilter === 'all'
-      || r.status === activeFilter
-      || (activeFilter === 'processing' && processingGroup.has(r.status));
+    // Status filter (tab)
+    const matchStatus = tab === 'all'
+      || r.status === tab
+      || (tab === 'processing' && processingGroup.has(r.status))
+      || (tab === 'watchlist' && watchlist.has(r.id));
+    // Search
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
+    // Label chip
+    const matchLabel  = !labelQ || r.label.toLowerCase().includes(labelQ);
+    // Artist chip
     const matchArtist = selectedArtists.size === 0 || selectedArtists.has(r.artist)
       || r.tracks.some(t => t.artists.split(',').some(a => selectedArtists.has(a.trim())));
+    // Date chip
     let matchDate = true;
     if (activeDateFilter.type !== 'all' && r.date) {
       const d = new Date(r.date + 'T00:00:00');
@@ -3106,22 +3332,35 @@ function filteredReleases() {
         matchDate = d >= cutoff;
       } else if (activeDateFilter.type === 'before' && activeDateFilter.value) {
         matchDate = d < activeDateFilter.value;
+      } else if (activeDateFilter.type === 'range') {
+        if (activeDateFilter.from) matchDate = matchDate && d >= activeDateFilter.from;
+        if (activeDateFilter.to)   matchDate = matchDate && d <= activeDateFilter.to;
       }
     }
-    const matchWatchlist = !watchlistFilterActive || watchlist.has(r.id);
-    return matchStatus && matchSearch && matchDate && matchArtist && matchWatchlist;
+    return matchStatus && matchSearch && matchLabel && matchDate && matchArtist;
   });
+}
+
+function filtersActive() {
+  const q      = document.getElementById('main-search')?.value || '';
+  const labelQ = document.getElementById('fb-label-input')?.value || '';
+  return q || labelQ || selectedArtists.size > 0 || activeDateFilter.type !== 'all';
 }
 
 // ─── Render Table ─────────────────────────────────────────────────────────
 function renderTable() {
-  if (currentView === 'grid') { renderGrid(); return; }
+  if (currentView === 'grid') { renderGrid(); refreshPills(); return; }
   const tbody = document.getElementById('tableBody');
-  const data = filteredReleases();
+  const data = getFilteredReleases();
+  refreshPills();
   tbody.innerHTML = '';
 
   if (data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">No releases found</td></tr>`;
+    const anyFilter = filtersActive();
+    const msg = anyFilter
+      ? `No releases match your filters. <a href="#" onclick="event.preventDefault();clearAllFilters()" style="color:var(--text-primary);text-decoration:underline">Clear all filters</a>`
+      : 'No releases found';
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">${msg}</td></tr>`;
     return;
   }
 
@@ -3353,23 +3592,30 @@ function executeTakedown() {
   closeTrackModal();
   refreshPills();
   renderTable();
-  renderAttentionBlock();
+  renderNeedActionAlert();
 }
 
 function refreshPills() {
-  const processingStatuses = new Set(['processing', 'under-review', 'approved-by-believe', 'sent-to-platforms']);
-  const counts = {
-    all:        releases.length,
-    draft:      releases.filter(r => r.status === 'draft').length,
-    processing: releases.filter(r => processingStatuses.has(r.status)).length,
-    delivered:  releases.filter(r => r.status === 'delivered').length,
-    'need-action': releases.filter(r => r.status === 'need-action').length,
-    unsellable: releases.filter(r => r.status === 'unsellable').length,
-  };
   const labels = { all: 'All', draft: 'Draft', processing: 'Processing', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
+  const showCounts = filtersActive();
   document.querySelectorAll('#statusPills .pill').forEach(pill => {
     const s = pill.dataset.status;
-    pill.textContent = labels[s];
+    if (s === 'watchlist') {
+      const baseLabel = activeFilter === 'watchlist' ? '★ Watchlist' : '☆ Watchlist';
+      if (showCounts) {
+        const n = getFilteredReleases('watchlist').length;
+        pill.innerHTML = `${baseLabel} <span class="pill-count">${n}</span>`;
+      } else {
+        pill.innerHTML = baseLabel;
+      }
+    } else if (labels[s]) {
+      if (showCounts) {
+        const n = getFilteredReleases(s).length;
+        pill.innerHTML = `${labels[s]} <span class="pill-count">${n}</span>`;
+      } else {
+        pill.textContent = labels[s];
+      }
+    }
   });
 }
 
@@ -3582,11 +3828,23 @@ document.getElementById('statusPills').addEventListener('click', e => {
   activeFilter = pill.dataset.status;
   document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   pill.classList.add('active');
+  const wlPill = document.querySelector('.pill[data-status="watchlist"]');
+  if (wlPill) wlPill.innerHTML = activeFilter === 'watchlist' ? '★ Watchlist' : '☆ Watchlist';
   renderTable();
 });
 
 // ─── Search ───────────────────────────────────────────────────────────────
-document.getElementById('searchInput').addEventListener('input', renderTable);
+let _searchDebounce = null;
+document.getElementById('main-search').addEventListener('input', e => {
+  document.getElementById('search-clear').style.display = e.target.value ? 'block' : 'none';
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(renderTable, 300);
+});
+document.getElementById('search-clear').addEventListener('click', () => {
+  document.getElementById('main-search').value = '';
+  document.getElementById('search-clear').style.display = 'none';
+  renderTable();
+});
 
 // ─── Watchlist ────────────────────────────────────────────────────────────
 const watchlist = new Set();
@@ -3604,8 +3862,7 @@ function toggleWatchlist(id, btn) {
     btn.querySelector('svg').setAttribute('fill', 'currentColor');
     btn.title = 'Remove from watchlist';
   }
-  updateWatchlistBtn();
-  if (watchlistFilterActive) renderTable();
+  if (activeFilter === 'watchlist') renderTable();
 }
 
 function toggleWatchlistFilter() {
@@ -3614,11 +3871,39 @@ function toggleWatchlistFilter() {
   renderTable();
 }
 
-function updateWatchlistBtn() {
-  const btn = document.getElementById('watchlistBtn');
-  const label = document.getElementById('watchlistBtnLabel');
-  btn.classList.toggle('active', watchlistFilterActive);
-  label.textContent = 'Watchlist';
+function updateFbMoreChip() {
+  const chip = document.getElementById('chip-more');
+  if (!chip) return;
+  const labelQ = document.getElementById('fb-label-input')?.value || '';
+  chip.innerHTML = labelQ
+    ? `+ Filters (1) <span class="chip-clear" onclick="event.stopPropagation();clearMoreFilters()">✕</span>`
+    : '+ Filters';
+  chip.classList.toggle('active', !!labelQ);
+}
+
+function clearMoreFilters() {
+  const labelInput = document.getElementById('fb-label-input');
+  if (labelInput) labelInput.value = '';
+  updateFbMoreChip();
+  renderTable();
+}
+
+function clearAllFilters() {
+  // Search
+  const searchInput = document.getElementById('main-search');
+  if (searchInput) { searchInput.value = ''; document.getElementById('search-clear').style.display = 'none'; }
+  // Date
+  activeDateFilter = { type: 'all', value: null, from: null, to: null };
+  updateDateFilterUI();
+  // Artist
+  selectedArtists.clear();
+  pendingArtists.clear();
+  updateArtistFilterBtn();
+  // Label
+  const labelInput = document.getElementById('fb-label-input');
+  if (labelInput) labelInput.value = '';
+  updateFbMoreChip();
+  renderTable();
 }
 
 // ─── Artist Filter ────────────────────────────────────────────────────────
@@ -3767,22 +4052,21 @@ function applyArtistFilter() {
 }
 
 function updateArtistFilterBtn() {
-  const btn = document.getElementById('artistFilterBtn');
-  const label = document.getElementById('artistFilterLabel');
-  const clearBtn = document.getElementById('artistClearBtn');
-  if (selectedArtists.size === 0) {
-    label.textContent = 'Artists';
-    btn.classList.remove('active-filter');
-    clearBtn.classList.add('hidden');
+  const chip = document.getElementById('chip-artist');
+  if (!chip) return;
+  const isActive = selectedArtists.size > 0;
+  let labelText;
+  if (!isActive) {
+    labelText = 'Artist';
   } else if (selectedArtists.size === 1) {
-    label.textContent = [...selectedArtists][0];
-    btn.classList.add('active-filter');
-    clearBtn.classList.remove('hidden');
+    labelText = [...selectedArtists][0];
   } else {
-    label.textContent = `${selectedArtists.size} artists`;
-    btn.classList.add('active-filter');
-    clearBtn.classList.remove('hidden');
+    labelText = `${selectedArtists.size} artists`;
   }
+  chip.innerHTML = isActive
+    ? `${labelText} <span class="chip-clear" onclick="event.stopPropagation();clearArtistFilter(event)">✕</span>`
+    : `Artist <span class="chip-caret">▾</span>`;
+  chip.classList.toggle('active', isActive);
 }
 
 document.getElementById('artistSearchInput')?.addEventListener('input', e => {
@@ -3798,10 +4082,124 @@ function toggleAddFiltersPopper(e) {
 }
 
 document.addEventListener('click', e => {
-  const wrap = document.getElementById('addFiltersWrap');
-  if (wrap && !wrap.contains(e.target)) {
-    document.getElementById('addFiltersPopper')?.classList.add('hidden');
+  if (!e.target.closest('.fb-chip-wrap')) {
+    ['fb-date-dropdown', 'fb-artist-dropdown', 'fb-more-dropdown'].forEach(id => {
+      document.getElementById(id)?.classList.add('hidden');
+    });
   }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['fb-date-dropdown', 'fb-artist-dropdown', 'fb-more-dropdown'].forEach(id => {
+      document.getElementById(id)?.classList.add('hidden');
+    });
+  }
+});
+
+// ─── Filter Bar Dropdowns ─────────────────────────────────────────────────
+function toggleFbDropdown(id) {
+  const dropdown = document.getElementById(id);
+  if (!dropdown) return;
+  const isHidden = dropdown.classList.contains('hidden');
+  ['fb-date-dropdown', 'fb-artist-dropdown', 'fb-more-dropdown'].forEach(d => {
+    document.getElementById(d)?.classList.add('hidden');
+  });
+  if (isHidden) {
+    dropdown.classList.remove('hidden');
+    if (id === 'fb-artist-dropdown') {
+      pendingArtists = new Set(selectedArtists);
+      document.getElementById('fbArtistSearchInput').value = '';
+      renderFbArtistList('');
+      setTimeout(() => document.getElementById('fbArtistSearchInput')?.focus(), 50);
+    }
+    if (id === 'fb-date-dropdown') {
+      if (activeDateFilter.type === 'range') {
+        if (activeDateFilter.from) document.getElementById('fb-date-from').value = activeDateFilter.from.toISOString().split('T')[0];
+        if (activeDateFilter.to)   document.getElementById('fb-date-to').value   = activeDateFilter.to.toISOString().split('T')[0];
+      }
+    }
+  }
+}
+
+function applyFbDate(type) {
+  activeDateFilter = { type, value: null };
+  document.getElementById('fb-date-from').value = '';
+  document.getElementById('fb-date-to').value = '';
+  updateDateFilterUI();
+  renderTable();
+  document.getElementById('fb-date-dropdown').classList.add('hidden');
+}
+
+function applyFbDateRange() {
+  const from = document.getElementById('fb-date-from').value;
+  const to   = document.getElementById('fb-date-to').value;
+  if (!from && !to) return;
+  activeDateFilter = {
+    type: 'range',
+    from: from ? new Date(from + 'T00:00:00') : null,
+    to:   to   ? new Date(to   + 'T23:59:59') : null,
+  };
+  updateDateFilterUI();
+  renderTable();
+  document.getElementById('fb-date-dropdown').classList.add('hidden');
+}
+
+function renderFbArtistList(query) {
+  const q = query.toLowerCase();
+  const filtered = artistData.filter(a => !q || a.name.toLowerCase().includes(q));
+  const pinned = filtered.filter(a => pinnedArtistsSet.has(a.name));
+  const all    = filtered.filter(a => !pinnedArtistsSet.has(a.name));
+  function rowHTML(a) {
+    const hue = nameHue(a.name);
+    const sel = pendingArtists.has(a.name) ? 'selected' : '';
+    const safeName = a.name.replace(/'/g,"\\'");
+    const avatarUrl = artistAvatarMap[a.name];
+    const avatarInner = avatarUrl ? `<img src="${avatarUrl}" alt="${a.name}" loading="lazy">` : nameInitials(a.name);
+    const avatarBg = avatarUrl ? '' : `style="background:hsl(${hue},55%,52%)"`;
+    return `<div class="artist-row ${sel}" onclick="toggleFbArtistRow('${safeName}', this)">
+      <div class="artist-avatar" ${avatarBg}>${avatarInner}</div>
+      <div class="artist-row-info">
+        <div class="artist-row-name">${a.name}</div>
+        <div class="artist-row-count">${a.releases} release${a.releases > 1 ? 's' : ''}</div>
+      </div>
+      <div class="artist-check">
+        <svg class="artist-check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 4,8 10,1"/></svg>
+      </div>
+    </div>`;
+  }
+  let html = '';
+  if (pinned.length) html += `<div class="artist-section-label">Pinned</div>${pinned.map(rowHTML).join('')}`;
+  if (all.length)    html += `<div class="artist-section-label">All Artists</div>${all.map(rowHTML).join('')}`;
+  if (!filtered.length) html = `<div style="padding:var(--sp-xlg);text-align:center;color:var(--text-secondary);font-size:13px">No artists found</div>`;
+  document.getElementById('fbArtistModalBody').innerHTML = html;
+}
+
+function toggleFbArtistRow(name, el) {
+  if (pendingArtists.has(name)) { pendingArtists.delete(name); el.classList.remove('selected'); }
+  else                           { pendingArtists.add(name);    el.classList.add('selected'); }
+}
+
+function applyFbArtistFilter() {
+  selectedArtists = new Set(pendingArtists);
+  document.getElementById('fb-artist-dropdown').classList.add('hidden');
+  updateArtistFilterBtn();
+  renderTable();
+}
+
+function toggleFbWatchlist() {
+  watchlistFilterActive = !watchlistFilterActive;
+  updateWatchlistBtn();
+  renderTable();
+}
+
+document.getElementById('fbArtistSearchInput')?.addEventListener('input', e => {
+  renderFbArtistList(e.target.value);
+});
+
+document.getElementById('fb-label-input')?.addEventListener('input', () => {
+  updateFbMoreChip();
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(renderTable, 300);
 });
 
 function clearDateFilter(e) {
@@ -4025,8 +4423,8 @@ let currentView = 'list';
 
 function setView(v) {
   currentView = v;
-  document.getElementById('listViewBtn').classList.toggle('active', v === 'list');
-  document.getElementById('gridViewBtn').classList.toggle('active', v === 'grid');
+  document.getElementById('view-list').classList.toggle('active', v === 'list');
+  document.getElementById('view-grid').classList.toggle('active', v === 'grid');
   document.getElementById('tableCard').classList.toggle('hidden', v === 'grid');
   document.getElementById('releasesGrid').classList.toggle('hidden', v === 'list');
   if (v === 'grid') renderGrid();
@@ -4034,7 +4432,7 @@ function setView(v) {
 
 function renderGrid() {
   const grid = document.getElementById('releasesGrid');
-  const data = filteredReleases();
+  const data = getFilteredReleases();
   grid.innerHTML = '';
 
   if (data.length === 0) {
@@ -4069,25 +4467,26 @@ function renderGrid() {
 }
 
 function updateDateFilterUI() {
-  const btn = document.getElementById('dateFilterBtn');
-  const labelEl = document.getElementById('dateFilterLabel');
-  const clearBtn = document.getElementById('dateClearBtn');
-  const labels = { days7: 'Last 7 days', days14: 'Last 14 days', month: 'Last month', months3: 'Last 3 months', months6: 'Last 6 months', year: 'Last year' };
+  const chip = document.getElementById('chip-date');
+  if (!chip) return;
+  const quickLabels = { days7: 'This week', month: 'This month', months3: 'Last 3 months', year: 'This year', days14: 'Last 14 days', months6: 'Last 6 months' };
   const isActive = activeDateFilter.type !== 'all';
-
-  if (activeDateFilter.type === 'before' && activeDateFilter.value) {
-    const d = activeDateFilter.value;
-    labelEl.textContent = 'Before ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  } else if (labels[activeDateFilter.type]) {
-    labelEl.textContent = labels[activeDateFilter.type];
-  } else {
-    labelEl.textContent = 'Release date';
+  let labelText = 'Release date';
+  if (isActive) {
+    if (activeDateFilter.type === 'before' && activeDateFilter.value) {
+      labelText = 'Before ' + activeDateFilter.value.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    } else if (activeDateFilter.type === 'range') {
+      labelText = 'Date range';
+    } else if (quickLabels[activeDateFilter.type]) {
+      labelText = quickLabels[activeDateFilter.type];
+    }
   }
-  btn.classList.toggle('active-filter', isActive);
-  clearBtn.classList.toggle('hidden', !isActive);
-
-  // Highlight active quick filter btn in modal
-  document.querySelectorAll('.quick-filter-btn').forEach(b => {
+  chip.innerHTML = isActive
+    ? `${labelText} <span class="chip-clear" onclick="event.stopPropagation();clearDateFilter(event)">✕</span>`
+    : `Release date <span class="chip-caret">▾</span>`;
+  chip.classList.toggle('active', isActive);
+  // Sync quick filter buttons in dropdown
+  document.querySelectorAll('#fb-date-dropdown .fb-quick-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.type === activeDateFilter.type);
   });
 }
@@ -4124,27 +4523,23 @@ function applyCustomDate() {
   closeDateModal();
 }
 
-// ─── Attention block ──────────────────────────────────────────────────────
-function renderAttentionBlock() {
-  const needAction = releases.filter(r => r.status === 'need-action');
-  const block = document.getElementById('attentionBlock');
-  const list  = document.getElementById('attentionList');
-  if (!needAction.length) { block.classList.add('hidden'); return; }
-  block.classList.remove('hidden');
-  list.innerHTML = needAction.map(r => `
-    <div class="attention-item">
-      <div class="attention-thumb">
-        <img src="${r.coverImg}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;display:block;">
-      </div>
-      <div class="attention-info">
-        <span class="attention-item-title">${r.title}</span>
-        <span class="attention-item-artist">${r.artist}</span>
-        <a class="attention-link" href="#">Review →</a>
-      </div>
-    </div>
-  `).join('');
+// ─── Need-action alert banner ─────────────────────────────────────────────
+function renderNeedActionAlert() {
+  const count = releases.filter(r => r.status === 'need-action').length;
+  const alert = document.getElementById('need-action-alert');
+  const badge = document.getElementById('needActionBadge');
+  if (count === 0) {
+    alert.classList.add('hidden');
+    badge.classList.add('hidden');
+    return;
+  }
+  alert.classList.remove('hidden');
+  document.getElementById('needActionCount').textContent = count;
+  document.getElementById('needActionText').textContent = count === 1 ? 'release requires your attention' : 'releases require your attention';
+  badge.textContent = count;
+  badge.classList.remove('hidden');
 }
-renderAttentionBlock();
+renderNeedActionAlert();
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 renderTable();
