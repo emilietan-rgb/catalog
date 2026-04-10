@@ -351,33 +351,6 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .btn-dark:hover { background: var(--neutral-170); border-color: var(--neutral-170); }
 
 /* ─── Need-action Alert Banner ───────────────────────────────────────────── */
-#need-action-alert {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-xsm);
-  background: #FFF8EC;
-  border-left: 3px solid #F59E0B;
-  border-radius: var(--cr-2xsm);
-  padding: var(--sp-sm) var(--sp-md);
-  font-size: 14px;
-}
-#need-action-alert.hidden { display: none; }
-.alert-icon { font-size: 15px; flex-shrink: 0; line-height: 1; }
-.alert-text { color: var(--text-primary); flex: 1; }
-.alert-text strong { font-weight: var(--fw-semibold); }
-.alert-cta {
-  background: none; border: none; cursor: pointer;
-  font-family: var(--font); font-size: 14px; font-weight: var(--fw-medium);
-  color: var(--accent-60); padding: 0; white-space: nowrap;
-  transition: color 0.1s;
-}
-.alert-cta:hover { color: var(--accent-70); }
-.alert-dismiss {
-  background: none; border: none; cursor: pointer;
-  font-size: 14px; color: var(--text-secondary); padding: 0 0 0 var(--sp-3xsm);
-  line-height: 1; flex-shrink: 0; transition: color 0.1s; margin-left: auto;
-}
-.alert-dismiss:hover { color: var(--text-primary); }
 .need-action-badge {
   display: inline-flex; align-items: center; justify-content: center;
   background: #F59E0B; color: #fff;
@@ -385,7 +358,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   border-radius: 999px; padding: 1px 6px; margin-left: 4px;
   vertical-align: middle; line-height: 1.4;
 }
-.need-action-badge.hidden { display: none; }
+.need-action-badge:empty { display: none; }
 
 /* ─── Chips ──────────────────────────────────────────────────────────────── */
 .chip {
@@ -1021,7 +994,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--border-primary);
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   padding: 0;
   width: 100%;
 }
@@ -1739,7 +1712,6 @@ td {
   gap: 8px;
   width: 100%;
   padding: 12px 0;
-  border-bottom: 1px solid var(--border-primary);
   margin-bottom: 16px;
 }
 .filter-bar-search {
@@ -1990,6 +1962,115 @@ td {
   box-sizing: border-box;
 }
 .fb-label-input:focus { border-color: var(--accent-60); }
+
+/* ─── Account Selector ───────────────────────────────────────────────────── */
+#account-selector-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 10px;
+  border: 1px solid var(--border-primary); border-radius: 8px;
+  background: var(--bg-primary); font-family: var(--font);
+  font-size: 13px; font-weight: var(--fw-medium);
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.1s, border-color 0.1s;
+}
+#account-selector-btn:hover { background: var(--bg-secondary); border-color: var(--neutral-70); }
+#account-selector-avatar {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: var(--neutral-190); color: #fff;
+  font-size: 10px; font-weight: var(--fw-semibold);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+#account-selector-dropdown {
+  position: absolute; top: 40px; left: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary); border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  min-width: 220px; z-index: 300; padding: 6px;
+}
+.account-dropdown-label {
+  font-size: 10px; font-weight: var(--fw-semibold);
+  color: var(--text-tertiary); text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 6px 10px 4px;
+}
+.account-dropdown-divider { height: 1px; background: var(--border-primary); margin: 4px 0; }
+.account-option {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 8px 10px;
+  border: none; background: none; font-family: var(--font);
+  font-size: 13px; color: var(--text-primary);
+  cursor: pointer; border-radius: 6px; text-align: left;
+  transition: background 0.1s;
+}
+.account-option:hover { background: var(--bg-secondary); }
+.account-option.active { font-weight: var(--fw-semibold); color: var(--neutral-190); }
+.account-option-avatar {
+  width: 24px; height: 24px; border-radius: 4px;
+  background: var(--neutral-190); color: #fff;
+  font-size: 11px; font-weight: var(--fw-semibold);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.account-option-avatar.all { background: var(--neutral-100); }
+
+/* ─── Tab Context Bar ────────────────────────────────────────────────────── */
+#tab-context-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; font-size: 14px; color: var(--text-secondary); min-height: 32px;
+}
+#tab-context-bar:empty { display: none; }
+.tcb-left { display: flex; align-items: center; gap: var(--sp-xsm); }
+.tcb-right { display: flex; align-items: center; gap: var(--sp-xsm); }
+.tcb-warning { color: #F59E0B; font-weight: var(--fw-semibold); }
+.tcb-info { font-size: 13px; color: var(--text-secondary); }
+
+/* ─── Completeness Bar ───────────────────────────────────────────────────── */
+.completeness-cell { display: flex; align-items: center; gap: var(--sp-xsm); min-width: 120px; }
+.completeness-bar-wrap { flex: 0 0 60px; height: 4px; background: var(--neutral-60); border-radius: 2px; overflow: hidden; }
+.completeness-bar-fill { height: 100%; border-radius: 2px; }
+.completeness-pct { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+
+/* ─── Reason Chip ────────────────────────────────────────────────────────── */
+.reason-chip {
+  display: inline-flex; align-items: center;
+  background: var(--orange-10); color: var(--orange-70);
+  border-radius: 999px; padding: 2px 8px;
+  font-size: 12px; font-weight: var(--fw-medium); white-space: nowrap;
+}
+
+/* ─── Row Action Buttons ─────────────────────────────────────────────────── */
+.row-action-ghost {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font); font-size: 13px;
+  color: var(--accent-60); padding: 4px 8px;
+  border-radius: var(--cr-4xsm); white-space: nowrap;
+  transition: background 0.1s, color 0.1s;
+}
+.row-action-ghost:hover { background: var(--accent-10); color: var(--accent-70); }
+.row-action-filled {
+  background: #F59E0B; color: #fff; border: none; border-radius: 6px;
+  padding: 4px 10px; font-size: 12px; font-weight: var(--fw-semibold);
+  font-family: var(--font); cursor: pointer; white-space: nowrap;
+  transition: background 0.1s;
+}
+.row-action-filled:hover { background: #D97706; }
+.row-action-icon {
+  background: none; border: none; cursor: default; color: var(--text-tertiary);
+  padding: var(--sp-3xsm); border-radius: var(--cr-4xsm);
+  display: inline-flex; align-items: center; position: relative;
+  transition: color 0.1s, background 0.1s;
+}
+.row-action-icon.clickable { cursor: pointer; }
+.row-action-icon.clickable:hover { color: var(--text-primary); background: var(--neutral-40); }
+.row-action-icon[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%); background: var(--neutral-190); color: #fff;
+  font-size: 11px; white-space: nowrap; padding: 3px 7px;
+  border-radius: var(--cr-4xsm); pointer-events: none; opacity: 0;
+  transition: opacity 0.15s; z-index: 100;
+}
+.row-action-icon[data-tooltip]:hover::after { opacity: 1; }
 </style>
 </head>
 <body>
@@ -2093,12 +2174,34 @@ td {
       </div>
     </div>
 
-    <!-- Need-action Alert Banner -->
-    <div id="need-action-alert">
-      <span class="alert-icon">⚠️</span>
-      <span class="alert-text"><strong id="needActionCount"></strong> <span id="needActionText"></span></span>
-      <button class="alert-cta" onclick="document.querySelector('.pill[data-status=\'need-action\']').click()">View all →</button>
-      <button class="alert-dismiss" aria-label="Dismiss" onclick="document.getElementById('need-action-alert').style.display='none'">✕</button>
+    <!-- Account Selector -->
+    <div id="account-selector-global" style="position:relative;display:inline-block;margin-bottom:12px">
+      <button id="account-selector-btn" onclick="toggleAccountDropdown()">
+        <span id="account-selector-avatar">LR</span>
+        <span id="account-selector-name">Lumière Records</span>
+        <span style="font-size:11px;color:var(--text-secondary)">▾</span>
+      </button>
+      <div id="account-selector-dropdown" style="display:none">
+        <div class="account-dropdown-label">ALL</div>
+        <button class="account-option" data-name="All accounts" data-initials="✦" onclick="selectAccount(this)">
+          <span class="account-option-avatar all">✦</span>
+          All accounts
+        </button>
+        <div class="account-dropdown-divider"></div>
+        <div class="account-dropdown-label">RECENT</div>
+        <button class="account-option active" data-name="Lumière Records" data-initials="LR" onclick="selectAccount(this)">
+          <span class="account-option-avatar">LR</span>
+          Lumière Records
+        </button>
+        <button class="account-option" data-name="Play Two" data-initials="PT" onclick="selectAccount(this)">
+          <span class="account-option-avatar">PT</span>
+          Play Two
+        </button>
+        <button class="account-option" data-name="Global Records" data-initials="GR" onclick="selectAccount(this)">
+          <span class="account-option-avatar">GR</span>
+          Global Records
+        </button>
+      </div>
     </div>
 
     <!-- Status Tabs -->
@@ -2108,7 +2211,7 @@ td {
         <button class="pill" data-status="draft">Draft</button>
         <button class="pill" data-status="processing">Processing</button>
         <button class="pill" data-status="delivered">Live</button>
-        <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
+        <button class="pill" data-status="need-action">Need action <span class="need-action-badge" id="needActionBadge"></span></button>
         <button class="pill" data-status="unsellable">Taken down</button>
         <button class="pill" data-status="watchlist">☆ Watchlist</button>
       </div>
@@ -2180,28 +2283,13 @@ td {
       </div>
     </div>
 
+    <!-- Tab Context Bar -->
+    <div id="tab-context-bar"></div>
+
     <!-- Table -->
     <div class="table-card" id="tableCard">
       <table id="releasesTable">
-        <thead>
-          <tr>
-            <th style="width:300px"><div class="th-inner">Release</div></th>
-            <th style="width:72px"><div class="th-inner">#Tracks</div></th>
-            <th><div class="th-inner">Release date
-              <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
-            </div></th>
-            <th><div class="th-inner">UPC</div></th>
-            <th><div class="th-inner">Label
-              <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
-            </div></th>
-            <th style="width:160px"><div class="th-inner">Platforms</div></th>
-            <th><div class="th-inner">Status
-              <svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>
-            </div></th>
-            <th style="width:36px"></th>
-            <th style="width:36px"></th>
-          </tr>
-        </thead>
+        <thead id="tableHead"></thead>
         <tbody id="tableBody"></tbody>
       </table>
     </div>
@@ -3105,6 +3193,31 @@ const coverUrls = [
 ];
 releases.forEach((r, i) => { r.coverImg = coverUrls[i]; });
 
+// ─── Mock data additions ───────────────────────────────────────────────────
+(function() {
+  const base = new Date('2026-04-10T00:00:00');
+  function daysAgo(n) {
+    const d = new Date(base); d.setDate(d.getDate() - n);
+    return d.toISOString().split('T')[0];
+  }
+  const reasons = ['ISRC mismatch', 'Missing metadata', 'Audio quality', 'Copyright claim'];
+  const storePool = ['Spotify', 'Apple Music', 'Deezer', 'Amazon Music', 'YouTube Music', 'Tidal'];
+  releases.forEach((r, i) => {
+    r.lastModified       = daysAgo((i * 3) % 30 + 1);
+    r.submissionDate     = daysAgo((i * 7 + 3) % 60 + 1);
+    r.hasPartialTakedown = (i % 5 === 0);
+    if (r.status === 'need-action') {
+      r.reason          = reasons[i % reasons.length];
+      r.needActionSince = daysAgo((i * 2 + 1) % 14 + 1);
+    }
+    if (r.status === 'unsellable') {
+      r.takedownType   = i % 2 === 0 ? 'automatic' : 'manual';
+      r.takedownDate   = daysAgo((i * 11 + 5) % 90 + 1);
+      r.storesAffected = storePool.slice(0, (i % 4) + 1);
+    }
+  });
+})();
+
 // Artist & title overrides
 const releaseOverrides = {
    1: { artist: 'Zara Bloom',    title: 'Midnight Echo' },
@@ -3288,6 +3401,195 @@ function formatDate(iso) {
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
+function relativeTime(isoDate) {
+  if (!isoDate) return '—';
+  const d = new Date(isoDate + 'T00:00:00');
+  const diff = Math.floor((new Date() - d) / 86400000);
+  if (diff <= 0) return 'Today';
+  if (diff === 1) return 'Yesterday';
+  if (diff < 7) return `${diff} days ago`;
+  const w = Math.floor(diff / 7);
+  if (diff < 30) return `${w} week${w > 1 ? 's' : ''} ago`;
+  const m = Math.floor(diff / 30);
+  if (diff < 365) return `${m} month${m > 1 ? 's' : ''} ago`;
+  const y = Math.floor(diff / 365);
+  return `${y} year${y > 1 ? 's' : ''} ago`;
+}
+
+function completenessValue(r) {
+  if (!r.tracks || r.tracks.length === 0) return 60;
+  if (!r.coverImg) return 80;
+  return 100;
+}
+
+// ─── Column Configuration ──────────────────────────────────────────────────
+const _sortIcon = `<svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>`;
+
+const tabColumnsConfig = {
+  all:           ['release', 'tracks', 'releaseDate', 'upc', 'label', 'platforms', 'status'],
+  draft:         ['release', 'tracks', 'lastModified', 'completeness', 'status'],
+  processing:    ['release', 'tracks', 'submissionDate', 'status'],
+  live:          ['release', 'tracks', 'releaseDate', 'platforms', 'status'],
+  'need-action': ['release', 'reason', 'since', 'status'],
+  'taken-down':  ['release', 'takedownType', 'takedownDate', 'storesAffected', 'status'],
+  watchlist:     ['release', 'tracks', 'releaseDate', 'platforms', 'status'],
+};
+
+const columnDefs = {
+  release: {
+    header: () => 'Release', width: '300px',
+    cell: r => `<td><div class="release-cell">
+      <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy">
+      <div class="release-info">
+        <div class="release-title">${r.title}</div>
+        <div class="release-artist">${r.artist}</div>
+      </div>
+    </div></td>`
+  },
+  tracks: {
+    header: () => '#Tracks', width: '72px',
+    cell: r => `<td style="font-size:13px;color:var(--text-secondary);text-align:center">${r.tracks.length}</td>`
+  },
+  releaseDate: {
+    header: () => `Release date ${_sortIcon}`,
+    cell: r => `<td class="date-cell">${formatDate(r.date)}</td>`
+  },
+  upc: {
+    header: () => 'UPC',
+    cell: r => `<td><span class="mono">${r.upc}</span></td>`
+  },
+  label: {
+    header: () => 'Label',
+    cell: r => `<td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>`
+  },
+  platforms: {
+    header: () => 'Platforms', width: '160px',
+    cell: r => `<td>${platformsCell(r.platforms, r.status)}</td>`
+  },
+  status: {
+    header: () => `Status ${_sortIcon}`,
+    cell: r => {
+      const warn = (r.status === 'unsellable' && r.takedownType === 'automatic')
+        ? '<span style="color:var(--orange-60);margin-right:3px">⚠️</span>' : '';
+      return `<td>${warn}${statusChip(r.status)}</td>`;
+    }
+  },
+  lastModified: {
+    header: () => `Last modified ${_sortIcon}`,
+    cell: r => `<td class="date-cell">${relativeTime(r.lastModified)}</td>`
+  },
+  completeness: {
+    header: () => 'Completeness',
+    cell: r => {
+      const pct = completenessValue(r);
+      const color = pct >= 80 ? 'var(--green-70)' : pct >= 40 ? '#F59E0B' : 'var(--red-60)';
+      return `<td><div class="completeness-cell">
+        <div class="completeness-bar-wrap">
+          <div class="completeness-bar-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+        <span class="completeness-pct">${pct}%</span>
+      </div></td>`;
+    }
+  },
+  submissionDate: {
+    header: () => `Submitted ${_sortIcon}`,
+    cell: r => `<td class="date-cell">${formatDate(r.submissionDate)}</td>`
+  },
+  reason: {
+    header: () => 'Reason',
+    cell: r => `<td><span class="reason-chip">${r.reason || '—'}</span></td>`
+  },
+  since: {
+    header: () => 'Since',
+    cell: r => `<td class="date-cell">${relativeTime(r.needActionSince)}</td>`
+  },
+  takedownType: {
+    header: () => 'Type',
+    cell: r => {
+      if (!r.takedownType) return `<td>—</td>`;
+      const cls = r.takedownType === 'automatic' ? 'chip-orange' : 'chip-neutral';
+      const label = r.takedownType === 'automatic' ? 'Automatic' : 'Manual';
+      return `<td><span class="chip ${cls}">${label}</span></td>`;
+    }
+  },
+  takedownDate: {
+    header: () => `Taken down ${_sortIcon}`,
+    cell: r => `<td class="date-cell">${formatDate(r.takedownDate)}</td>`
+  },
+  storesAffected: {
+    header: () => 'Stores affected',
+    cell: r => {
+      const stores = r.storesAffected || [];
+      if (!stores.length) return `<td style="font-size:13px;color:var(--text-secondary)">—</td>`;
+      const visible = stores.slice(0, 2).join(', ');
+      const more = stores.length > 2 ? ` <span style="color:var(--text-secondary)">+${stores.length - 2} more</span>` : '';
+      return `<td style="font-size:13px">${visible}${more}</td>`;
+    }
+  },
+};
+
+function getTabKey() {
+  const map = { all: 'all', draft: 'draft', processing: 'processing', delivered: 'live', 'need-action': 'need-action', unsellable: 'taken-down', watchlist: 'watchlist' };
+  return map[activeFilter] || 'all';
+}
+
+function renderTabHeaders(cols) {
+  const thead = document.getElementById('tableHead');
+  if (!thead) return;
+  const ths = cols.map(k => {
+    const def = columnDefs[k];
+    if (!def) return '';
+    const w = def.width ? ` style="width:${def.width}"` : '';
+    return `<th${w}><div class="th-inner">${def.header()}</div></th>`;
+  });
+  ths.push(`<th style="width:36px"></th>`);
+  ths.push(`<th style="width:80px"></th>`);
+  thead.innerHTML = `<tr>${ths.join('')}</tr>`;
+}
+
+function renderTabContextBar(data) {
+  const bar = document.getElementById('tab-context-bar');
+  if (!bar) return;
+  const n = data.length;
+  const tk = getTabKey();
+  const rs = n !== 1 ? 'releases' : 'release';
+  const map = {
+    all:           { left: `${n} ${rs}`, right: '' },
+    draft:         { left: `${n} ${rs} in draft`, right: `<a href="#" class="btn btn-primary" style="font-size:13px;text-decoration:none;padding:6px 12px" onclick="event.preventDefault()">+ Create new release</a>` },
+    processing:    { left: `${n} ${rs} under review`, right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
+    live:          { left: `${n} ${rs} live`, right: '' },
+    'need-action': { left: `<span class="tcb-warning">${n} ${rs} require your attention</span>`, right: '' },
+    'taken-down':  { left: `${n} ${rs} taken down`, right: '' },
+    watchlist:     { left: `${n} ${rs} in watchlist`, right: '' },
+  };
+  const { left, right } = map[tk] || map.all;
+  bar.innerHTML = `<div class="tcb-left">${left}</div><div class="tcb-right">${right}</div>`;
+}
+
+function rowActionCell(r) {
+  const tk = getTabKey();
+  const isStarred = watchlist.has(r.id);
+  const starCell = `<td style="padding:0"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
+  let action = '';
+  if (tk === 'draft') {
+    action = `<button class="row-action-ghost" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+  } else if (tk === 'processing') {
+    action = `<span class="row-action-icon" data-tooltip="Average review time: 2–3 business days"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor" stroke="none"/></svg></span>`;
+  } else if (tk === 'live') {
+    action = `<span style="display:inline-flex;align-items:center;gap:2px">
+      <button class="row-action-icon clickable" data-tooltip="View on Spotify" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9"/><path d="M10 2h4v4"/><path d="M14 2L7 9"/></svg></button>
+      <button class="chevron-btn${expandedRows.has(r.id) ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg></button>
+    </span>`;
+  } else if (tk === 'need-action') {
+    action = `<button class="row-action-filled" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
+  } else if (tk === 'taken-down') {
+    action = '';
+  } else {
+    action = `<button class="chevron-btn${expandedRows.has(r.id) ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg></button>`;
+  }
+  return `${starCell}<td style="padding:4px 8px;white-space:nowrap">${action}</td>`;
+}
+
 const processingGroup = new Set(['processing', 'under-review', 'approved-by-believe', 'sent-to-platforms']);
 
 function getFilteredReleases(statusOverride) {
@@ -3350,9 +3652,16 @@ function filtersActive() {
 // ─── Render Table ─────────────────────────────────────────────────────────
 function renderTable() {
   if (currentView === 'grid') { renderGrid(); refreshPills(); return; }
-  const tbody = document.getElementById('tableBody');
   const data = getFilteredReleases();
+  const tk   = getTabKey();
+  const cols = tabColumnsConfig[tk] || tabColumnsConfig.all;
+  const colSpan = cols.length + 2; // +star +action
+
+  renderTabHeaders(cols);
+  renderTabContextBar(data);
   refreshPills();
+
+  const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
 
   if (data.length === 0) {
@@ -3360,82 +3669,54 @@ function renderTable() {
     const msg = anyFilter
       ? `No releases match your filters. <a href="#" onclick="event.preventDefault();clearAllFilters()" style="color:var(--text-primary);text-decoration:underline">Clear all filters</a>`
       : 'No releases found';
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-tertiary)">${msg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align:center;padding:40px;color:var(--text-tertiary)">${msg}</td></tr>`;
     return;
   }
 
   data.forEach(r => {
-    // Main row
     const tr = document.createElement('tr');
     tr.dataset.id = r.id;
     const isExpanded = expandedRows.has(r.id);
-    const isActive = openPanelId === r.id;
     if (isExpanded) tr.classList.add('expanded');
+    // Taken-down manual: dim row
+    if (tk === 'taken-down' && r.takedownType === 'manual') tr.style.opacity = '0.5';
 
-    const isStarred = watchlist.has(r.id);
-    tr.innerHTML = `
-      <td>
-        <div class="release-cell">
-          <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy">
-          <div class="release-info">
-            <div class="release-title">${r.title}</div>
-            <div class="release-artist">${r.artist}</div>
-          </div>
-        </div>
-      </td>
-      <td style="font-size:13px;color:var(--text-secondary)">${r.tracks.length}</td>
-      <td class="date-cell">${formatDate(r.date)}</td>
-      <td><span class="mono">${r.upc}</span></td>
-      <td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>
-      <td>${platformsCell(r.platforms, r.status)}</td>
-      <td>${statusChip(r.status)}</td>
-      <td style="padding:0">
-        <button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg>
-        </button>
-      </td>
-      <td style="padding:0">
-        <button class="chevron-btn${isExpanded ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg>
-        </button>
-      </td>
-    `;
+    const cellsHTML = cols.map(k => { const def = columnDefs[k]; return def ? def.cell(r) : '<td></td>'; }).join('');
+    tr.innerHTML = cellsHTML + rowActionCell(r);
     tr.addEventListener('click', () => openReleasePage(r.id));
     tbody.appendChild(tr);
 
-    // Sub-row (tracks)
-    if (isExpanded) {
+    // Sub-row (tracks) — only for tabs that support expansion
+    const expandable = new Set(['all', 'live', 'watchlist', 'draft', 'processing']);
+    if (isExpanded && expandable.has(tk)) {
       const subTr = document.createElement('tr');
       subTr.classList.add('sub-row');
-      subTr.innerHTML = `<td colspan="9">
+      subTr.innerHTML = `<td colspan="${colSpan}">
         <div class="sub-table-wrap">
           <table class="sub-table">
-            <thead>
-              <tr>
-                <th style="width:28px">#</th>
-                <th>Track title</th>
-                <th>Artists</th>
-                <th>ISRC</th>
-              </tr>
-            </thead>
+            <thead><tr>
+              <th style="width:28px">#</th>
+              <th>Track title</th>
+              <th>Artists</th>
+              <th>ISRC</th>
+            </tr></thead>
             <tbody>
               ${r.tracks.map(t => {
                 const safeTitle   = t.title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
                 const safeArtists = t.artists.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
                 const noDialog = new Set(['under-review','approved-by-believe','sent-to-platforms','unsellable','need-action']).has(r.status);
                 return `<tr style="cursor:pointer" onclick="event.stopPropagation();openPanelAndPlay(${r.id},${t.num})">
-                <td class="track-num">${t.num}</td>
-                <td style="font-weight:500">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</td>
-                <td style="color:var(--text-secondary)">${t.artists}</td>
-                <td>
-                  <div class="isrc-wrap">
+                  <td class="track-num">${t.num}</td>
+                  <td style="font-weight:500">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</td>
+                  <td style="color:var(--text-secondary)">${t.artists}</td>
+                  <td><div class="isrc-wrap">
                     <span class="mono isrc-text" ${t.isrc && !noDialog ? `onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
                     ${t.isrc ? `<button class="copy-btn" onclick="event.stopPropagation();copyISRC('${t.isrc}',this)">copy</button>` : ''}
                     ${t.isrc && (isrcReleaseCount[t.isrc] > 1) && !noDialog ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip">Shared</span>` : ''}
                     ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}
-                  </div>
-                </td>
-              </tr>`;}).join('')}
+                  </div></td>
+                </tr>`;
+              }).join('')}
             </tbody>
           </table>
         </div>
@@ -4433,6 +4714,7 @@ function setView(v) {
 function renderGrid() {
   const grid = document.getElementById('releasesGrid');
   const data = getFilteredReleases();
+  renderTabContextBar(data);
   grid.innerHTML = '';
 
   if (data.length === 0) {
@@ -4534,12 +4816,53 @@ function renderNeedActionAlert() {
     return;
   }
   alert.classList.remove('hidden');
-  document.getElementById('needActionCount').textContent = count;
-  document.getElementById('needActionText').textContent = count === 1 ? 'release requires your attention' : 'releases require your attention';
+  document.getElementById('need-action-count').textContent = count;
+  document.getElementById('need-action-text').textContent = count === 1 ? 'release requires your attention' : 'releases require your attention';
   badge.textContent = count;
   badge.classList.remove('hidden');
 }
 renderNeedActionAlert();
+
+// ─── Account Selector ─────────────────────────────────────────────────────
+function toggleAccountDropdown() {
+  const dd = document.getElementById('account-selector-dropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+
+function selectAccount(btn) {
+  const name = btn.dataset.name;
+  const initials = btn.dataset.initials;
+  document.getElementById('account-selector-name').textContent = name;
+  document.getElementById('account-selector-avatar').textContent = initials;
+  document.querySelectorAll('.account-option').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('account-selector-dropdown').style.display = 'none';
+  showAccountToast('Viewing as ' + name);
+}
+
+function showAccountToast(msg) {
+  let t = document.getElementById('_accountToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = '_accountToast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--neutral-190);color:#fff;border-radius:8px;padding:8px 16px;font-size:13px;font-family:var(--font);z-index:999;pointer-events:none;transition:opacity 0.2s';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2000);
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('account-selector-global');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('account-selector-dropdown').style.display = 'none';
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('account-selector-dropdown').style.display = 'none';
+});
 
 // ─── Init ─────────────────────────────────────────────────────────────────
 renderTable();
