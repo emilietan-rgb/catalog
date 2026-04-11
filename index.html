@@ -1775,7 +1775,9 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
   margin-bottom: 0;
 }
 .filter-bar-search {
-  flex: 1 1 auto;
+  width: 264px;
+  max-width: 264px;
+  flex-shrink: 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -1817,37 +1819,37 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 }
 .search-clear:hover { color: var(--text-primary); }
 .filter-bar-chips {
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 .fb-chip-wrap { position: relative; }
 .filter-chip {
-  height: 36px;
-  min-width: 120px;
+  height: 32px;
   border: 1px solid var(--border-primary);
-  border-radius: 8px;
-  padding: 0 12px;
+  border-radius: 6px;
+  padding: 0 8px;
   font-size: 14px;
+  font-weight: 500;
   font-family: var(--font);
-  background: var(--bg-primary);
+  background: var(--neutral-20);
   color: var(--text-primary);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   white-space: nowrap;
   transition: background 0.1s, border-color 0.1s;
 }
-.filter-chip:hover { background: var(--neutral-30); border-color: var(--neutral-70); }
+.filter-chip:hover { background: var(--neutral-30); border-color: var(--neutral-80); }
 .filter-chip.active {
   background: var(--accent-10);
   border-color: var(--accent-60);
   color: var(--accent-70);
   font-weight: var(--fw-medium);
 }
-.chip-caret { font-size: 11px; color: var(--text-secondary); }
+.chip-caret { flex-shrink: 0; color: var(--text-secondary); display: block; }
 .filter-chip.active .chip-caret { color: var(--accent-60); }
 .chip-clear {
   display: inline-flex;
@@ -1874,7 +1876,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 .filter-bar-actions {
   display: flex;
   gap: 4px;
-  flex: 0 0 auto;
+  flex-shrink: 0;
 }
 .filter-bar-actions .view-toggle {
   width: 32px;
@@ -2278,7 +2280,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       <div class="status-pills" id="statusPills">
         <button class="pill active" data-status="all">All</button>
         <button class="pill" data-status="draft">Draft</button>
-        <button class="pill" data-status="in-review">In review</button>
+        <button class="pill" data-status="in-review">Upcoming</button>
         <button class="pill" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
         <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
         <button class="pill" data-status="unsellable">Taken down</button>
@@ -2297,7 +2299,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       <div class="filter-bar-chips">
         <div class="fb-chip-wrap">
           <button class="filter-chip" id="chip-date" onclick="toggleFbDropdown('fb-date-dropdown')">
-            Release date <span class="chip-caret">▾</span>
+            Release date <svg class="chip-caret" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg>
           </button>
           <div class="fb-dropdown hidden" id="fb-date-dropdown">
             <div class="fb-quick-btns">
@@ -2319,7 +2321,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 
         <div class="fb-chip-wrap">
           <button class="filter-chip" id="chip-artist" onclick="toggleFbDropdown('fb-artist-dropdown')">
-            Artist <span class="chip-caret">▾</span>
+            Artist <svg class="chip-caret" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg>
           </button>
           <div class="fb-dropdown hidden" id="fb-artist-dropdown">
             <div class="artist-search-wrap">
@@ -3504,7 +3506,7 @@ function platformsCell(p, status) {
 
   const topStoreIssues = logos.filter(s => TOP_STORES.includes(s.name) && (() => { const st = overrides[s.name] || 'live'; return st === 'pending' || st === 'error'; })()).length;
   const issuesTag = topStoreIssues > 0
-    ? `<button class="store-issues-btn" aria-label="Store issues" onclick="event.stopPropagation()">⚠️<div class="store-issues-tooltip">Delivery issue on ${topStoreIssues} store${topStoreIssues > 1 ? 's' : ''}</div></button>`
+    ? `<button class="store-issues-btn" aria-label="Store issues" onclick="event.stopPropagation()">⚠️<div class="store-issues-tooltip">Upcoming issue on ${topStoreIssues} store${topStoreIssues > 1 ? 's' : ''}</div></button>`
     : '';
   return `<div class="platforms-cell">
     <div class="store-logos">${logosHtml}</div>
@@ -4037,7 +4039,7 @@ function executeTakedown() {
 }
 
 function refreshPills() {
-  const labels = { all: 'All', draft: 'Draft', 'in-review': 'In review', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
+  const labels = { all: 'All', draft: 'Draft', 'in-review': 'Upcoming', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
   const showCounts = filtersActive();
   document.querySelectorAll('#statusPills .pill').forEach(pill => {
     const s = pill.dataset.status;
