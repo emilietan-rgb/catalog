@@ -2443,12 +2443,7 @@ const releases = [
     type: "EP",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 295,
-    tracks: [
-      { num: 1, title: "Phosphène", artists: "Doux Rêve", isrc: "" },
-      { num: 2, title: "Brume dorée", artists: "Doux Rêve", isrc: "" },
-      { num: 3, title: "Sommeil des dunes", artists: "Doux Rêve", isrc: "" },
-      { num: 4, title: "Éther", artists: "Doux Rêve", isrc: "" },
-    ]
+    tracks: []
   },
 
   // ── PROCESSING (4) ───────────────────────────────────────────────────────
@@ -2618,7 +2613,7 @@ const releases = [
     title: "Cascade",
     artist: "Aurélie Dumas",
     label: "Lumière Records",
-    date: "2025-03-14",
+    date: "2026-04-14",
     upc: "196871001101",
     status: "delivered",
     type: "Single",
@@ -2634,7 +2629,7 @@ const releases = [
     title: "Éclipse Dorée",
     artist: "Aurélie Dumas",
     label: "Lumière Records",
-    date: "2024-09-06",
+    date: "2026-04-16",
     upc: "196871001201",
     status: "delivered",
     type: "Album",
@@ -2657,7 +2652,7 @@ const releases = [
     title: "Synthétique",
     artist: "Neon Waves",
     label: "Lumière Records",
-    date: "2024-11-22",
+    date: "2026-04-18",
     upc: "196871001301",
     status: "delivered",
     type: "Album",
@@ -3238,7 +3233,7 @@ releases.forEach((r, i) => { r.coverImg = coverUrls[i]; });
     const d = new Date(base); d.setDate(d.getDate() - n);
     return d.toISOString().split('T')[0];
   }
-  const reasons = ['ISRC mismatch', 'Missing metadata', 'Audio quality', 'Copyright claim'];
+  const reasons = ['ISRC mismatch', 'Missing metadata', 'Audio quality', 'Artwork rejected'];
   const storePool = ['Spotify', 'Apple Music', 'Deezer', 'Amazon Music', 'YouTube Music', 'Tidal'];
   releases.forEach((r, i) => {
     r.lastModified       = daysAgo((i * 3) % 30 + 1);
@@ -3489,7 +3484,7 @@ const columnDefs = {
     cell: r => `<td style="font-size:13px;color:var(--text-secondary);text-align:center">${r.tracks.length}</td>`
   },
   releaseDate: {
-    header: () => `Release date ${_sortIcon}`,
+    header: () => `Release date`,
     cell: r => `<td class="date-cell">${formatDate(r.date)}</td>`
   },
   upc: {
@@ -3505,15 +3500,13 @@ const columnDefs = {
     cell: r => `<td>${platformsCell(r.platforms, r.status)}</td>`
   },
   status: {
-    header: () => `Status ${_sortIcon}`,
+    header: () => `Status`,
     cell: r => {
-      const warn = (r.status === 'unsellable' && r.takedownType === 'automatic')
-        ? '<span style="color:var(--orange-60);margin-right:3px">⚠️</span>' : '';
-      return `<td>${warn}${statusChip(r.status)}</td>`;
+      return `<td>${statusChip(r.status)}</td>`;
     }
   },
   lastModified: {
-    header: () => `Last modified ${_sortIcon}`,
+    header: () => `Last modified`,
     cell: r => `<td class="date-cell">${relativeTime(r.lastModified)}</td>`
   },
   completeness: {
@@ -3530,7 +3523,7 @@ const columnDefs = {
     }
   },
   submissionDate: {
-    header: () => `Submitted ${_sortIcon}`,
+    header: () => `Submitted`,
     cell: r => `<td class="date-cell">${formatDate(r.submissionDate)}</td>`
   },
   reason: {
@@ -3551,7 +3544,7 @@ const columnDefs = {
     }
   },
   takedownDate: {
-    header: () => `Taken down ${_sortIcon}`,
+    header: () => `Taken down`,
     cell: r => `<td class="date-cell">${formatDate(r.takedownDate)}</td>`
   },
   storesAffected: {
@@ -3610,7 +3603,10 @@ function rowActionCell(r) {
   const starCell = `<td style="padding:0"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
   let action = '';
   if (tk === 'draft') {
-    action = `<button class="row-action-ghost" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+    const pct = completenessValue(r);
+    action = pct === 100
+      ? `<button style="background:var(--color-primary);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
+      : `<button class="row-action-ghost" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
   } else if (tk === 'processing') {
     action = `<span class="row-action-icon" data-tooltip="Average review time: 2–3 business days"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor" stroke="none"/></svg></span>`;
   } else if (tk === 'live') {
