@@ -400,7 +400,8 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 .chip-neutral { background: var(--neutral-40); color: var(--neutral-140); border: 1px solid var(--neutral-60); }
 .chip-accent { background: var(--accent-10); color: var(--accent-70); border: 1px solid var(--accent-20, #c8e4fe); }
-.chip-green { background: var(--green-10); color: var(--green-80); border: 1px solid var(--green-20, #b6eacc); }
+.chip-green { background: #16A34A; color: #fff; border: none; }
+.tab-live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #16A34A; margin-right: 6px; vertical-align: middle; animation: live-pulse 2s ease-in-out infinite; }
 .live-recent-wrapper { display: inline-flex; align-items: center; gap: 6px; }
 .live-pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: #16A34A; flex-shrink: 0; animation: live-pulse 2s ease-in-out infinite; }
 @keyframes live-pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: 0.4; } 100% { transform: scale(1); opacity: 1; } }
@@ -2278,7 +2279,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
         <button class="pill active" data-status="all">All</button>
         <button class="pill" data-status="draft">Draft</button>
         <button class="pill" data-status="in-review">In review</button>
-        <button class="pill" data-status="delivered">Live</button>
+        <button class="pill" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
         <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
         <button class="pill" data-status="unsellable">Taken down</button>
         <button class="pill" data-status="watchlist">☆ Watchlist</button>
