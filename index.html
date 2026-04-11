@@ -1215,6 +1215,13 @@ td {
 .release-cover-svg { width: 40px; height: 40px; border-radius: var(--cr-2xsm); flex-shrink: 0; }
 .release-cover-img { width: 48px; height: 48px; border-radius: var(--cr-2xsm); flex-shrink: 0; object-fit: cover; display: block; }
 .release-info { min-width: 0; flex: 1; }
+.release-meta { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+.release-title-link { font-size: 14px; font-weight: 600; color: var(--text-primary); cursor: pointer; width: fit-content; }
+.release-title-link:hover { text-decoration: underline; }
+.release-tracks { font-size: 13px; color: var(--text-secondary); }
+.release-meta-dot { font-size: 13px; color: var(--text-secondary); }
+.release-artist-link { font-size: 13px; color: var(--text-secondary); cursor: default; }
+.release-artist-link:hover { text-decoration: underline; cursor: pointer; }
 .release-title {
   font-weight: var(--fw-medium);
   color: var(--text-primary);
@@ -1245,6 +1252,7 @@ td {
 }
 .chevron-btn:hover { color: var(--text-primary); background: var(--neutral-40); }
 .chevron-btn.open { transform: rotate(90deg); color: var(--text-primary); }
+.row-expand-cell { width: 32px; text-align: center; padding: 0; }
 
 /* ─── Star / Watchlist ───────────────────────────────────────────────────── */
 .star-btn {
@@ -1372,7 +1380,14 @@ td {
 
 /* ─── UPC / Date cells ───────────────────────────────────────────────────── */
 .mono { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 12px; color: var(--text-secondary); letter-spacing: 0.2px; }
+.upc-cell { display: flex; align-items: center; gap: 6px; position: relative; }
+.upc-value { font-size: 13px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.upc-copy-btn { opacity: 0; pointer-events: none; font-size: 11px; font-weight: 500; color: var(--accent-60); background: none; border: 1px solid var(--accent-60); cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: opacity 0.15s ease; white-space: nowrap; font-family: var(--font); }
+tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 .date-cell { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+.release-date-cell { display: flex; flex-direction: column; gap: 2px; }
+.release-date-main { font-size: 14px; color: var(--text-primary); }
+.release-date-time { font-size: 11px; color: var(--text-secondary); }
 
 /* ─── Sub-table (tracks) ─────────────────────────────────────────────────── */
 .sub-row { background: var(--bg-primary) !important; cursor: default !important; }
@@ -1616,6 +1631,7 @@ td {
 }
 .rp-header-info { display: flex; flex-direction: column; gap: var(--sp-3xsm); min-width: 0; }
 .rp-title { font-size: 20px; font-weight: var(--fw-semibold); color: var(--text-primary); line-height: 1.25; }
+.release-title-row { display: flex; align-items: center; gap: 10px; }
 .rp-artist { font-size: 14px; color: var(--text-secondary); }
 .rp-tabs {
   display: flex; border-bottom: 1px solid var(--border-primary);
@@ -2064,21 +2080,17 @@ td {
 }
 
 /* ─── Row Action Buttons ─────────────────────────────────────────────────── */
-.row-action-ghost {
-  background: none; border: none; cursor: pointer;
-  font-family: var(--font); font-size: 13px;
-  color: var(--accent-60); padding: 4px 8px;
-  border-radius: var(--cr-4xsm); white-space: nowrap;
-  transition: background 0.1s, color 0.1s;
-}
-.row-action-ghost:hover { background: var(--accent-10); color: var(--accent-70); }
-.row-action-filled {
-  background: #F59E0B; color: #fff; border: none; border-radius: 6px;
-  padding: 4px 10px; font-size: 12px; font-weight: var(--fw-semibold);
+.row-cta {
+  height: 28px; padding: 0 10px;
+  border: 1px solid currentColor;
+  border-radius: 6px; background: none;
+  font-size: 12px; font-weight: 500;
   font-family: var(--font); cursor: pointer; white-space: nowrap;
-  transition: background 0.1s;
+  transition: opacity 0.1s;
 }
-.row-action-filled:hover { background: #D97706; }
+.row-cta:hover { opacity: 0.7; }
+.row-cta-secondary { color: var(--text-secondary); }
+.row-cta-primary { color: var(--accent-60); }
 .row-action-icon {
   background: none; border: none; cursor: default; color: var(--text-tertiary);
   padding: var(--sp-3xsm); border-radius: var(--cr-4xsm);
@@ -2247,7 +2259,7 @@ td {
       <div class="status-pills" id="statusPills">
         <button class="pill active" data-status="all">All</button>
         <button class="pill" data-status="draft">Draft</button>
-        <button class="pill" data-status="processing">Processing</button>
+        <button class="pill" data-status="in-review">In review</button>
         <button class="pill" data-status="delivered">Live</button>
         <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
         <button class="pill" data-status="unsellable">Taken down</button>
@@ -2354,7 +2366,10 @@ td {
       <div class="rp-header">
         <img class="rp-cover" id="rpCover" src="" alt="">
         <div class="rp-header-info">
-          <div class="rp-title" id="rpTitle"></div>
+          <div class="release-title-row">
+            <div class="rp-title" id="rpTitle"></div>
+            <span id="rpStatusChip"></span>
+          </div>
           <div class="rp-artist" id="rpArtist"></div>
         </div>
       </div>
@@ -2493,7 +2508,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-05-08",
     upc: "196871000203",
-    status: "approved-by-believe",
+    status: "approved",
     type: "EP",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 155,
@@ -2511,7 +2526,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-04-28",
     upc: "196871000204",
-    status: "sent-to-platforms",
+    status: "delivering",
     type: "Album",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 330,
@@ -3370,10 +3385,9 @@ function releaseFormat(n) {
 function statusChip(status) {
   const map = {
     "draft":          ["chip-neutral",  "Draft"],
-    "processing":     ["chip-orange",   "Processing"],
     "under-review":   ["chip-purple",   "Under review"],
-    "approved-by-believe": ["chip-purple", "Approved", "Believe validation"],
-    "sent-to-platforms":   ["chip-purple", "Sent",     "Delivered to platforms"],
+    "approved":       ["chip-purple",   "Approved"],
+    "delivering":     ["chip-purple",   "Delivering"],
     "delivered":      ["chip-green",    "Live"],
     "need-action":    ["chip-orange",   "Need action"],
     "unsellable":     ["chip-red",      "Taken down"],
@@ -3459,25 +3473,33 @@ function completenessValue(r) {
 const _sortIcon = `<svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>`;
 
 const tabColumnsConfig = {
-  all:           ['release', 'tracks', 'releaseDate', 'upc', 'label', 'platforms', 'status'],
-  draft:         ['release', 'tracks', 'lastModified', 'completeness', 'status'],
-  processing:    ['release', 'tracks', 'submissionDate', 'status'],
-  live:          ['release', 'tracks', 'releaseDate', 'platforms', 'status'],
-  'need-action': ['release', 'reason', 'since', 'status'],
-  'taken-down':  ['release', 'takedownType', 'takedownDate', 'storesAffected', 'status'],
-  watchlist:     ['release', 'tracks', 'releaseDate', 'platforms', 'status'],
+  all:           ['release', 'releaseDate', 'upc', 'label', 'platforms', 'status'],
+  draft:         ['release', 'lastModified', 'completeness'],
+  'in-review':   ['release', 'releaseDate', 'submissionDate', 'upc', 'status'],
+  live:          ['release', 'releaseDate', 'platforms'],
+  'need-action': ['release', 'reason', 'since'],
+  'taken-down':  ['release', 'takedownType', 'takedownDate', 'storesAffected'],
+  watchlist:     ['release', 'releaseDate', 'platforms', 'status'],
 };
 
 const columnDefs = {
   release: {
     header: () => 'Release', width: '300px',
-    cell: r => `<td><div class="release-cell">
+    cell: r => {
+      const n = r.tracks ? r.tracks.length : 0;
+      const trackLabel = n === 1 ? '1 track' : `${n} tracks`;
+      return `<td><div class="release-cell">
       <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy">
       <div class="release-info">
-        <div class="release-title">${r.title}</div>
-        <div class="release-artist">${r.artist}</div>
+        <span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>
+        <span class="release-meta">
+          <span class="release-tracks">${trackLabel}</span>
+          <span class="release-meta-dot">·</span>
+          <span class="release-artist-link" onclick="event.stopPropagation()">${r.artist}</span>
+        </span>
       </div>
-    </div></td>`
+    </div></td>`;
+    }
   },
   tracks: {
     header: () => '#Tracks', width: '72px',
@@ -3485,11 +3507,13 @@ const columnDefs = {
   },
   releaseDate: {
     header: () => `Release date`,
-    cell: r => `<td class="date-cell">${formatDate(r.date)}</td>`
+    cell: r => `<td class="date-cell"><div class="release-date-cell"><span class="release-date-main">${formatDate(r.date)}</span><span class="release-date-time">00:00:00 CET</span></div></td>`
   },
   upc: {
     header: () => 'UPC',
-    cell: r => `<td><span class="mono">${r.upc}</span></td>`
+    cell: r => r.status === 'under-review'
+      ? `<td class="upc-cell upc-empty" style="color:var(--neutral-70)">—</td>`
+      : `<td><div class="upc-cell"><span class="upc-value">${r.upc}</span><button class="upc-copy-btn" aria-label="Copy UPC" data-upc="${r.upc}" onclick="event.stopPropagation();copyUPC(this)">Copy</button></div></td>`
   },
   label: {
     header: () => 'Label',
@@ -3502,6 +3526,14 @@ const columnDefs = {
   status: {
     header: () => `Status`,
     cell: r => {
+      if (getTabKey() === 'in-review') {
+        const stepMap = { 'under-review': '1/3', 'approved': '2/3', 'delivering': '3/3' };
+        const step = stepMap[r.status];
+        if (step) {
+          const chip = statusChip(r.status);
+          return `<td>${chip.replace('</span>', ` · ${step}</span>`)}</td>`;
+        }
+      }
       return `<td>${statusChip(r.status)}</td>`;
     }
   },
@@ -3538,9 +3570,8 @@ const columnDefs = {
     header: () => 'Type',
     cell: r => {
       if (!r.takedownType) return `<td>—</td>`;
-      const cls = r.takedownType === 'automatic' ? 'chip-orange' : 'chip-neutral';
       const label = r.takedownType === 'automatic' ? 'Automatic' : 'Manual';
-      return `<td><span class="chip ${cls}">${label}</span></td>`;
+      return `<td><span style="background:var(--neutral-20);color:var(--text-secondary);border:1px solid var(--border-primary);border-radius:999px;padding:2px 8px;font-size:12px;font-weight:500;white-space:nowrap">${label}</span></td>`;
     }
   },
   takedownDate: {
@@ -3560,7 +3591,7 @@ const columnDefs = {
 };
 
 function getTabKey() {
-  const map = { all: 'all', draft: 'draft', processing: 'processing', delivered: 'live', 'need-action': 'need-action', unsellable: 'taken-down', watchlist: 'watchlist' };
+  const map = { all: 'all', draft: 'draft', 'in-review': 'in-review', delivered: 'live', 'need-action': 'need-action', unsellable: 'taken-down', watchlist: 'watchlist' };
   return map[activeFilter] || 'all';
 }
 
@@ -3573,8 +3604,9 @@ function renderTabHeaders(cols) {
     const w = def.width ? ` style="width:${def.width}"` : '';
     return `<th${w}><div class="th-inner">${def.header()}</div></th>`;
   });
-  ths.push(`<th style="width:36px"></th>`);
-  ths.push(`<th style="width:80px"></th>`);
+  ths.unshift(`<th style="width:36px"></th>`);
+  ths.push(`<th style="width:100px"></th>`);
+  ths.push(`<th style="width:32px"></th>`);
   thead.innerHTML = `<tr>${ths.join('')}</tr>`;
 }
 
@@ -3587,7 +3619,7 @@ function renderTabContextBar(data) {
   const map = {
     all:           { left: `${n} ${rs}`, right: '' },
     draft:         { left: `${n} ${rs} in draft`, right: `<a href="#" class="btn btn-primary" style="font-size:13px;text-decoration:none;padding:6px 12px" onclick="event.preventDefault()">+ Create new release</a>` },
-    processing:    { left: `${n} ${rs} under review`, right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
+    'in-review':   { left: `${n} ${rs} in review`, right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
     live:          { left: `${n} ${rs} live`, right: '' },
     'need-action': { left: `<span class="tcb-warning">${n} ${rs} require your attention</span>`, right: '' },
     'taken-down':  { left: `${n} ${rs} taken down`, right: '' },
@@ -3597,34 +3629,30 @@ function renderTabContextBar(data) {
   bar.innerHTML = `<div class="tcb-left">${left}</div><div class="tcb-right">${right}</div>`;
 }
 
-function rowActionCell(r) {
-  const tk = getTabKey();
+function rowStarCell(r) {
   const isStarred = watchlist.has(r.id);
-  const starCell = `<td style="padding:0"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
+  return `<td style="width:36px;padding:0;text-align:center"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
+}
+
+function rowCtaCell(r) {
+  const tk = getTabKey();
   let action = '';
   if (tk === 'draft') {
     const pct = completenessValue(r);
     action = pct === 100
-      ? `<button style="background:var(--color-primary);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
-      : `<button class="row-action-ghost" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
-  } else if (tk === 'processing') {
+      ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
+      : `<button class="row-cta row-cta-secondary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+  } else if (tk === 'in-review') {
     action = `<span class="row-action-icon" data-tooltip="Average review time: 2–3 business days"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor" stroke="none"/></svg></span>`;
   } else if (tk === 'live') {
-    action = `<span style="display:inline-flex;align-items:center;gap:2px">
-      <button class="row-action-icon clickable" data-tooltip="View on Spotify" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9"/><path d="M10 2h4v4"/><path d="M14 2L7 9"/></svg></button>
-      <button class="chevron-btn${expandedRows.has(r.id) ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg></button>
-    </span>`;
+    action = `<button class="row-action-icon clickable" data-tooltip="View on Spotify" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9"/><path d="M10 2h4v4"/><path d="M14 2L7 9"/></svg></button>`;
   } else if (tk === 'need-action') {
-    action = `<button class="row-action-filled" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
-  } else if (tk === 'taken-down') {
-    action = '';
-  } else {
-    action = `<button class="chevron-btn${expandedRows.has(r.id) ? ' open' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg></button>`;
+    action = `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
   }
-  return `${starCell}<td style="padding:4px 8px;white-space:nowrap">${action}</td>`;
+  return `<td style="padding:4px 8px;white-space:nowrap;text-align:right">${action}</td>`;
 }
 
-const processingGroup = new Set(['processing', 'under-review', 'approved-by-believe', 'sent-to-platforms']);
+const processingGroup = new Set(['under-review', 'approved', 'delivering']);
 
 function getFilteredReleases(statusOverride) {
   const tab = statusOverride !== undefined ? statusOverride : activeFilter;
@@ -3635,7 +3663,7 @@ function getFilteredReleases(statusOverride) {
     // Status filter (tab)
     const matchStatus = tab === 'all'
       || r.status === tab
-      || (tab === 'processing' && processingGroup.has(r.status))
+      || (tab === 'in-review' && processingGroup.has(r.status))
       || (tab === 'watchlist' && watchlist.has(r.id));
     // Search
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
@@ -3689,7 +3717,7 @@ function renderTable() {
   const data = getFilteredReleases();
   const tk   = getTabKey();
   const cols = tabColumnsConfig[tk] || tabColumnsConfig.all;
-  const colSpan = cols.length + 2; // +star +action
+  const colSpan = cols.length + 3; // +star +action +expand
 
   renderTabHeaders(cols);
   renderTabContextBar(data);
@@ -3713,15 +3741,17 @@ function renderTable() {
     const isExpanded = expandedRows.has(r.id);
     if (isExpanded) tr.classList.add('expanded');
     // Taken-down manual: dim row
-    if (tk === 'taken-down' && r.takedownType === 'manual') tr.style.opacity = '0.5';
 
     const cellsHTML = cols.map(k => { const def = columnDefs[k]; return def ? def.cell(r) : '<td></td>'; }).join('');
-    tr.innerHTML = cellsHTML + rowActionCell(r);
+    const expandable = new Set(['all', 'live', 'watchlist', 'draft', 'in-review']);
+    const expandCell = expandable.has(tk)
+      ? `<td class="row-expand-cell"><button class="chevron-btn${isExpanded ? ' open' : ''}" aria-label="Expand tracks" aria-expanded="${isExpanded}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg></button></td>`
+      : `<td class="row-expand-cell"></td>`;
+    tr.innerHTML = rowStarCell(r) + cellsHTML + rowCtaCell(r) + expandCell;
     tr.addEventListener('click', () => openReleasePage(r.id));
     tbody.appendChild(tr);
 
     // Sub-row (tracks) — only for tabs that support expansion
-    const expandable = new Set(['all', 'live', 'watchlist', 'draft', 'processing']);
     if (isExpanded && expandable.has(tk)) {
       const subTr = document.createElement('tr');
       subTr.classList.add('sub-row');
@@ -3772,6 +3802,19 @@ function toggleExpand(id) {
 }
 
 // ─── Copy ISRC ────────────────────────────────────────────────────────────
+function copyUPC(btn) {
+  navigator.clipboard.writeText(btn.dataset.upc).then(() => {
+    btn.textContent = 'Copied ✓';
+    btn.style.color = 'var(--color-success, #16A34A)';
+    btn.style.borderColor = 'var(--color-success, #16A34A)';
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 1500);
+  });
+}
+
 function copyISRC(isrc, btn) {
   navigator.clipboard.writeText(isrc).then(() => {
     const orig = btn.textContent;
@@ -3911,7 +3954,7 @@ function executeTakedown() {
 }
 
 function refreshPills() {
-  const labels = { all: 'All', draft: 'Draft', processing: 'Processing', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
+  const labels = { all: 'All', draft: 'Draft', 'in-review': 'In review', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
   const showCounts = filtersActive();
   document.querySelectorAll('#statusPills .pill').forEach(pill => {
     const s = pill.dataset.status;
@@ -4546,6 +4589,7 @@ function openReleasePage(id) {
   const titleTrunc = r.title.length > 20 ? r.title.slice(0, 20) + '…' : r.title;
   document.getElementById('rpBreadcrumb').innerHTML = `Lumière Records / <strong>${titleTrunc}</strong>`;
   document.getElementById('rpTitle').textContent = r.title;
+  document.getElementById('rpStatusChip').innerHTML = statusChip(r.status);
   document.getElementById('rpArtist').textContent = r.artist;
   const cover = document.getElementById('rpCover');
   cover.src = r.coverImg || '';
