@@ -400,7 +400,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 .chip-neutral { background: var(--neutral-40); color: var(--neutral-140); border: 1px solid var(--neutral-60); }
 .chip-accent { background: var(--accent-10); color: var(--accent-70); border: 1px solid var(--accent-20, #c8e4fe); }
-.chip-green { background: #16A34A; color: #fff; border: none; }
+.chip-green { background: var(--green-10); color: var(--green-80); border: 1px solid var(--green-20, #b6eacc); }
 .tab-live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #16A34A; margin-right: 6px; vertical-align: middle; animation: live-pulse 2s ease-in-out infinite; }
 .live-recent-wrapper { display: inline-flex; align-items: center; gap: 6px; }
 .live-pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: #16A34A; flex-shrink: 0; animation: live-pulse 2s ease-in-out infinite; }
@@ -1057,6 +1057,44 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .table-card {
   background: #fff;
 }
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  min-height: 44px;
+}
+.table-summary {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: var(--font);
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pagination-btn {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--cr-2xsm);
+  background: var(--neutral-10);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+.pagination-btn:hover:not(:disabled) { background: var(--neutral-20); }
+.pagination-btn:disabled { opacity: 0.38; cursor: default; }
+.pagination-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  white-space: nowrap;
+}
 
 /* ─── Grid View ──────────────────────────────────────────────────────────── */
 .releases-grid {
@@ -1149,6 +1187,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: 13px;
 }
 thead tr {
@@ -1156,22 +1195,23 @@ thead tr {
   background: transparent;
 }
 th {
-  padding: var(--sp-3xsm);
+  padding: 10px 20px;
   text-align: left;
-  font-size: 14px;
-  font-weight: var(--fw-medium);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--text-secondary);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: var(--font);
+  vertical-align: middle;
 }
-th:first-child { padding-left: var(--sp-3xsm); }
 .th-inner {
   display: flex;
   align-items: center;
   gap: 4px;
-  height: 40px;
-  min-height: 40px;
-  padding: 0 var(--sp-3xsm);
   border-radius: var(--cr-2xsm);
   width: 100%;
 }
@@ -1189,9 +1229,12 @@ tbody tr:last-child { border-bottom: none; }
 tbody tr:hover { background: var(--bg-secondary); }
 tbody tr.expanded { background: var(--bg-secondary); }
 td {
-  padding: var(--sp-sm) var(--sp-md);
+  padding: 10px 20px;
   vertical-align: middle;
   color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ─── Release Cell ───────────────────────────────────────────────────────── */
@@ -1218,9 +1261,9 @@ td {
 }
 .release-cover-svg { width: 40px; height: 40px; border-radius: var(--cr-2xsm); flex-shrink: 0; }
 .release-cover-img { width: 48px; height: 48px; border-radius: var(--cr-2xsm); flex-shrink: 0; object-fit: cover; display: block; }
-.release-info { min-width: 0; flex: 1; }
-.release-meta { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
-.release-title-link { font-size: 14px; font-weight: 600; color: var(--text-primary); cursor: pointer; width: fit-content; }
+.release-info { min-width: 0; flex: 1; overflow: hidden; }
+.release-meta { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; overflow: hidden; min-width: 0; }
+.release-title-link { font-size: 14px; font-weight: 600; color: var(--text-primary); cursor: pointer; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .release-title-link:hover { text-decoration: underline; }
 .release-tracks { font-size: 13px; color: var(--text-secondary); }
 .release-meta-dot { font-size: 13px; color: var(--text-secondary); }
@@ -1342,13 +1385,13 @@ td {
 .store-logo-img.status-live { opacity: 1; }
 .store-logo-img.status-pending { opacity: 0.3; filter: grayscale(100%); }
 .store-logo-img.status-error { opacity: 1; filter: grayscale(100%); border: 1.5px solid #EF4444; border-radius: 4px; }
+.store-logo-link { display: inline-flex; cursor: pointer; transition: opacity 0.12s, transform 0.12s; }
+.store-logo-link:hover { opacity: 0.75; transform: scale(1.1); }
+.store-logo-static { display: inline-flex; cursor: default; }
 .store-issues-btn { position: relative; background: none; border: none; cursor: pointer; padding: 0; font-size: 14px; color: #F59E0B; display: inline-flex; align-items: center; flex-shrink: 0; }
 .store-issues-tooltip { position: absolute; bottom: calc(100% + 6px); right: 0; background: var(--text-primary); color: #fff; font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 6px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s ease; z-index: 100; }
 .store-issues-btn:hover .store-issues-tooltip { opacity: 1; }
 .store-only-label { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
-.store-logo-wrapper { position: relative; display: inline-flex; }
-.store-tooltip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--text-primary); color: #fff; font-size: 11px; font-weight: 500; padding: 4px 8px; border-radius: 6px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s ease; z-index: 100; }
-.store-logo-wrapper:hover .store-tooltip { opacity: 1; }
 .store-logos-more { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
 .warn-icon {
   flex-shrink: 0;
@@ -1900,7 +1943,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 .fb-dropdown {
   position: absolute;
   top: calc(100% + 6px);
-  left: 0;
+  right: 0;
   background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
@@ -2360,9 +2403,16 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
     <!-- Table -->
     <div class="table-card" id="tableCard">
       <table id="releasesTable">
+        <colgroup id="tableColgroup"></colgroup>
         <thead id="tableHead"></thead>
         <tbody id="tableBody"></tbody>
       </table>
+    </div>
+
+    <!-- Table footer: summary + pagination -->
+    <div class="table-footer" id="tableFooter">
+      <span class="table-summary" id="tableSummary"></span>
+      <div class="pagination" id="pagination"></div>
     </div>
 
     <!-- Grid -->
@@ -2529,7 +2579,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-05-08",
     upc: "196871000203",
-    status: "approved",
+    status: "ready-for-release",
     type: "EP",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 155,
@@ -2547,7 +2597,7 @@ const releases = [
     label: "Lumière Records",
     date: "2025-04-28",
     upc: "196871000204",
-    status: "delivering",
+    status: "ready-for-release",
     type: "Album",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 330,
@@ -3414,6 +3464,8 @@ const DIST_TERRITORIES = [
 let activeFilter = "all";
 let expandedRows = new Set();
 let openPanelId = null;
+let currentPage = 1;
+const PAGE_SIZE = 10;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 function releaseFormat(n) {
@@ -3426,8 +3478,7 @@ function statusChip(status) {
   const map = {
     "draft":          ["chip-neutral",  "Draft"],
     "under-review":   ["chip-purple",   "Under review"],
-    "approved":       ["chip-purple",   "Approved"],
-    "delivering":     ["chip-purple",   "Delivering"],
+    "ready-for-release": ["chip-purple", "Ready for release"],
     "delivered":      ["chip-green",    "Live"],
     "need-action":    ["chip-orange",   "Need action"],
     "unsellable":     ["chip-red",      "Taken down"],
@@ -3466,12 +3517,12 @@ function coverSVGLarge(hue) {
 const TOP_STORES = ['Spotify', 'Apple Music', 'Deezer', 'YouTube Music', 'Amazon Music'];
 
 const storeLogos = [
-  { name: 'Spotify',       url: 'https://cdn.simpleicons.org/spotify/1DB954' },
-  { name: 'Apple Music',   url: 'https://cdn.simpleicons.org/applemusic/FC3C44' },
-  { name: 'Deezer',        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Deezer_logo_2023.svg/200px-Deezer_logo_2023.svg.png' },
-  { name: 'YouTube Music', url: 'https://cdn.simpleicons.org/youtubemusic/FF0000' },
-  { name: 'Amazon Music',  url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Amazon_Music_logo.svg/200px-Amazon_Music_logo.svg.png' },
-  { name: 'TikTok',        url: 'https://cdn.simpleicons.org/tiktok/000000' },
+  { name: 'Spotify',       url: 'https://cdn.simpleicons.org/spotify/1DB954',       dspUrl: 'https://open.spotify.com' },
+  { name: 'Apple Music',   url: 'https://cdn.simpleicons.org/applemusic/FC3C44',    dspUrl: 'https://music.apple.com' },
+  { name: 'Deezer',        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Deezer_logo_2023.svg/200px-Deezer_logo_2023.svg.png', dspUrl: 'https://www.deezer.com' },
+  { name: 'YouTube Music', url: 'https://cdn.simpleicons.org/youtubemusic/FF0000',  dspUrl: 'https://music.youtube.com' },
+  { name: 'Amazon Music',  url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Amazon_Music_logo.svg/200px-Amazon_Music_logo.svg.png', dspUrl: 'https://music.amazon.com' },
+  { name: 'TikTok',        url: 'https://cdn.simpleicons.org/tiktok/000000',        dspUrl: 'https://www.tiktok.com/music' },
 ];
 
 function platformsCell(p, status) {
@@ -3487,8 +3538,12 @@ function platformsCell(p, status) {
 
   function logoTag(s) {
     const st = overrides[s.name] || 'live';
-    const tooltipText = st === 'live' ? s.name : `${s.name} · ${st.charAt(0).toUpperCase() + st.slice(1)}`;
-    return `<div class="store-logo-wrapper"><img class="store-logo-img status-${st}" src="${s.url}" alt="${s.name}" onerror="this.style.display='none'"><div class="store-tooltip">${tooltipText}</div></div>`;
+    const isLive = st === 'live';
+    const img = `<img class="store-logo-img status-${st}" src="${s.url}" alt="${s.name}" onerror="this.style.display='none'">`;
+    if (isLive) {
+      return `<a class="store-logo-link" href="${s.dspUrl || '#'}" target="_blank" rel="noopener noreferrer" title="${s.name}" onclick="event.stopPropagation()">${img}</a>`;
+    }
+    return `<span class="store-logo-static" title="Not available on this store">${img}</span>`;
   }
 
   let logosHtml = '';
@@ -3506,7 +3561,7 @@ function platformsCell(p, status) {
 
   const topStoreIssues = logos.filter(s => TOP_STORES.includes(s.name) && (() => { const st = overrides[s.name] || 'live'; return st === 'pending' || st === 'error'; })()).length;
   const issuesTag = topStoreIssues > 0
-    ? `<button class="store-issues-btn" aria-label="Store issues" onclick="event.stopPropagation()">⚠️<div class="store-issues-tooltip">Upcoming issue on ${topStoreIssues} store${topStoreIssues > 1 ? 's' : ''}</div></button>`
+    ? `<button class="store-issues-btn" aria-label="Store issues" onclick="event.stopPropagation()">⚠️<div class="store-issues-tooltip">Issue detected on ${topStoreIssues} store${topStoreIssues > 1 ? 's' : ''}</div></button>`
     : '';
   return `<div class="platforms-cell">
     <div class="store-logos">${logosHtml}</div>
@@ -3557,7 +3612,7 @@ const tabColumnsConfig = {
 
 const columnDefs = {
   release: {
-    header: () => 'Release', width: '300px',
+    header: () => 'Release',
     cell: r => {
       const n = r.tracks ? r.tracks.length : 0;
       const trackLabel = n === 1 ? '1 track' : `${n} tracks`;
@@ -3584,7 +3639,7 @@ const columnDefs = {
       if (getTabKey() === 'in-review' && r.status === 'under-review') {
         return `<td class="date-cell" style="color:var(--neutral-70)">—</td>`;
       }
-      return `<td class="date-cell"><div class="release-date-cell"><span class="release-date-main">${formatDate(r.date)}</span><span class="release-date-time">00:00:00 CET</span></div></td>`;
+      return `<td class="date-cell">${formatDate(r.date)}</td>`;
     }
   },
   upc: {
@@ -3598,20 +3653,12 @@ const columnDefs = {
     cell: r => `<td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>`
   },
   platforms: {
-    header: () => 'Platforms', width: '160px',
+    header: () => 'Platforms',
     cell: r => `<td>${platformsCell({ ...r.platforms, storeStatuses: r.storeStatuses, releaseStores: r.releaseStores, totalStores: r.totalStores }, r.status)}</td>`
   },
   status: {
     header: () => `Status`,
     cell: r => {
-      if (getTabKey() === 'in-review') {
-        const stepMap = { 'under-review': '1/3', 'approved': '2/3', 'delivering': '3/3' };
-        const step = stepMap[r.status];
-        if (step) {
-          const chip = statusChip(r.status);
-          return `<td>${chip.replace('</span>', ` · ${step}</span>`)}</td>`;
-        }
-      }
       if (r.status === 'delivered') {
         const releaseDate = new Date(r.date);
         const today = new Date('2026-04-11');
@@ -3622,6 +3669,10 @@ const columnDefs = {
       }
       return `<td>${statusChip(r.status)}</td>`;
     }
+  },
+  format: {
+    header: () => 'Format',
+    cell: r => `<td style="font-size:13px;color:var(--text-secondary)">${releaseFormat(r.tracks ? r.tracks.length : 0)}</td>`
   },
   lastModified: {
     header: () => `Last modified`,
@@ -3681,18 +3732,47 @@ function getTabKey() {
   return map[activeFilter] || 'all';
 }
 
+const COL_WIDTHS = {
+  release:        '30%',
+  upc:            '12%',
+  label:          '10%',
+  releaseDate:    '11%',
+  platforms:      '16%',
+  status:         '10%',
+  lastModified:   '11%',
+  completeness:   '10%',
+  submissionDate: '11%',
+  reason:         '12%',
+  since:          '9%',
+  takedownDate:   '11%',
+  takedownType:   '10%',
+  storesAffected: '14%',
+  format:         '8%',
+};
+
 function renderTabHeaders(cols) {
   const thead = document.getElementById('tableHead');
   if (!thead) return;
+
+  const colgroup = document.getElementById('tableColgroup');
+  if (colgroup) {
+    const colEls = [
+      `<col style="width:40px">`,
+      ...cols.map(k => `<col style="width:${COL_WIDTHS[k] || 'auto'}">`),
+      `<col>`,
+      `<col style="width:40px">`,
+    ];
+    colgroup.innerHTML = colEls.join('');
+  }
+
   const ths = cols.map(k => {
     const def = columnDefs[k];
     if (!def) return '';
-    const w = def.width ? ` style="width:${def.width}"` : '';
-    return `<th${w}><div class="th-inner">${def.header()}</div></th>`;
+    return `<th><div class="th-inner">${def.header()}</div></th>`;
   });
-  ths.unshift(`<th style="width:36px"></th>`);
-  ths.push(`<th style="width:100px"></th>`);
-  ths.push(`<th style="width:32px"></th>`);
+  ths.unshift(`<th></th>`);
+  ths.push(`<th></th>`);
+  ths.push(`<th></th>`);
   thead.innerHTML = `<tr>${ths.join('')}</tr>`;
 }
 
@@ -3703,21 +3783,21 @@ function renderTabContextBar(data) {
   const tk = getTabKey();
   const rs = n !== 1 ? 'releases' : 'release';
   const map = {
-    all:           { left: `${n} ${rs}`, right: '' },
-    draft:         { left: `${n} ${rs} in draft`, right: `<a href="#" class="btn btn-primary" style="font-size:13px;text-decoration:none;padding:6px 12px" onclick="event.preventDefault()">+ Create new release</a>` },
-    'in-review':   { left: `${n} ${rs} in review`, right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
-    live:          { left: `${n} ${rs} live`, right: '' },
-    'need-action': { left: '', right: '' },
-    'taken-down':  { left: `${n} ${rs} taken down`, right: '' },
-    watchlist:     { left: `${n} ${rs} in watchlist`, right: '' },
+    all:           { right: '' },
+    draft:         { right: `<a href="#" class="btn btn-primary" style="font-size:13px;text-decoration:none;padding:6px 12px" onclick="event.preventDefault()">+ Create new release</a>` },
+    'in-review':   { right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
+    live:          { right: '' },
+    'need-action': { right: '' },
+    'taken-down':  { right: '' },
+    watchlist:     { right: '' },
   };
-  const { left, right } = map[tk] || map.all;
-  bar.innerHTML = `<div class="tcb-left">${left}</div><div class="tcb-right">${right}</div>`;
+  const { right } = map[tk] || map.all;
+  bar.innerHTML = right ? `<div class="tcb-left"></div><div class="tcb-right">${right}</div>` : '';
 }
 
 function rowStarCell(r) {
   const isStarred = watchlist.has(r.id);
-  return `<td style="width:36px;padding:0;text-align:center"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
+  return `<td style="padding:0;text-align:center"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
 }
 
 function rowCtaCell(r) {
@@ -3727,7 +3807,7 @@ function rowCtaCell(r) {
     const pct = completenessValue(r);
     action = pct === 100
       ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
-      : `<button class="row-cta row-cta-secondary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+      : `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
   } else if (tk === 'in-review') {
     action = `<span class="row-action-icon" data-tooltip="Average review time: 2–3 business days"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor" stroke="none"/></svg></span>`;
   } else if (tk === 'live') {
@@ -3737,7 +3817,7 @@ function rowCtaCell(r) {
   return `<td style="padding:4px 8px;white-space:nowrap;text-align:right">${action}</td>`;
 }
 
-const processingGroup = new Set(['under-review', 'approved', 'delivering']);
+const processingGroup = new Set(['under-review', 'ready-for-release']);
 
 function getFilteredReleases(statusOverride) {
   const tab = statusOverride !== undefined ? statusOverride : activeFilter;
@@ -3796,6 +3876,74 @@ function filtersActive() {
   return q || labelQ || selectedArtists.size > 0 || activeDateFilter.type !== 'all';
 }
 
+// ─── Table Footer: summary + pagination ───────────────────────────────────
+function renderTableFooter(data, totalPages) {
+  // Summary
+  const summaryEl = document.getElementById('tableSummary');
+  if (summaryEl) {
+    const tk = getTabKey();
+    let text = '';
+    if (tk === 'all') {
+      const nDraft     = releases.filter(r => r.status === 'draft').length;
+      const nReview    = releases.filter(r => processingGroup.has(r.status)).length;
+      const nLive      = releases.filter(r => r.status === 'delivered').length;
+      const nAction    = releases.filter(r => r.status === 'need-action').length;
+      const nUnsell    = releases.filter(r => r.status === 'unsellable').length;
+      const parts = [];
+      if (nDraft)  parts.push(`${nDraft} draft${nDraft !== 1 ? 's' : ''}`);
+      if (nReview) parts.push(`${nReview} processing`);
+      if (nLive)   parts.push(`${nLive} live`);
+      if (nAction) parts.push(`${nAction} need action`);
+      if (nUnsell) parts.push(`${nUnsell} unsellable`);
+      text = parts.join(' · ');
+    } else if (tk === 'live') {
+      const nLive = data.length;
+      const nIssues = data.filter(r => {
+        const ss = r.storeStatuses || {};
+        return Object.values(ss).some(v => v === 'error' || v === 'pending');
+      }).length;
+      text = `${nLive} release${nLive !== 1 ? 's' : ''} live` + (nIssues > 0 ? ` · ${nIssues} with delivery issues` : '');
+    } else if (tk === 'in-review') {
+      const nUnder = data.filter(r => r.status === 'under-review').length;
+      const nReady = data.filter(r => r.status === 'ready-for-release').length;
+      const parts = [];
+      if (nUnder) parts.push(`${nUnder} under review`);
+      if (nReady) parts.push(`${nReady} approved & sent`);
+      text = parts.join(' · ');
+    } else if (tk === 'need-action') {
+      const n = data.length;
+      text = `${n} release${n !== 1 ? 's' : ''} require your attention`;
+    } else if (tk === 'draft') {
+      const n = data.length;
+      text = `${n} draft${n !== 1 ? 's' : ''} in progress`;
+    } else if (tk === 'taken-down') {
+      const n = data.length;
+      text = `${n} release${n !== 1 ? 's' : ''} taken down`;
+    } else if (tk === 'watchlist') {
+      const n = data.length;
+      text = `${n} release${n !== 1 ? 's' : ''} in watchlist`;
+    }
+    summaryEl.textContent = text;
+  }
+
+  // Pagination
+  const pagEl = document.getElementById('pagination');
+  if (!pagEl) return;
+  if (totalPages <= 1) { pagEl.innerHTML = ''; return; }
+  pagEl.innerHTML = `
+    <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Previous</button>
+    <span class="pagination-label">Page ${currentPage} of ${totalPages}</span>
+    <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>
+  `;
+}
+
+function goToPage(page) {
+  const data = getFilteredReleases();
+  const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE));
+  currentPage = Math.max(1, Math.min(page, totalPages));
+  renderTable();
+}
+
 // ─── Render Table ─────────────────────────────────────────────────────────
 function renderTable() {
   if (currentView === 'grid') { renderGrid(); refreshPills(); return; }
@@ -3804,9 +3952,15 @@ function renderTable() {
   const cols = tabColumnsConfig[tk] || tabColumnsConfig.all;
   const colSpan = cols.length + 3; // +star +action +expand
 
+  // Clamp page
+  const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const pageData = data.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   renderTabHeaders(cols);
   renderTabContextBar(data);
   refreshPills();
+  renderTableFooter(data, totalPages);
 
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
@@ -3820,7 +3974,7 @@ function renderTable() {
     return;
   }
 
-  data.forEach(r => {
+  pageData.forEach(r => {
     const tr = document.createElement('tr');
     tr.dataset.id = r.id;
     const isExpanded = expandedRows.has(r.id);
@@ -4269,6 +4423,7 @@ document.getElementById('statusPills').addEventListener('click', e => {
   const pill = e.target.closest('.pill');
   if (!pill) return;
   activeFilter = pill.dataset.status;
+  currentPage = 1;
   document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   pill.classList.add('active');
   const wlPill = document.querySelector('.pill[data-status="watchlist"]');
@@ -4281,7 +4436,7 @@ let _searchDebounce = null;
 document.getElementById('main-search').addEventListener('input', e => {
   document.getElementById('search-clear').style.display = e.target.value ? 'block' : 'none';
   clearTimeout(_searchDebounce);
-  _searchDebounce = setTimeout(renderTable, 300);
+  _searchDebounce = setTimeout(() => { currentPage = 1; renderTable(); }, 300);
 });
 document.getElementById('search-clear').addEventListener('click', () => {
   document.getElementById('main-search').value = '';
