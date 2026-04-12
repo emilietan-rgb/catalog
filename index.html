@@ -301,24 +301,15 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   letter-spacing: -0.3px;
 }
 .btn-create-release {
-  height: 36px;
-  padding: 0 16px;
-  background: #000;
-  color: #fff;
-  border: none;
-  border-radius: var(--cr-sm);
-  font-size: 14px;
-  font-weight: 500;
   font-family: var(--font);
-  cursor: pointer;
-  white-space: nowrap;
   flex-shrink: 0;
-  transition: opacity 0.12s;
+  transition: background 0.12s;
 }
+.btn-create-release:hover { background: #1a87e0 !important; }
 .page-header-right {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
   flex-shrink: 0;
 }
 .header-btn:hover { background: #222 !important; }
@@ -2133,22 +2124,15 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 
 /* ─── Account Selector ───────────────────────────────────────────────────── */
 #account-selector-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 36px; padding: 0 12px;
-  border: none; border-radius: 8px;
-  background: #000; color: #fff; font-family: var(--font);
-  font-size: 13px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 32px; padding: 0 12px;
+  border: 1px solid #ebeff5; border-radius: 6px;
+  background: #f9fafc; color: #0f1012; font-family: var(--font);
+  font-size: 14px; font-weight: 500;
   cursor: pointer; white-space: nowrap;
-  transition: opacity 0.12s;
+  transition: background 0.12s, border-color 0.12s;
 }
-#account-selector-btn:hover { opacity: 0.85; }
-#account-selector-avatar {
-  width: 20px; height: 20px; border-radius: 4px;
-  background: #1a1a1a; color: #fff;
-  font-size: 11px; font-weight: 600;
-  display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
+#account-selector-btn:hover { background: #f0f2f6; border-color: #dde2ea; }
 #account-selector-dropdown {
   position: absolute; top: 40px; right: 0;
   background: var(--bg-primary);
@@ -2338,10 +2322,10 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       </div>
       <div class="page-header-right">
         <div id="account-selector-global">
-          <button id="account-selector-btn" class="header-btn" onclick="toggleAccountDropdown()" style="display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; background:#000 !important; color:#fff !important; border:none !important; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;">
-            <span id="account-selector-avatar" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#333;border-radius:4px;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">LR</span>
+          <button id="account-selector-btn" onclick="toggleAccountDropdown()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M8 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-4.5 5c0-2.21 2.015-4 4.5-4s4.5 1.79 4.5 4" stroke="#0f1012" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span id="account-selector-name">Lumière Records</span>
-            <span style="font-size:11px;color:rgba(255,255,255,0.5)">▾</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="#0f1012" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div id="account-selector-dropdown" style="display:none">
             <div class="account-dropdown-label">ALL</div>
@@ -2365,7 +2349,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
             </button>
           </div>
         </div>
-        <button class="header-btn" onclick="console.log('Create release clicked')" style="display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; background:#000 !important; color:#fff !important; border:none !important; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;">Create release</button>
+        <button class="btn-create-release" onclick="console.log('Create release clicked')" style="display:inline-flex; align-items:center; gap:4px; height:32px; padding:0 12px; background:#2599fb !important; color:#ebeff5 !important; border:none !important; border-radius:6px; font-size:14px; font-weight:500; cursor:pointer; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M8 3.5v9M3.5 8h9" stroke="#ebeff5" stroke-width="1.5" stroke-linecap="round"/></svg>Create</button>
       </div>
     </div>
 
@@ -3668,12 +3652,12 @@ function completenessValue(r) {
 const _sortIcon = `<svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>`;
 
 const tabColumnsConfig = {
-  all:           ['release', 'upc', 'label', 'releaseDate', 'platforms', 'status'],
-  draft:         ['release', 'upc', 'releaseDate', 'lastModified', 'completeness'],
-  'in-review':   ['release', 'upc', 'releaseDate', 'submissionDate', 'status'],
-  live:          ['release', 'upc', 'releaseDate', 'platforms'],
-  'need-action': ['release', 'upc', 'releaseDate', 'since', 'reason'],
-  'taken-down':  ['release', 'upc', 'takedownDate', 'takedownType', 'storesAffected'],
+  all:           ['release', 'upc', 'label', 'releaseDate', 'status'],
+  draft:         ['release', 'upc', 'label', 'releaseDate', 'lastModified', 'completeness'],
+  'in-review':   ['release', 'upc', 'label', 'releaseDate', 'submissionDate', 'status'],
+  live:          ['release', 'upc', 'label', 'releaseDate', 'platforms'],
+  'need-action': ['release', 'upc', 'label', 'releaseDate', 'since', 'reason'],
+  'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType', 'storesAffected'],
   watchlist:     ['release', 'upc', 'label', 'releaseDate', 'platforms', 'status'],
 };
 
@@ -3703,9 +3687,6 @@ const columnDefs = {
   releaseDate: {
     header: () => `Release date`,
     cell: r => {
-      if (getTabKey() === 'in-review' && r.status === 'under-review') {
-        return `<td class="date-cell" style="color:var(--neutral-70)">—</td>`;
-      }
       return `<td class="date-cell">${formatDate(r.date)}</td>`;
     }
   },
@@ -3852,7 +3833,7 @@ function renderTabContextBar(data) {
   const map = {
     all:           { right: '' },
     draft:         { right: '' },
-    'in-review':   { right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
+    'in-review':   { right: '' },
     live:          { right: '' },
     'need-action': { right: '' },
     'taken-down':  { right: '' },
@@ -3876,7 +3857,7 @@ function rowCtaCell(r) {
       ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
       : `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
   } else if (tk === 'in-review') {
-    action = `<span class="row-action-icon" data-tooltip="Average review time: 2–3 business days"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4"/><circle cx="8" cy="5.5" r="0.5" fill="currentColor" stroke="none"/></svg></span>`;
+    action = '';
   } else if (tk === 'live') {
   } else if (tk === 'need-action') {
     action = `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
