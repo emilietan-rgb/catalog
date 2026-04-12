@@ -289,7 +289,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 /* ─── Page Header ────────────────────────────────────────────────────────── */
 .page-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--sp-md);
 }
@@ -300,6 +300,29 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   line-height: 28px;
   letter-spacing: -0.3px;
 }
+.btn-create-release {
+  height: 36px;
+  padding: 0 16px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: var(--cr-sm);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.12s;
+}
+.page-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.header-btn:hover { background: #222 !important; }
+#account-selector-global { position: relative; }
 .page-header-left .subtitle {
   font-size: 14px;
   color: var(--text-secondary);
@@ -1023,7 +1046,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--border-primary);
-  margin-bottom: 24px;
+  margin-bottom: 0;
   padding: 0;
   width: 100%;
 }
@@ -1812,34 +1835,38 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 #filter-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   width: 100%;
-  padding: 0;
+  padding: 10px 0;
   margin-bottom: 0;
 }
+.filter-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .filter-bar-search {
-  width: 264px;
-  max-width: 264px;
+  width: 280px;
   flex-shrink: 0;
   position: relative;
   display: flex;
   align-items: center;
-  min-width: 0;
 }
 .filter-bar-search .search-icon {
   position: absolute;
-  left: 10px;
-  font-size: 13px;
+  left: 9px;
   pointer-events: none;
-  line-height: 1;
+  color: var(--text-secondary);
+  display: block;
 }
 #main-search {
   width: 100%;
-  height: 36px;
+  height: 32px;
   border: 1px solid var(--border-primary);
-  border-radius: 8px;
-  padding: 0 32px 0 36px;
-  font-size: 14px;
+  border-radius: 6px;
+  padding: 0 48px 0 30px;
+  font-size: 13px;
   font-family: var(--font);
   color: var(--text-primary);
   background: var(--bg-primary);
@@ -1861,11 +1888,52 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
   transition: color 0.1s;
 }
 .search-clear:hover { color: var(--text-primary); }
-.filter-bar-chips {
+.search-bulk-btn {
+  position: absolute;
+  right: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-left: auto;
+  line-height: 1;
+  transition: color 0.1s;
+}
+.search-bulk-btn:hover { color: var(--text-primary); }
+.search-bulk-btn.active { color: var(--accent-60); }
+#main-search-bulk {
+  width: 280px;
+  min-height: 32px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+#main-search-bulk:focus { border-color: var(--accent-60); box-shadow: 0 0 0 3px var(--accent-10); }
+#main-search-bulk.hidden { display: none; }
+#main-search.hidden { display: none; }
+.fb-account-list { display: flex; flex-direction: column; gap: 2px; }
+.fb-account-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 6px; border: none;
+  background: none; font-size: 13px; font-family: var(--font);
+  color: var(--text-primary); cursor: pointer; text-align: left; width: 100%;
+}
+.fb-account-item:hover { background: var(--neutral-20); }
+.fb-account-item.active { font-weight: 600; }
+.fb-account-avatar {
+  width: 22px; height: 22px; border-radius: 4px;
+  background: var(--neutral-40); color: var(--text-secondary);
+  font-size: 10px; font-weight: 600; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
 }
 .fb-chip-wrap { position: relative; }
 .filter-chip {
@@ -1873,7 +1941,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 0 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   font-family: var(--font);
   background: var(--neutral-20);
@@ -1908,22 +1976,17 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
   cursor: pointer;
 }
 .chip-clear:hover { background: var(--accent-70); }
-.filter-bar-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--border-primary);
-  align-self: center;
-  flex-shrink: 0;
-  margin: 0 4px;
-}
 .filter-bar-actions {
   display: flex;
-  gap: 4px;
+  gap: 0;
   flex-shrink: 0;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  overflow: hidden;
 }
 .filter-bar-actions .view-toggle {
   width: 32px;
-  height: 36px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2071,23 +2134,23 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 /* ─── Account Selector ───────────────────────────────────────────────────── */
 #account-selector-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  height: 32px; padding: 0 10px;
-  border: 1px solid var(--border-primary); border-radius: 8px;
-  background: var(--bg-primary); font-family: var(--font);
-  font-size: 13px; font-weight: var(--fw-medium);
+  height: 36px; padding: 0 12px;
+  border: none; border-radius: 8px;
+  background: #000; color: #fff; font-family: var(--font);
+  font-size: 13px; font-weight: 500;
   cursor: pointer; white-space: nowrap;
-  transition: background 0.1s, border-color 0.1s;
+  transition: opacity 0.12s;
 }
-#account-selector-btn:hover { background: var(--bg-secondary); border-color: var(--neutral-70); }
+#account-selector-btn:hover { opacity: 0.85; }
 #account-selector-avatar {
   width: 20px; height: 20px; border-radius: 4px;
-  background: var(--neutral-190); color: #fff;
-  font-size: 10px; font-weight: var(--fw-semibold);
+  background: #1a1a1a; color: #fff;
+  font-size: 11px; font-weight: 600;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 #account-selector-dropdown {
-  position: absolute; top: 40px; left: 0;
+  position: absolute; top: 40px; right: 0;
   background: var(--bg-primary);
   border: 1px solid var(--border-primary); border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.10);
@@ -2273,35 +2336,36 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       <div class="page-header-left">
         <h1>Releases</h1>
       </div>
-    </div>
-
-    <!-- Account Selector -->
-    <div id="account-selector-global" style="position:relative;display:inline-block;margin-bottom:12px">
-      <button id="account-selector-btn" onclick="toggleAccountDropdown()">
-        <span id="account-selector-avatar">LR</span>
-        <span id="account-selector-name">Lumière Records</span>
-        <span style="font-size:11px;color:var(--text-secondary)">▾</span>
-      </button>
-      <div id="account-selector-dropdown" style="display:none">
-        <div class="account-dropdown-label">ALL</div>
-        <button class="account-option" data-name="All accounts" data-initials="✦" onclick="selectAccount(this)">
-          <span class="account-option-avatar all">✦</span>
-          All accounts
-        </button>
-        <div class="account-dropdown-divider"></div>
-        <div class="account-dropdown-label">RECENT</div>
-        <button class="account-option active" data-name="Lumière Records" data-initials="LR" onclick="selectAccount(this)">
-          <span class="account-option-avatar">LR</span>
-          Lumière Records
-        </button>
-        <button class="account-option" data-name="Play Two" data-initials="PT" onclick="selectAccount(this)">
-          <span class="account-option-avatar">PT</span>
-          Play Two
-        </button>
-        <button class="account-option" data-name="Global Records" data-initials="GR" onclick="selectAccount(this)">
-          <span class="account-option-avatar">GR</span>
-          Global Records
-        </button>
+      <div class="page-header-right">
+        <div id="account-selector-global">
+          <button id="account-selector-btn" class="header-btn" onclick="toggleAccountDropdown()" style="display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; background:#000 !important; color:#fff !important; border:none !important; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;">
+            <span id="account-selector-avatar" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#333;border-radius:4px;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">LR</span>
+            <span id="account-selector-name">Lumière Records</span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.5)">▾</span>
+          </button>
+          <div id="account-selector-dropdown" style="display:none">
+            <div class="account-dropdown-label">ALL</div>
+            <button class="account-option" data-name="All accounts" data-initials="✦" onclick="selectAccount(this)">
+              <span class="account-option-avatar all">✦</span>
+              All accounts
+            </button>
+            <div class="account-dropdown-divider"></div>
+            <div class="account-dropdown-label">RECENT</div>
+            <button class="account-option active" data-name="Lumière Records" data-initials="LR" onclick="selectAccount(this)">
+              <span class="account-option-avatar">LR</span>
+              Lumière Records
+            </button>
+            <button class="account-option" data-name="Play Two" data-initials="PT" onclick="selectAccount(this)">
+              <span class="account-option-avatar">PT</span>
+              Play Two
+            </button>
+            <button class="account-option" data-name="Global Records" data-initials="GR" onclick="selectAccount(this)">
+              <span class="account-option-avatar">GR</span>
+              Global Records
+            </button>
+          </div>
+        </div>
+        <button class="header-btn" onclick="console.log('Create release clicked')" style="display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; background:#000 !important; color:#fff !important; border:none !important; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;">Create release</button>
       </div>
     </div>
 
@@ -2318,28 +2382,46 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       <button class="alert-dismiss" aria-label="Dismiss" onclick="document.getElementById('need-action-alert').style.display='none'">✕</button>
     </div>
 
-    <!-- Status Tabs -->
-    <div class="pills-row">
-      <div class="status-pills" id="statusPills">
-        <button class="pill active" data-status="all">All</button>
-        <button class="pill" data-status="draft">Draft</button>
-        <button class="pill" data-status="in-review">Upcoming</button>
-        <button class="pill" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
-        <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
-        <button class="pill" data-status="unsellable">Taken down</button>
-        <button class="pill" data-status="watchlist">☆ Watchlist</button>
-      </div>
-    </div>
-
-    <!-- Filter Bar -->
+    <!-- Controls Bar -->
     <div id="filter-bar">
-      <div class="filter-bar-search">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="main-search" placeholder="Search by title, artist or UPC..." autocomplete="off">
-        <button class="search-clear" id="search-clear" aria-label="Clear" style="display:none">✕</button>
-      </div>
+      <div class="filter-bar-left">
+        <div class="filter-bar-search">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+          <input type="text" id="main-search" placeholder="Search for a release, track, UPC… ⌘K" autocomplete="off">
+          <button class="search-bulk-btn" id="search-bulk-btn" title="Toggle bulk UPC mode" onclick="toggleBulkUPC()" aria-pressed="false">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M2 8h8M2 12h5"/></svg>
+          </button>
+          <button class="search-clear" id="search-clear" aria-label="Clear" style="display:none">✕</button>
+        </div>
+        <textarea id="main-search-bulk" class="hidden" placeholder="Paste multiple UPCs, one per line…" rows="1" autocomplete="off"></textarea>
 
-      <div class="filter-bar-chips">
+        <div class="fb-chip-wrap">
+          <button class="filter-chip filter-chip-more" id="chip-more" onclick="toggleFbDropdown('fb-more-dropdown')">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M4 8h8M6 12h4"/></svg>
+            Filters
+          </button>
+          <div class="fb-dropdown hidden" id="fb-more-dropdown">
+            <div class="fb-dropdown-label">Label</div>
+            <input type="text" class="fb-label-input" id="fb-label-input" placeholder="Filter by label…">
+          </div>
+        </div>
+
+        <div class="fb-chip-wrap">
+          <button class="filter-chip" id="chip-artist" onclick="toggleFbDropdown('fb-artist-dropdown')">
+            Artists <svg class="chip-caret" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg>
+          </button>
+          <div class="fb-dropdown hidden" id="fb-artist-dropdown">
+            <div class="artist-search-wrap">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+              <input type="text" class="artist-search-input" id="fbArtistSearchInput" placeholder="Search artists…">
+            </div>
+            <div class="artist-modal-body" id="fbArtistModalBody"></div>
+            <div class="artist-modal-footer">
+              <button class="btn btn-dark" onclick="applyFbArtistFilter()" style="flex:1">Apply</button>
+            </div>
+          </div>
+        </div>
+
         <div class="fb-chip-wrap">
           <button class="filter-chip" id="chip-date" onclick="toggleFbDropdown('fb-date-dropdown')">
             Release date <svg class="chip-caret" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg>
@@ -2361,39 +2443,24 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
             <button class="fb-apply-btn" onclick="applyFbDateRange()">Apply</button>
           </div>
         </div>
-
-        <div class="fb-chip-wrap">
-          <button class="filter-chip" id="chip-artist" onclick="toggleFbDropdown('fb-artist-dropdown')">
-            Artist <svg class="chip-caret" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg>
-          </button>
-          <div class="fb-dropdown hidden" id="fb-artist-dropdown">
-            <div class="artist-search-wrap">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
-              <input type="text" class="artist-search-input" id="fbArtistSearchInput" placeholder="Search artists…">
-            </div>
-            <div class="artist-modal-body" id="fbArtistModalBody"></div>
-            <div class="artist-modal-footer">
-              <button class="btn btn-dark" onclick="applyFbArtistFilter()" style="flex:1">Apply</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="fb-chip-wrap">
-          <button class="filter-chip filter-chip-more" id="chip-more" onclick="toggleFbDropdown('fb-more-dropdown')">
-            + Filters
-          </button>
-          <div class="fb-dropdown hidden" id="fb-more-dropdown">
-            <div class="fb-dropdown-label">Label</div>
-            <input type="text" class="fb-label-input" id="fb-label-input" placeholder="Filter by label…">
-          </div>
-        </div>
       </div>
-
-      <div class="filter-bar-divider"></div>
 
       <div class="filter-bar-actions">
         <button class="view-toggle active" id="view-list" onclick="setView('list')" title="List view">≡</button>
         <button class="view-toggle" id="view-grid" onclick="setView('grid')" title="Grid view">⊞</button>
+      </div>
+    </div>
+
+    <!-- Status Tabs -->
+    <div class="pills-row">
+      <div class="status-pills" id="statusPills">
+        <button class="pill active" data-status="all">All</button>
+        <button class="pill" data-status="draft">Draft</button>
+        <button class="pill" data-status="in-review">Upcoming</button>
+        <button class="pill" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
+        <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
+        <button class="pill" data-status="unsellable">Taken down</button>
+        <button class="pill" data-status="watchlist">☆ Watchlist</button>
       </div>
     </div>
 
@@ -3784,7 +3851,7 @@ function renderTabContextBar(data) {
   const rs = n !== 1 ? 'releases' : 'release';
   const map = {
     all:           { right: '' },
-    draft:         { right: `<a href="#" class="btn btn-primary" style="font-size:13px;text-decoration:none;padding:6px 12px" onclick="event.preventDefault()">+ Create new release</a>` },
+    draft:         { right: '' },
     'in-review':   { right: `<span class="tcb-info">Average review time: 2–3 business days</span>` },
     live:          { right: '' },
     'need-action': { right: '' },
@@ -3821,7 +3888,7 @@ const processingGroup = new Set(['under-review', 'ready-for-release']);
 
 function getFilteredReleases(statusOverride) {
   const tab = statusOverride !== undefined ? statusOverride : activeFilter;
-  const q      = (document.getElementById('main-search')?.value || '').toLowerCase();
+  const q      = (getSearchQuery?.() || document.getElementById('main-search')?.value || '').toLowerCase();
   const labelQ = (document.getElementById('fb-label-input')?.value || '').toLowerCase();
   const now = new Date();
   return releases.filter(r => {
@@ -3871,7 +3938,7 @@ function getFilteredReleases(statusOverride) {
 }
 
 function filtersActive() {
-  const q      = document.getElementById('main-search')?.value || '';
+  const q      = getSearchQuery?.() || document.getElementById('main-search')?.value || '';
   const labelQ = document.getElementById('fb-label-input')?.value || '';
   return q || labelQ || selectedArtists.size > 0 || activeDateFilter.type !== 'all';
 }
@@ -4433,16 +4500,64 @@ document.getElementById('statusPills').addEventListener('click', e => {
 
 // ─── Search ───────────────────────────────────────────────────────────────
 let _searchDebounce = null;
-document.getElementById('main-search').addEventListener('input', e => {
-  document.getElementById('search-clear').style.display = e.target.value ? 'block' : 'none';
+let _prevFilter = null;
+let _bulkUPCMode = false;
+
+function toggleBulkUPC() {
+  _bulkUPCMode = !_bulkUPCMode;
+  const input    = document.getElementById('main-search');
+  const bulk     = document.getElementById('main-search-bulk');
+  const btn      = document.getElementById('search-bulk-btn');
+  btn.classList.toggle('active', _bulkUPCMode);
+  btn.setAttribute('aria-pressed', _bulkUPCMode);
+  input.classList.toggle('hidden', _bulkUPCMode);
+  bulk.classList.toggle('hidden', !_bulkUPCMode);
+  if (_bulkUPCMode) { bulk.focus(); } else { input.focus(); }
+}
+
+function getSearchQuery() {
+  if (_bulkUPCMode) {
+    return document.getElementById('main-search-bulk').value;
+  }
+  return document.getElementById('main-search').value;
+}
+
+function onSearchInput(hasValue) {
+  document.getElementById('search-clear').style.display = hasValue ? 'block' : 'none';
+  if (hasValue && activeFilter !== 'all') {
+    _prevFilter = activeFilter;
+    activeFilter = 'all';
+    document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.status === 'all'));
+  } else if (!hasValue && _prevFilter) {
+    activeFilter = _prevFilter;
+    _prevFilter = null;
+    document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.status === activeFilter));
+  }
   clearTimeout(_searchDebounce);
   _searchDebounce = setTimeout(() => { currentPage = 1; renderTable(); }, 300);
-});
+}
+
+document.getElementById('main-search').addEventListener('input', e => onSearchInput(!!e.target.value));
+document.getElementById('main-search-bulk').addEventListener('input', e => onSearchInput(!!e.target.value));
+
 document.getElementById('search-clear').addEventListener('click', () => {
   document.getElementById('main-search').value = '';
+  document.getElementById('main-search-bulk').value = '';
   document.getElementById('search-clear').style.display = 'none';
+  if (_prevFilter) {
+    activeFilter = _prevFilter;
+    _prevFilter = null;
+    document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.status === activeFilter));
+  }
+  currentPage = 1;
   renderTable();
 });
+
+function selectFbAccount(btn, name) {
+  document.querySelectorAll('.fb-account-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fb-accounts-dropdown').classList.add('hidden');
+}
 
 // ─── Watchlist ────────────────────────────────────────────────────────────
 const watchlist = new Set();
