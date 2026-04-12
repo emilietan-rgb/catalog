@@ -273,12 +273,14 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: visible;
   background: #ffffff;
 }
 .content {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: visible;
+  overflow-x: visible;
   padding: var(--sp-xlg);
   display: flex;
   flex-direction: column;
@@ -1032,44 +1034,50 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .pills-row {
   display: flex;
   align-items: center;
+  margin-top: 12px;
 }
 .status-pills {
   display: flex;
   gap: 0;
-  border-bottom: 1px solid var(--border-primary);
-  margin-bottom: 0;
+  align-items: center;
   padding: 0;
   width: 100%;
 }
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-3xsm);
-  padding: 10px 16px;
+  justify-content: center;
+  gap: 4px;
+  min-height: 32px;
+  min-width: 64px;
+  padding: 0 12px;
   font-family: var(--font);
   font-size: 14px;
-  font-weight: var(--fw-medium);
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: #747884;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+  border-radius: 512px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.12s;
+  transition: color 0.12s, background 0.12s;
   user-select: none;
 }
-.pill:hover { color: var(--text-primary); }
+.pill:hover { color: #27282c; }
 .pill.active {
-  color: var(--text-primary);
-  border-bottom: 2px solid var(--text-primary);
-  font-weight: var(--fw-semibold);
+  background: #f3f4f8;
+  color: #27282c;
+  font-weight: 500;
 }
-.pill-count { font-weight: var(--fw-medium); color: var(--text-secondary); }
+.pill-count { font-weight: 500; color: inherit; }
 
 /* ─── Table Card ─────────────────────────────────────────────────────────── */
 .table-card {
   background: #fff;
+  overflow-x: auto;
+  overflow-y: visible;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 .table-footer {
   display: flex;
@@ -1200,6 +1208,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 }
 table {
   width: 100%;
+  min-width: 960px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 13px;
@@ -1969,11 +1978,8 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 .chip-clear:hover { background: var(--accent-70); }
 .filter-bar-actions {
   display: flex;
-  gap: 0;
+  gap: 4px;
   flex-shrink: 0;
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  overflow: hidden;
 }
 .filter-bar-actions .view-toggle {
   width: 32px;
@@ -1981,17 +1987,15 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-secondary);
-  border: none;
-  color: var(--text-secondary);
+  background: #f9fafc;
+  border: 1px solid #ebeff5;
+  border-radius: 6px;
+  color: #747884;
   cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-  transition: background 0.1s, color 0.1s;
+  transition: border-color 0.1s, color 0.1s;
 }
-.filter-bar-actions .view-toggle + .view-toggle { border-left: 1px solid var(--border-primary); }
-.filter-bar-actions .view-toggle:hover { background: var(--neutral-40); color: var(--text-primary); }
-.filter-bar-actions .view-toggle.active { background: var(--neutral-40); color: var(--text-primary); }
+.filter-bar-actions .view-toggle:hover { border-color: #3a3c42; color: #27282c; }
+.filter-bar-actions .view-toggle.active { border-color: #3a3c42; color: #27282c; }
 
 /* ─── Filter Dropdowns ───────────────────────────────────────────────────── */
 .fb-dropdown {
@@ -2430,8 +2434,8 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       </div>
 
       <div class="filter-bar-actions">
-        <button class="view-toggle active" id="view-list" onclick="setView('list')" title="List view">≡</button>
-        <button class="view-toggle" id="view-grid" onclick="setView('grid')" title="Grid view">⊞</button>
+        <button class="view-toggle active" id="view-list" onclick="setView('list')" title="List view"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h12M3 9h12M3 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <button class="view-toggle" id="view-grid" onclick="setView('grid')" title="Grid view"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="3" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="10" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg></button>
       </div>
     </div>
 
