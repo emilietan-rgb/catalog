@@ -415,12 +415,21 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   white-space: nowrap;
 }
 .chip-neutral { background: var(--neutral-40); color: var(--neutral-140); border: 1px solid var(--neutral-60); }
+.chip-draft { background: #f9fafc; color: #0f1012; border: none; }
 .chip-accent { background: var(--accent-10); color: var(--accent-70); border: 1px solid var(--accent-20, #c8e4fe); }
 .chip-green { background: var(--green-10); color: var(--green-80); border: 1px solid var(--green-20, #b6eacc); }
 .tab-live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #16A34A; margin-right: 6px; vertical-align: middle; animation: live-pulse 2s ease-in-out infinite; }
 .live-recent-wrapper { display: inline-flex; align-items: center; gap: 6px; }
 .live-pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: #16A34A; flex-shrink: 0; animation: live-pulse 2s ease-in-out infinite; }
 @keyframes live-pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: 0.4; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes live-pulse-sm { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+#si-tooltip {
+  position: fixed; z-index: 9999; pointer-events: none;
+  background: var(--text-primary); color: #fff;
+  font-size: 12px; font-weight: 500; font-family: var(--font);
+  padding: 4px 8px; border-radius: 6px; white-space: nowrap;
+  opacity: 0; transition: opacity 0.1s;
+}
 .chip-orange { background: var(--orange-10); color: var(--orange-70); border: 1px solid var(--orange-20); }
 .chip-red { background: var(--red-10); color: var(--red-70); border: 1px solid var(--red-20); }
 .chip-purple { background: var(--purple-10); color: var(--purple-70); border: 1px solid var(--purple-20); }
@@ -2221,6 +2230,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
   border-radius: 999px; padding: 2px 8px;
   font-size: 12px; font-weight: var(--fw-medium); white-space: nowrap;
 }
+.reason-chip-red { background: var(--red-10); color: var(--red-70); }
 
 /* ─── Row Action Buttons ─────────────────────────────────────────────────── */
 .row-cta {
@@ -2252,6 +2262,7 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
 }
 .row-action-icon[data-tooltip]:hover::after { opacity: 1; }
 </style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
@@ -3559,15 +3570,24 @@ function releaseFormat(n) {
 
 function statusChip(status) {
   const map = {
-    "draft":          ["chip-neutral",  "Draft"],
-    "under-review":   ["chip-purple",   "Under review"],
+    "draft":          ["chip-draft",    "Draft"],
+    "under-review":   ["chip-orange",   "Under review"],
     "ready-for-release": ["chip-purple", "Ready for release"],
     "delivered":      ["chip-green",    "Live"],
-    "need-action":    ["chip-orange",   "Need action"],
-    "unsellable":     ["chip-red",      "Taken down"],
+    "need-action":    ["chip-red",      "Need action"],
+    "unsellable":     ["chip-neutral",  "Taken down"],
   };
+  if (status === 'delivered') {
+    return `<span data-si-tooltip="Live" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:live-pulse-sm 2s ease-in-out infinite;cursor:default"></span>`;
+  }
   const [cls, label, tooltip] = map[status] || ["chip-neutral", status];
-  return `<span class="chip ${cls}"${tooltip ? ` data-tooltip="${tooltip}"` : ''}>${label}</span>`;
+  const icon = status === 'need-action'
+    ? `<span class="material-icons" style="font-size:12px;line-height:1;flex-shrink:0">error</span>`
+    : status === 'unsellable'
+    ? `<span class="material-icons" style="font-size:12px;line-height:1;flex-shrink:0">block</span>`
+    : '';
+  const extraStyle = icon ? 'display:inline-flex;align-items:center;gap:2px;padding-left:5px' : 'display:inline-flex;align-items:center;gap:2px';
+  return `<span class="chip ${cls}"${tooltip ? ` data-tooltip="${tooltip}"` : ''} style="${extraStyle}">${icon}${label}</span>`;
 }
 
 function coverSVGCard(hue) {
@@ -3688,6 +3708,35 @@ function completenessValue(r) {
   return 100;
 }
 
+// ─── Status Icon ────────────────────────────────────────────────────────────
+function statusIcon(status) {
+  const map = {
+    'draft':             ['edit',                 '#9ca3af'],
+    'under-review':      ['schedule',             '#8b5cf6'],
+    'ready-for-release': ['schedule',             '#8b5cf6'],
+    'delivered':         'dot',
+    'need-action':       ['error',                '#ef4444'],
+    'unsellable':        ['block',                '#9ca3af'],
+  };
+  const labels = {
+    'draft':             'Draft',
+    'under-review':      'Under review',
+    'ready-for-release': 'Ready for release',
+    'delivered':         'Live',
+    'need-action':       'Need action',
+    'unsellable':        'Taken down',
+  };
+  const tooltip = labels[status] || status;
+  if (map[status] === 'chip') {
+    return statusChip(status);
+  }
+  if (map[status] === 'dot') {
+    return `<span data-si-tooltip="${tooltip}" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:live-pulse-sm 2s ease-in-out infinite;cursor:default"></span>`;
+  }
+  const [icon, color, extra = ''] = map[status] || ['circle', '#9ca3af'];
+  return `<span class="material-icons" data-si-tooltip="${tooltip}" style="font-size:16px;color:${color};flex-shrink:0;${extra};cursor:default">${icon}</span>`;
+}
+
 // ─── Territories Mock Data ──────────────────────────────────────────────────
 const territoriesMap = {
   1:240, 2:185, 3:52,  4:12,  5:198, 6:76,  7:240, 8:33,  9:110, 10:198,
@@ -3700,13 +3749,13 @@ const territoriesMap = {
 const _sortIcon = `<svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>`;
 
 const tabColumnsConfig = {
-  all:           ['release', 'upc', 'label', 'releaseDate', 'status'],
-  draft:         ['release', 'upc', 'label', 'releaseDate', 'lastModified', 'completeness'],
-  'in-review':   ['release', 'upc', 'label', 'releaseDate', 'submissionDate', 'status'],
+  all:           ['release', 'upc', 'label', 'releaseDate', 'territories'],
+  draft:         ['release', 'upc', 'label', 'releaseDate', 'lastModified', 'completeness', 'territories'],
+  'in-review':   ['release', 'upc', 'label', 'releaseDate', 'submissionDate', 'territories'],
   live:          ['release', 'upc', 'label', 'releaseDate', 'territories', 'platforms'],
-  'need-action': ['release', 'upc', 'label', 'releaseDate', 'since', 'reason'],
-  'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType', 'storesAffected'],
-  watchlist:     ['release', 'upc', 'label', 'releaseDate', 'territories', 'platforms', 'status'],
+  'need-action': ['release', 'upc', 'label', 'releaseDate', 'since', 'reason', 'territories'],
+  'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType', 'storesAffected', 'territories'],
+  watchlist:     ['release', 'upc', 'label', 'releaseDate', 'platforms', 'territories'],
 };
 
 const columnDefs = {
@@ -3716,9 +3765,9 @@ const columnDefs = {
       const n = r.tracks ? r.tracks.length : 0;
       const trackLabel = n === 1 ? '1 track' : `${n} tracks`;
       return `<td class="release-col-cell"><div class="release-cell">
-      <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy">
+      <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy" style="${r.status === 'unsellable' ? 'opacity:0.3' : ''}">
       <div class="release-info">
-        <span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>
+        <span style="display:inline-flex;align-items:center;gap:6px"><span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>${statusChip(r.status)}</span>
         <span class="release-meta">
           <span class="release-tracks">${trackLabel}</span>
           <span class="release-meta-dot">·</span>
@@ -3798,7 +3847,11 @@ const columnDefs = {
   },
   reason: {
     header: () => 'Reason',
-    cell: r => `<td><span class="reason-chip">${r.reason || '—'}</span></td>`
+    cell: r => {
+      const redReasons = ['Audio quality', 'Artwork rejected'];
+      const cls = redReasons.includes(r.reason) ? 'reason-chip reason-chip-red' : 'reason-chip';
+      return `<td><span class="${cls}">${r.reason || '—'}</span></td>`;
+    }
   },
   since: {
     header: () => 'Since',
@@ -3882,22 +3935,18 @@ function rowCtaCell(r) {
   let action = '';
   if (tk === 'draft') {
     const pct = completenessValue(r);
-    action = pct === 100
-      ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
-      : `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+    if (pct === 100) action = `<button onclick="event.stopPropagation();openSubmitConfirm(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;white-space:nowrap;font-family:var(--font)">Submit</button>`;
   } else if (tk === 'in-review' || tk === 'taken-down') {
     return `<td></td>`;
   } else if (tk === 'live') {
   } else if (tk === 'need-action') {
-    action = `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
+    action = `<button onclick="event.stopPropagation();openFixIssuesDialog(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;white-space:nowrap;font-family:var(--font)">Fix Issues</button>`;
   } else if (tk === 'all') {
     if (r.status === 'draft') {
       const pct = completenessValue(r);
-      action = pct === 100
-        ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
-        : `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+      if (pct === 100) action = `<button onclick="event.stopPropagation();openSubmitConfirm(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;white-space:nowrap;font-family:var(--font)">Submit</button>`;
     } else if (r.status === 'need-action') {
-      action = `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
+      action = `<button onclick="event.stopPropagation();openFixIssuesDialog(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;white-space:nowrap;font-family:var(--font)">Fix Issues</button>`;
     }
   }
   return `<td style="padding:4px 8px;white-space:nowrap;text-align:right">${action}</td>`;
@@ -5386,5 +5435,123 @@ renderTable();
     <button class="btn btn-dark" onclick="applyCustomDate()" style="flex:1">Apply</button>
   </div>
 </div>
+<div id="si-tooltip"></div>
+<script>
+(function() {
+  const tip = document.getElementById('si-tooltip');
+  let timer = null;
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('[data-si-tooltip]');
+    if (!el) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      tip.textContent = el.dataset.siTooltip;
+      tip.style.opacity = '1';
+    }, 1000);
+  });
+  document.addEventListener('mousemove', e => {
+    if (tip.style.opacity === '1' || timer) {
+      tip.style.left = (e.clientX + 12) + 'px';
+      tip.style.top  = (e.clientY + 12) + 'px';
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    const el = e.target.closest('[data-si-tooltip]');
+    if (!el) return;
+    clearTimeout(timer);
+    timer = null;
+    tip.style.opacity = '0';
+  });
+})();
+</script>
+
+<!-- Fix Issues Dialog -->
+<div class="modal-overlay hidden" id="fixIssuesOverlay" onclick="closeFixIssuesDialog()"></div>
+<div class="date-modal hidden" id="fixIssuesModal" style="width:420px;gap:0">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <span style="font-size:16px;font-weight:600;color:#0f1012">Issues to resolve</span>
+    <button onclick="closeFixIssuesDialog()" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:none;border:none;border-radius:6px;cursor:pointer;color:#747884;font-size:18px;padding:0" onmouseover="this.style.background='#f3f4f8'" onmouseout="this.style.background='none'">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+    </button>
+  </div>
+  <div id="fixIssuesBody"></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+    <button onclick="closeFixIssuesDialog()" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;font-family:var(--font)">Close</button>
+    <button onclick="goFixIssues()" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#2599fb;border:none;border-radius:6px;font-size:14px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font)">Edit release</button>
+  </div>
+</div>
+
+<!-- Submit Confirmation Dialog -->
+<div class="modal-overlay hidden" id="submitConfirmOverlay" onclick="closeSubmitConfirm()"></div>
+<div class="date-modal hidden" id="submitConfirmModal" style="width:360px;gap:0">
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+    <span style="font-size:16px;font-weight:600;color:#0f1012;line-height:22px">Submit for review</span>
+    <span style="font-size:14px;color:#747884;line-height:20px">This release will be sent to our team for review. You won't be able to edit it until the review is complete.</span>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end">
+    <button onclick="closeSubmitConfirm()" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;font-family:var(--font)">Cancel</button>
+    <button onclick="confirmSubmit()" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#2599fb;border:none;border-radius:6px;font-size:14px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--font)">Submit</button>
+  </div>
+</div>
+
+<script>
+let _fixIssuesReleaseId = null;
+
+const issueDescriptions = {
+  'ISRC mismatch':     'One or more track ISRCs do not match the registered values. Please verify and correct the ISRC codes for all affected tracks.',
+  'Missing metadata':  'Required metadata fields are incomplete. Review the release information and fill in all mandatory fields before resubmitting.',
+  'Audio quality':     'The audio files do not meet our quality requirements. Please re-upload WAV or FLAC files at 44.1 kHz / 16-bit or higher.',
+  'Artwork rejected':  'The cover artwork does not comply with store guidelines. Ensure it is at least 3000×3000 px, in RGB, with no explicit content or logos.',
+};
+
+function openFixIssuesDialog(releaseId) {
+  _fixIssuesReleaseId = releaseId;
+  const r = releases.find(x => x.id === releaseId);
+  const reason = r && r.reason ? r.reason : 'Unknown issue';
+  const desc = issueDescriptions[reason] || 'Please review the release details and correct the reported issue before resubmitting.';
+  const body = document.getElementById('fixIssuesBody');
+  body.innerHTML = `
+    <p style="font-size:14px;color:#747884;line-height:20px;margin:0 0 16px">The following issue was reported for <strong style="color:#0f1012">${r ? r.title : 'this release'}</strong>. Please resolve it before the release can go live.</p>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:#fff8f8;border:1px solid #ffd9de;border-radius:8px">
+        <span class="material-icons" style="font-size:18px;color:#ef4444;flex-shrink:0;margin-top:1px">error</span>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#0f1012;margin-bottom:4px">${reason}</div>
+          <div style="font-size:13px;color:#747884;line-height:18px">${desc}</div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('fixIssuesOverlay').classList.remove('hidden');
+  document.getElementById('fixIssuesModal').classList.remove('hidden');
+}
+function closeFixIssuesDialog() {
+  _fixIssuesReleaseId = null;
+  document.getElementById('fixIssuesOverlay').classList.add('hidden');
+  document.getElementById('fixIssuesModal').classList.add('hidden');
+}
+function goFixIssues() {
+  const id = _fixIssuesReleaseId;
+  closeFixIssuesDialog();
+  if (id != null) openReleasePage(id);
+}
+
+let _submitReleaseId = null;
+
+function openSubmitConfirm(releaseId) {
+  _submitReleaseId = releaseId;
+  document.getElementById('submitConfirmOverlay').classList.remove('hidden');
+  document.getElementById('submitConfirmModal').classList.remove('hidden');
+}
+function closeSubmitConfirm() {
+  _submitReleaseId = null;
+  document.getElementById('submitConfirmOverlay').classList.add('hidden');
+  document.getElementById('submitConfirmModal').classList.add('hidden');
+}
+function confirmSubmit() {
+  const id = _submitReleaseId;
+  closeSubmitConfirm();
+  if (id != null) openReleasePage(id);
+}
+</script>
 </body>
 </html>
