@@ -698,6 +698,50 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .filter-btn.active-filter .filter-arrow { color: #0f1012; }
 
 /* ─── Date Modal ─────────────────────────────────────────────────────────── */
+#snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: #27282c;
+  color: #fff;
+  font-size: 14px;
+  font-family: var(--font);
+  font-weight: 400;
+  padding: 0 4px 0 16px;
+  height: 44px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 9999;
+  white-space: nowrap;
+}
+#snackbar.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+#snackbar-undo {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+#snackbar-undo:hover { background: rgba(255,255,255,0.2); }
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1091,9 +1135,8 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 .table-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  min-height: 44px;
+  justify-content: flex-end;
+  padding: 8px 16px;
 }
 .table-summary {
   font-size: 12px;
@@ -1271,11 +1314,12 @@ tbody tr:last-child { border-bottom: none; }
 tbody tr:hover { background: var(--bg-secondary); }
 tbody tr.expanded { background: var(--bg-secondary); }
 td {
-  padding: 8px 20px;
+  padding: 6px 20px;
   vertical-align: middle;
   color: #27282c;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 18px;
+  line-height: 16px;
   white-space: nowrap;
 }
 td.release-col-cell {
@@ -1502,11 +1546,13 @@ tbody tr.expanded td.release-col-cell { background: var(--bg-secondary); }
 
 /* ─── UPC / Date cells ───────────────────────────────────────────────────── */
 .mono { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 12px; color: var(--text-secondary); letter-spacing: 0.2px; }
-.upc-cell { display: flex; align-items: center; gap: 6px; position: relative; }
-.upc-value { font-size: 13px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
-.upc-copy-btn { opacity: 0; pointer-events: none; font-size: 11px; font-weight: 500; color: var(--accent-60); background: none; border: 1px solid var(--accent-60); cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: opacity 0.15s ease; white-space: nowrap; font-family: var(--font); }
-tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
-.date-cell { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+.upc-cell { display: inline-flex; align-items: center; gap: 4px; position: relative; cursor: pointer; }
+.upc-value { font-size: 12px; color: var(--text-primary); font-family: 'SF Mono', 'Fira Mono', 'Roboto Mono', monospace; letter-spacing: 0.01em; white-space: nowrap; }
+.upc-copy-icon { opacity: 0; pointer-events: none; display: inline-flex; align-items: center; color: var(--text-secondary); transition: opacity 0.12s ease; flex-shrink: 0; }
+.upc-copy-icon .material-icons { font-size: 14px; }
+td:hover .upc-copy-icon { opacity: 1; pointer-events: auto; }
+td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
+.date-cell { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 .release-date-cell { display: flex; flex-direction: column; gap: 2px; }
 .release-date-main { font-size: 14px; color: var(--text-primary); }
 .release-date-time { font-size: 11px; color: var(--text-secondary); }
@@ -2503,9 +2549,8 @@ tr:hover .upc-copy-btn { opacity: 1; pointer-events: auto; }
       </table>
     </div>
 
-    <!-- Table footer: summary + pagination -->
+    <!-- Table footer: pagination -->
     <div class="table-footer" id="tableFooter">
-      <span class="table-summary" id="tableSummary"></span>
       <div class="pagination" id="pagination"></div>
     </div>
 
@@ -3434,7 +3479,9 @@ releases.forEach((r, i) => { r.coverImg = coverUrls[i]; });
   }
   const reasons = ['ISRC mismatch', 'Missing metadata', 'Audio quality', 'Artwork rejected'];
   const storePool = ['Spotify', 'Apple Music', 'Deezer', 'Amazon Music', 'YouTube Music', 'Tidal'];
+  const deliveryPool = [['Digital'], ['Digital'], ['Digital', 'Video'], ['Digital'], ['Digital', 'Physical']];
   releases.forEach((r, i) => {
+    r.deliveryTypes      = deliveryPool[i % deliveryPool.length];
     r.lastModified       = daysAgo((i * 3) % 30 + 1);
     r.submissionDate     = daysAgo((i * 7 + 3) % 60 + 1);
     r.hasPartialTakedown = (i % 5 === 0);
@@ -3750,10 +3797,10 @@ const _sortIcon = `<svg class="sort-icon" width="12" height="12" viewBox="0 0 12
 
 const tabColumnsConfig = {
   all:           ['release', 'upc', 'label', 'releaseDate', 'territories'],
-  draft:         ['release', 'upc', 'label', 'releaseDate', 'lastModified', 'completeness', 'territories'],
+  draft:         ['release', 'label', 'releaseDate', 'territories', 'completeness'],
   'in-review':   ['release', 'upc', 'label', 'releaseDate', 'submissionDate', 'territories'],
   live:          ['release', 'upc', 'label', 'releaseDate', 'territories', 'platforms'],
-  'need-action': ['release', 'upc', 'label', 'releaseDate', 'since', 'reason', 'territories'],
+  'need-action': ['release', 'upc', 'label', 'releaseDate', 'reason', 'territories'],
   'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType', 'storesAffected', 'territories'],
   watchlist:     ['release', 'upc', 'label', 'releaseDate', 'platforms', 'territories'],
 };
@@ -3785,18 +3832,30 @@ const columnDefs = {
     header: () => `Release date`,
     cell: r => {
       const timeStr = r.date && r.date.includes('T') ? formatTime(r.date) : null;
-      return `<td class="date-cell">${formatDate(r.date)}${timeStr ? `<span style="display:block;font-size:12px;color:#747884;margin-top:2px">${timeStr}</span>` : ''}</td>`;
+      return `<td class="date-cell">${formatDate(r.date)}${timeStr ? `<span style="display:block;font-size:10px;color:#747884;margin-top:1px">${timeStr}</span>` : ''}</td>`;
     }
   },
   upc: {
     header: () => 'UPC',
-    cell: r => r.status === 'under-review'
-      ? `<td class="upc-cell upc-empty" style="color:var(--neutral-70)">—</td>`
-      : `<td><div class="upc-cell"><span class="upc-value">${r.upc}</span><button class="upc-copy-btn" aria-label="Copy UPC" data-upc="${r.upc}" onclick="event.stopPropagation();copyUPC(this)">Copy</button></div></td>`
+    cell: r => {
+      if (r.status === 'under-review') return `<td class="upc-td" style="color:var(--neutral-70)">—</td>`;
+      const u = r.upc || '';
+      const truncated = u.length > 6 ? `${u.slice(0, 3)}…${u.slice(-3)}` : u;
+      return `<td class="upc-td" onclick="event.stopPropagation();copyUPCFull(this,'${u}')" data-si-tooltip="${u}">
+        <div class="upc-cell">
+          <span class="upc-value">${truncated}</span>
+          <span class="upc-copy-icon"><span class="material-icons">content_copy</span></span>
+        </div>
+      </td>`;
+    }
   },
   label: {
-    header: () => 'Label',
-    cell: r => `<td>${r.label}</td>`
+    header: () => 'Label/Distribution',
+    cell: r => {
+      const deliveryTypes = r.deliveryTypes || ['DIGITAL'];
+      const delivery = deliveryTypes.join(' • ');
+      return `<td><div style="line-height:1">${r.label}<span style="display:block;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.04em;margin-top:3px">${delivery}</span></div></td>`;
+    }
   },
   territories: {
     header: () => 'Territories',
@@ -3886,7 +3945,7 @@ function getTabKey() {
   return map[activeFilter] || 'all';
 }
 
-function renderTabHeaders(cols) {
+function renderTabHeaders(cols, count) {
   const thead = document.getElementById('tableHead');
   if (!thead) return;
 
@@ -3897,7 +3956,10 @@ function renderTabHeaders(cols) {
     const def = columnDefs[k];
     if (!def) return '';
     const cls = k === 'release' ? ' class="col-release"' : ' class="col-data"';
-    return `<th${cls}><div class="th-inner">${def.header()}</div></th>`;
+    const label = k === 'release'
+      ? `Release <span style="color:#b0b5bf;font-weight:400">· ${count}</span>`
+      : def.header();
+    return `<th${cls}><div class="th-inner">${label}</div></th>`;
   });
   const noActions = new Set(['in-review', 'taken-down']);
   ths.unshift(`<th style="padding:0 4px;width:32px;min-width:32px"></th>`);
@@ -3908,21 +3970,7 @@ function renderTabHeaders(cols) {
 
 function renderTabContextBar(data) {
   const bar = document.getElementById('tab-context-bar');
-  if (!bar) return;
-  const n = data.length;
-  const tk = getTabKey();
-  const rs = n !== 1 ? 'releases' : 'release';
-  const map = {
-    all:           { right: '' },
-    draft:         { right: '' },
-    'in-review':   { right: '' },
-    live:          { right: '' },
-    'need-action': { right: '' },
-    'taken-down':  { right: '' },
-    watchlist:     { right: '' },
-  };
-  const { right } = map[tk] || map.all;
-  bar.innerHTML = right ? `<div class="tcb-left"></div><div class="tcb-right">${right}</div>` : '';
+  if (bar) bar.innerHTML = '';
 }
 
 function rowStarCell(r) {
@@ -4011,56 +4059,8 @@ function filtersActive() {
   return q || labelQ || selectedArtists.size > 0 || activeDateFilter.type !== 'all';
 }
 
-// ─── Table Footer: summary + pagination ───────────────────────────────────
+// ─── Table Footer: pagination ───────────────────────────────────────────────
 function renderTableFooter(data, totalPages) {
-  // Summary
-  const summaryEl = document.getElementById('tableSummary');
-  if (summaryEl) {
-    const tk = getTabKey();
-    let text = '';
-    if (tk === 'all') {
-      const nDraft     = releases.filter(r => r.status === 'draft').length;
-      const nReview    = releases.filter(r => processingGroup.has(r.status)).length;
-      const nLive      = releases.filter(r => r.status === 'delivered').length;
-      const nAction    = releases.filter(r => r.status === 'need-action').length;
-      const nUnsell    = releases.filter(r => r.status === 'unsellable').length;
-      const parts = [];
-      if (nDraft)  parts.push(`${nDraft} draft${nDraft !== 1 ? 's' : ''}`);
-      if (nReview) parts.push(`${nReview} processing`);
-      if (nLive)   parts.push(`${nLive} live`);
-      if (nAction) parts.push(`${nAction} need action`);
-      if (nUnsell) parts.push(`${nUnsell} unsellable`);
-      text = parts.join(' · ');
-    } else if (tk === 'live') {
-      const nLive = data.length;
-      const nIssues = data.filter(r => {
-        const ss = r.storeStatuses || {};
-        return Object.values(ss).some(v => v === 'error' || v === 'pending');
-      }).length;
-      text = `${nLive} release${nLive !== 1 ? 's' : ''} live` + (nIssues > 0 ? ` · ${nIssues} with delivery issues` : '');
-    } else if (tk === 'in-review') {
-      const nUnder = data.filter(r => r.status === 'under-review').length;
-      const nReady = data.filter(r => r.status === 'ready-for-release').length;
-      const parts = [];
-      if (nUnder) parts.push(`${nUnder} under review`);
-      if (nReady) parts.push(`${nReady} approved & sent`);
-      text = parts.join(' · ');
-    } else if (tk === 'need-action') {
-      const n = data.length;
-      text = `${n} release${n !== 1 ? 's' : ''} require your attention`;
-    } else if (tk === 'draft') {
-      const n = data.length;
-      text = `${n} draft${n !== 1 ? 's' : ''} in progress`;
-    } else if (tk === 'taken-down') {
-      const n = data.length;
-      text = `${n} release${n !== 1 ? 's' : ''} taken down`;
-    } else if (tk === 'watchlist') {
-      const n = data.length;
-      text = `${n} release${n !== 1 ? 's' : ''} in watchlist`;
-    }
-    summaryEl.textContent = text;
-  }
-
   // Pagination
   const pagEl = document.getElementById('pagination');
   if (!pagEl) return;
@@ -4092,7 +4092,7 @@ function renderTable() {
   if (currentPage > totalPages) currentPage = totalPages;
   const pageData = data.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-  renderTabHeaders(cols);
+  renderTabHeaders(cols, data.length);
   renderTabContextBar(data);
   refreshPills();
   renderTableFooter(data, totalPages);
@@ -4182,16 +4182,22 @@ function toggleExpand(id) {
 }
 
 // ─── Copy ISRC ────────────────────────────────────────────────────────────
+function copyUPCFull(td, upc) {
+  navigator.clipboard.writeText(upc).then(() => {
+    const icon = td.querySelector('.upc-copy-icon .material-icons');
+    const val  = td.querySelector('.upc-value');
+    if (icon) { icon.textContent = 'check'; icon.style.color = '#16a34a'; }
+    if (val)  { val.style.color = '#16a34a'; }
+    setTimeout(() => {
+      if (icon) { icon.textContent = 'content_copy'; icon.style.color = ''; }
+      if (val)  { val.style.color = ''; }
+    }, 1500);
+  });
+}
 function copyUPC(btn) {
   navigator.clipboard.writeText(btn.dataset.upc).then(() => {
     btn.textContent = 'Copied ✓';
-    btn.style.color = 'var(--color-success, #16A34A)';
-    btn.style.borderColor = 'var(--color-success, #16A34A)';
-    setTimeout(() => {
-      btn.textContent = 'Copy';
-      btn.style.color = '';
-      btn.style.borderColor = '';
-    }, 1500);
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
   });
 }
 
@@ -4637,17 +4643,50 @@ function selectFbAccount(btn, name) {
 const watchlist = new Set();
 let watchlistFilterActive = false;
 
+let _snackbarTimer = null;
+let _snackbarUndo = null;
+
+function showSnackbar(msg, undoFn) {
+  clearTimeout(_snackbarTimer);
+  _snackbarUndo = undoFn;
+  const sb = document.getElementById('snackbar');
+  document.getElementById('snackbar-msg').textContent = msg;
+  sb.classList.add('visible');
+  _snackbarTimer = setTimeout(() => {
+    sb.classList.remove('visible');
+    _snackbarUndo = null;
+  }, 4000);
+}
+
+function snackbarUndo() {
+  clearTimeout(_snackbarTimer);
+  document.getElementById('snackbar').classList.remove('visible');
+  if (_snackbarUndo) { _snackbarUndo(); _snackbarUndo = null; }
+}
+
 function toggleWatchlist(id, btn) {
   if (watchlist.has(id)) {
     watchlist.delete(id);
     btn.classList.remove('starred');
     btn.querySelector('svg').setAttribute('fill', 'none');
     btn.title = 'Add to watchlist';
+    showSnackbar('Removed from watchlist', () => {
+      watchlist.add(id);
+      const b = document.querySelector(`.star-btn[data-id="${id}"]`);
+      if (b) { b.classList.add('starred'); b.querySelector('svg').setAttribute('fill', 'currentColor'); b.title = 'Remove from watchlist'; }
+      if (activeFilter === 'watchlist') renderTable();
+    });
   } else {
     watchlist.add(id);
     btn.classList.add('starred');
     btn.querySelector('svg').setAttribute('fill', 'currentColor');
     btn.title = 'Remove from watchlist';
+    showSnackbar('Added to watchlist', () => {
+      watchlist.delete(id);
+      const b = document.querySelector(`.star-btn[data-id="${id}"]`);
+      if (b) { b.classList.remove('starred'); b.querySelector('svg').setAttribute('fill', 'none'); b.title = 'Add to watchlist'; }
+      if (activeFilter === 'watchlist') renderTable();
+    });
   }
   if (activeFilter === 'watchlist') renderTable();
 }
@@ -5464,6 +5503,12 @@ renderTable();
   });
 })();
 </script>
+
+<!-- Snackbar -->
+<div id="snackbar">
+  <span id="snackbar-msg"></span>
+  <button id="snackbar-undo" onclick="snackbarUndo()">Undo</button>
+</div>
 
 <!-- Fix Issues Dialog -->
 <div class="modal-overlay hidden" id="fixIssuesOverlay" onclick="closeFixIssuesDialog()"></div>
