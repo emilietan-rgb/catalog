@@ -3479,7 +3479,7 @@ releases.forEach((r, i) => { r.coverImg = coverUrls[i]; });
   }
   const reasons = ['ISRC mismatch', 'Missing metadata', 'Audio quality', 'Artwork rejected'];
   const storePool = ['Spotify', 'Apple Music', 'Deezer', 'Amazon Music', 'YouTube Music', 'Tidal'];
-  const deliveryPool = [['Digital'], ['Digital'], ['Digital', 'Video'], ['Digital'], ['Digital', 'Physical']];
+  const deliveryPool = [['digital'], ['digital'], ['digital', 'video'], ['digital'], ['digital']];
   releases.forEach((r, i) => {
     r.deliveryTypes      = deliveryPool[i % deliveryPool.length];
     r.lastModified       = daysAgo((i * 3) % 30 + 1);
@@ -3814,7 +3814,7 @@ const columnDefs = {
       return `<td class="release-col-cell"><div class="release-cell">
       <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy" style="${r.status === 'unsellable' ? 'opacity:0.3' : ''}">
       <div class="release-info">
-        <span style="display:inline-flex;align-items:center;gap:6px"><span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>${statusChip(r.status)}</span>
+        <span style="display:inline-flex;align-items:center;gap:6px"><span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>${r.status === 'delivered' ? '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:live-pulse-sm 2s ease-in-out infinite"></span>' : r.status === 'draft' ? '<span class="material-icons" style="font-size:13px;color:#9ca3af;flex-shrink:0">edit</span>' : ''}</span>
         <span class="release-meta">
           <span class="release-tracks">${trackLabel}</span>
           <span class="release-meta-dot">·</span>
