@@ -1405,7 +1405,7 @@ tbody tr.expanded td.release-col-cell { background: var(--bg-secondary); }
 }
 .chevron-btn:hover { color: var(--text-primary); background: var(--neutral-40); }
 .chevron-btn.open { transform: rotate(90deg); color: var(--text-primary); }
-.row-expand-cell { width: 40px; text-align: center; padding: 0 4px; }
+.row-expand-cell { width: 40px; text-align: center; padding: 0 4px; white-space: nowrap; }
 .row-expand-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px;
@@ -4005,7 +4005,7 @@ function renderTabHeaders(cols, count) {
   });
   const noActions = new Set(['in-review', 'taken-down', 'all', 'live', 'watchlist']);
   ths.unshift(`<th style="padding:0 4px;width:32px;min-width:32px"></th>`);
-  ths.push(noActions.has(getTabKey()) ? `<th></th>` : `<th class="col-actions">Actions</th>`);
+  ths.push(noActions.has(getTabKey()) ? `<th></th>` : `<th class="col-actions"></th>`);
   ths.push(`<th class="col-chevron"></th>`);
   thead.innerHTML = `<tr>${ths.join('')}</tr>`;
 }
@@ -4025,7 +4025,7 @@ function rowCtaCell(r) {
   let action = '';
   if (tk === 'draft') {
     const pct = completenessValue(r);
-    if (pct === 100) action = `<button onclick="event.stopPropagation();openSubmitConfirm(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;white-space:nowrap;font-family:var(--font)">Submit</button>`;
+    if (pct === 100) action = `<button onclick="event.stopPropagation();openSubmitConfirm(${r.id})" data-si-tooltip="Submit for review" data-si-tooltip-pos="left" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:none;border:none;border-radius:6px;cursor:pointer;color:#747884;transition:background 0.12s,color 0.12s" onmouseover="this.style.background='#f3f4f8';this.style.color='#0f1012'" onmouseout="this.style.background='none';this.style.color='#747884'"><span class="material-icons" style="font-size:18px">send</span></button>`;
   } else if (tk === 'in-review' || tk === 'taken-down' || tk === 'all' || tk === 'live' || tk === 'watchlist') {
     return `<td></td>`;
   } else if (tk === 'live') {
@@ -4171,8 +4171,11 @@ function renderTable() {
       return html.replace(/^<td/, '<td class="col-data"');
     }).join('');
     const expandable = new Set(['all', 'live', 'watchlist', 'draft', 'in-review']);
+    const editBtn = r.status === 'need-action'
+      ? `<button data-si-tooltip="Fix issues" data-si-tooltip-pos="left" onclick="event.stopPropagation();openReleasePage(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:none;border:none;border-radius:6px;cursor:pointer;color:#747884;transition:background 0.12s,color 0.12s" onmouseover="this.style.background='#f3f4f8';this.style.color='#0f1012'" onmouseout="this.style.background='none';this.style.color='#747884'"><span class="material-icons" style="font-size:18px">edit</span></button>`
+      : '';
     const expandCell = expandable.has(tk)
-      ? `<td class="row-expand-cell"><button class="row-expand-btn${isExpanded ? ' expanded' : ''}" aria-label="Expand tracks" aria-expanded="${isExpanded}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></td>`
+      ? `<td class="row-expand-cell">${editBtn}<button class="row-expand-btn${isExpanded ? ' expanded' : ''}" aria-label="Expand tracks" aria-expanded="${isExpanded}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></td>`
       : `<td class="row-expand-cell"></td>`;
     tr.innerHTML = rowStarCell(r) + cellsHTML + rowCtaCell(r) + expandCell;
     tr.addEventListener('click', () => openReleasePage(r.id));
@@ -5552,16 +5555,33 @@ renderTable();
 (function() {
   const tip = document.getElementById('si-tooltip');
   let timer = null;
+  let anchorEl = null;
   document.addEventListener('mouseover', e => {
     const el = e.target.closest('[data-si-tooltip]');
     if (!el) return;
+    anchorEl = el.dataset.siTooltipPos ? el : null;
     clearTimeout(timer);
     timer = setTimeout(() => {
       tip.textContent = el.dataset.siTooltip;
+      if (anchorEl) {
+        const r = anchorEl.getBoundingClientRect();
+        if (anchorEl.dataset.siTooltipPos === 'left') {
+          tip.style.visibility = 'hidden';
+          tip.style.opacity = '1';
+          const w = tip.offsetWidth;
+          tip.style.visibility = '';
+          tip.style.left = (r.left - w - 8) + 'px';
+          tip.style.top  = (r.top + r.height / 2 - 12) + 'px';
+        } else {
+          tip.style.left = (r.right + 8) + 'px';
+          tip.style.top  = (r.top + r.height / 2 - 12) + 'px';
+        }
+      }
       tip.style.opacity = '1';
     }, 1000);
   });
   document.addEventListener('mousemove', e => {
+    if (anchorEl) return;
     if (tip.style.opacity === '1' || timer) {
       tip.style.left = (e.clientX + 12) + 'px';
       tip.style.top  = (e.clientY + 12) + 'px';
@@ -5572,6 +5592,7 @@ renderTable();
     if (!el) return;
     clearTimeout(timer);
     timer = null;
+    anchorEl = null;
     tip.style.opacity = '0';
   });
 })();
