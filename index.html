@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Releases — Believe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ─── Harmony DS Tokens ──────────────────────────────────────────────────── */
@@ -369,29 +369,38 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
 /* ─── Need-action Alert Banner ───────────────────────────────────────────── */
 #need-action-alert {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: #FEF3EE;
-  border: 1px solid #FDDCCC;
+  align-items: center;
+  gap: 16px;
+  background: #ffecef;
+  border: 1px solid #ffd9de;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   margin-bottom: 16px;
   width: 100%;
   box-sizing: border-box;
 }
 #need-action-alert.hidden { display: none; }
-.callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.callout-body { flex: 1; min-width: 0; }
-.callout-title { font-size: 14px; font-weight: var(--fw-semibold); color: var(--text-primary); margin-bottom: 4px; }
-.callout-description { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-.callout-link { color: var(--accent-60); font-weight: var(--fw-medium); text-decoration: none; margin-left: 8px; }
-.callout-link:hover { text-decoration: underline; }
-.alert-dismiss {
-  flex-shrink: 0; background: none; border: none; cursor: pointer;
-  font-size: 14px; color: var(--text-secondary); padding: 0;
-  line-height: 1; align-self: flex-start; transition: color 0.1s;
+.callout-entity { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.callout-cover { width: 48px; height: 48px; min-width: 48px; border-radius: 8px; background: #ffd9de; display: flex; align-items: center; justify-content: center; }
+.callout-cover .material-icons { font-size: 22px; color: #e63a52; }
+.callout-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 4px 0; }
+.callout-title { font-size: 14px; font-weight: 500; color: #0f1012; line-height: 18px; }
+.callout-description { font-size: 14px; font-weight: 400; color: #747884; line-height: 18px; }
+.callout-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.callout-view-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 32px; min-width: 64px; padding: 0 8px;
+  background: #ffd9de; border: none; border-radius: 6px;
+  font-family: var(--font); font-size: 14px; font-weight: 500; color: #e63a52;
+  cursor: pointer; white-space: nowrap; transition: background 0.12s;
 }
-.alert-dismiss:hover { color: var(--text-primary); }
+.callout-view-btn:hover { background: #ffc8cf; }
+.callout-close-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; background: none; border: none; border-radius: 6px;
+  cursor: pointer; color: #747884; transition: background 0.12s;
+}
+.callout-close-btn:hover { background: #ffd9de; }
 .need-action-badge {
   display: inline-flex; align-items: center; justify-content: center;
   background: #F59E0B; color: #fff;
@@ -1122,7 +1131,8 @@ body { font-family: var(--font); font-size: 14px; color: var(--text-primary); ba
   color: #27282c;
   font-weight: 500;
 }
-.pill-count { font-weight: 500; color: inherit; }
+.pill-count { font-size: 12px; font-weight: 400; color: #9ca3af; margin-left: 2px; }
+.pill-alert-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF3E5C; position: absolute; top: 4px; right: 4px; pointer-events: none; }
 
 /* ─── Table Card ─────────────────────────────────────────────────────────── */
 .table-card {
@@ -2079,6 +2089,16 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
 }
 .filter-bar-actions .view-toggle:hover { border-color: #3a3c42; color: #27282c; }
 .filter-bar-actions .view-toggle.active { border-color: #3a3c42; color: #27282c; }
+#btn-watchlist-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 32px; padding: 0 10px;
+  background: #f9fafc; border: 1px solid #ebeff5; border-radius: 6px;
+  font-size: 13px; font-weight: 500; color: #3a3c42;
+  cursor: pointer; transition: border-color 0.1s, color 0.1s;
+  white-space: nowrap; font-family: var(--font);
+}
+#btn-watchlist-toggle:hover { border-color: #3a3c42; color: #27282c; }
+#btn-watchlist-toggle.active { border-color: #3a3c42; color: #27282c; }
 
 /* ─── Filter Dropdowns ───────────────────────────────────────────────────── */
 .fb-dropdown {
@@ -2444,15 +2464,21 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
 
     <!-- Need-action Alert Banner -->
     <div id="need-action-alert">
-      <div class="callout-icon">⚠️</div>
-      <div class="callout-body">
-        <div class="callout-title">Releases requiring your attention</div>
-        <div class="callout-description">
-          <span id="need-action-count"></span> <span id="need-action-text"></span>
-          <a href="#" id="need-action-cta" class="callout-link" onclick="document.querySelector('.pill[data-status=\'need-action\']').click();return false;">View all →</a>
+      <div class="callout-entity">
+        <div class="callout-cover">
+          <span class="material-icons">error</span>
+        </div>
+        <div class="callout-body">
+          <div class="callout-title">Action required</div>
+          <div class="callout-description"><span id="need-action-count"></span> <span id="need-action-text"></span></div>
         </div>
       </div>
-      <button class="alert-dismiss" aria-label="Dismiss" onclick="document.getElementById('need-action-alert').style.display='none'">✕</button>
+      <div class="callout-actions">
+        <button class="callout-view-btn" onclick="document.querySelector('.pill[data-status=\'in-review\']').click()">View</button>
+        <button class="callout-close-btn" aria-label="Dismiss" onclick="document.getElementById('need-action-alert').style.display='none'">
+          <span class="material-icons" style="font-size:18px">close</span>
+        </button>
+      </div>
     </div>
 
     <!-- Controls Bar -->
@@ -2519,6 +2545,7 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
       </div>
 
       <div class="filter-bar-actions">
+        <button id="btn-watchlist-toggle" onclick="toggleWatchlistTab()" title="Watchlist" style="margin-right:12px"><svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><polygon points="9,2.25 11.47,7.28 17,8.09 13,11.97 13.94,17.48 9,14.87 4.06,17.48 5,11.97 1,8.09 6.53,7.28"/></svg>Watchlist<span id="watchlist-btn-count" style="display:none;background:#0f1012;color:#fff;font-size:10px;font-weight:600;border-radius:99px;padding:1px 5px;margin-left:2px;line-height:14px"></span></button>
         <button class="view-toggle active" id="view-list" onclick="setView('list')" title="List view"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h12M3 9h12M3 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
         <button class="view-toggle" id="view-grid" onclick="setView('grid')" title="Grid view"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="3" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="10" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg></button>
       </div>
@@ -2529,11 +2556,9 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
       <div class="status-pills" id="statusPills">
         <button class="pill active" data-status="all">All</button>
         <button class="pill" data-status="draft">Draft</button>
-        <button class="pill" data-status="in-review">Upcoming</button>
+        <button class="pill" data-status="in-review" style="position:relative">Ongoing</button>
         <button class="pill" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
-        <button class="pill" data-status="need-action">Need action <span class="need-action-badge hidden" id="needActionBadge"></span></button>
-        <button class="pill" data-status="unsellable">Taken down</button>
-        <button class="pill" data-status="watchlist">☆ Watchlist</button>
+        <button class="pill" data-status="unsellable">Takedown</button>
       </div>
     </div>
 
@@ -3479,9 +3504,13 @@ releases.forEach((r, i) => { r.coverImg = coverUrls[i]; });
   }
   const reasons = ['ISRC mismatch', 'Missing metadata', 'Audio quality', 'Artwork rejected'];
   const storePool = ['Spotify', 'Apple Music', 'Deezer', 'Amazon Music', 'YouTube Music', 'Tidal'];
+  const distPool = ['DIGITAL', 'DIGITAL', 'DIGITAL', 'DIGITAL · VIDEO', 'DIGITAL', 'DIGITAL', 'DIGITAL · VIDEO', 'DIGITAL · MUSIC VIDEO', 'DIGITAL', 'DIGITAL · VIDEO', 'DIGITAL', 'DIGITAL', 'DIGITAL · MUSIC VIDEO', 'DIGITAL', 'DIGITAL', 'DIGITAL · VIDEO', 'DIGITAL', 'DIGITAL', 'DIGITAL', 'DIGITAL'];
   const deliveryPool = [['digital'], ['digital'], ['digital', 'video'], ['digital'], ['digital']];
   releases.forEach((r, i) => {
     r.deliveryTypes      = deliveryPool[i % deliveryPool.length];
+    r.distLabel          = distPool[i % distPool.length];
+    if (r.id === 16) r.distIcon = 'notifications_active';
+    if (r.id === 2) r.extraChip = '<span class="chip chip-neutral">Physical</span>';
     r.lastModified       = daysAgo((i * 3) % 30 + 1);
     r.submissionDate     = daysAgo((i * 7 + 3) % 60 + 1);
     r.hasPartialTakedown = (i % 5 === 0);
@@ -3603,6 +3632,14 @@ const DIST_TERRITORIES = [
 
 // ─── State ────────────────────────────────────────────────────────────────
 let activeFilter = "all";
+let sortCol = 'status';
+let sortDir = 1;   // 1 = asc, -1 = desc
+
+function toggleStatusSort() {
+  if (sortCol === 'status') { sortDir *= -1; }
+  else { sortCol = 'status'; sortDir = 1; }
+  renderTable();
+}
 let expandedRows = new Set();
 let openPanelId = null;
 let currentPage = 1;
@@ -3621,11 +3658,11 @@ function statusChip(status) {
     "under-review":   ["chip-purple",   "Under review"],
     "ready-for-release": ["chip-purple", "Ready for release"],
     "delivered":      ["chip-green",    "Live"],
-    "need-action":    ["chip-red",      "Need action"],
+    "need-action":    ["chip-red",      "Action required"],
     "unsellable":     ["chip-neutral",  "Taken down"],
   };
   if (status === 'delivered') {
-    return `<span data-si-tooltip="Live" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:live-pulse-sm 2s ease-in-out infinite;cursor:default"></span>`;
+    return `<span class="chip chip-green">Live</span>`;
   }
   const [cls, label, tooltip] = map[status] || ["chip-neutral", status];
   const icon = status === 'need-action'
@@ -3699,14 +3736,13 @@ function platformsCell(p, status) {
   let logosHtml = '';
   if (total === 1) {
     // Unique scope: single logo + name + "only"
-    logosHtml = `${logoTag(logos[0])}<span class="store-only-label">${logos[0].name} only</span>`;
+    logosHtml = p.hideOnlyLabel ? logoTag(logos[0]) : `${logoTag(logos[0])}<span class="store-only-label">${logos[0].name} only</span>`;
   } else if (total <= 4) {
     // Selective scope: show all logos, no counter
     logosHtml = logos.map(logoTag).join('');
   } else {
     // Global scope: show max 4 + "+N stores"
-    logosHtml = logos.slice(0, 4).map(logoTag).join('') +
-      `<span class="store-logos-more">+${total - 4} stores</span>`;
+    logosHtml = logos.slice(0, 4).map(logoTag).join('');
   }
 
   const topStoreIssues = logos.filter(s => TOP_STORES.includes(s.name) && (() => { const st = overrides[s.name] || 'live'; return st === 'pending' || st === 'error'; })()).length;
@@ -3770,7 +3806,7 @@ function statusIcon(status) {
     'under-review':      'Under review',
     'ready-for-release': 'Ready for release',
     'delivered':         'Live',
-    'need-action':       'Need action',
+    'need-action':       'Action required',
     'unsellable':        'Taken down',
   };
   const tooltip = labels[status] || status;
@@ -3796,13 +3832,13 @@ const territoriesMap = {
 const _sortIcon = `<svg class="sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3-3 3 3M9 7.5l-3 3-3-3"/></svg>`;
 
 const tabColumnsConfig = {
-  all:           ['release', 'upc', 'label', 'releaseDate', 'territories'],
+  all:           ['release', 'upc', 'label', 'releaseDate', 'territories', 'status'],
   draft:         ['release', 'label', 'releaseDate', 'territories', 'completeness'],
-  'in-review':   ['release', 'upc', 'label', 'releaseDate', 'submissionDate', 'territories'],
+  'in-review':   ['release', 'upc', 'label', 'releaseDate', 'status', 'submissionDate'],
   live:          ['release', 'upc', 'label', 'releaseDate', 'territories', 'platforms'],
   'need-action': ['release', 'upc', 'label', 'releaseDate', 'reason', 'territories'],
-  'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType', 'storesAffected', 'territories'],
-  watchlist:     ['release', 'upc', 'label', 'releaseDate', 'platforms', 'territories'],
+  'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType'],
+  watchlist:     ['release', 'upc', 'label', 'releaseDate', 'territories', 'status'],
 };
 
 const columnDefs = {
@@ -3814,9 +3850,9 @@ const columnDefs = {
       return `<td class="release-col-cell"><div class="release-cell">
       <img class="release-cover-img" src="${r.coverImg}" alt="${r.title}" loading="lazy" style="${r.status === 'unsellable' ? 'opacity:0.3' : ''}">
       <div class="release-info">
-        <span style="display:inline-flex;align-items:center;gap:6px"><span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>${r.status === 'delivered' ? '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:live-pulse-sm 2s ease-in-out infinite"></span>' : r.status === 'draft' ? '<span class="material-icons" style="font-size:13px;color:#9ca3af;flex-shrink:0">edit</span>' : ''}</span>
+        <span style="display:inline-flex;align-items:center;gap:6px"><span class="release-title-link" onclick="event.stopPropagation();openReleasePage(${r.id})">${r.title}</span>${r.extraChip || ''}</span>
         <span class="release-meta">
-          <span class="release-tracks">${trackLabel}</span>
+          ${r.distLabel && r.distLabel.includes('VIDEO') ? `<span class="material-icons" data-si-tooltip="${r.distIcon ? 'Ringtone' : 'Youtube video'}" style="font-size:13px;color:#9ca3af;flex-shrink:0;vertical-align:middle;cursor:default">${r.distIcon || 'videocam'}</span>` : ''}<span class="release-tracks">${trackLabel}</span>
           <span class="release-meta-dot">·</span>
           <span class="release-artist-link" onclick="event.stopPropagation()">${r.artist}</span>
         </span>
@@ -3850,29 +3886,35 @@ const columnDefs = {
     }
   },
   label: {
-    header: () => 'Label/Distribution',
-    cell: r => {
-      const deliveryTypes = r.deliveryTypes || ['DIGITAL'];
-      const delivery = deliveryTypes.join(' • ');
-      return `<td><div style="line-height:1">${r.label}<span style="display:block;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.04em;margin-top:3px">${delivery}</span></div></td>`;
-    }
+    header: () => 'Label',
+    cell: r => `<td>${r.label}</td>`
   },
   territories: {
-    header: () => 'Territories',
-    cell: r => `<td>${territoriesMap[r.id] ?? '—'}</td>`
+    header: () => 'Deliveries',
+    cell: r => {
+      const n = territoriesMap[r.id];
+      const p = r.platforms;
+      const storesLine = r.id === 2 ? `<span style="display:block;font-size:11px;color:#9ca3af;margin-top:2px">—</span>` : p && p.count > 0 ? `<span style="display:block;font-size:11px;color:#9ca3af;margin-top:2px">${p.count}/${p.total} stores</span>` : '';
+      return `<td><div style="line-height:1">${n != null ? `${n} territories` : '—'}${storesLine}</div></td>`;
+    }
   },
   platforms: {
-    header: () => 'Platforms',
-    cell: r => `<td>${platformsCell({ ...r.platforms, storeStatuses: r.storeStatuses, releaseStores: r.releaseStores, totalStores: r.totalStores }, r.status)}</td>`
+    header: () => 'Top Links',
+    cell: r => `<td>${platformsCell({ ...r.platforms, storeStatuses: r.storeStatuses, releaseStores: r.releaseStores, totalStores: r.totalStores, hideOnlyLabel: r.id === 19 }, r.status)}</td>`
   },
   status: {
-    header: () => `Status`,
+    header: () => {
+      if (getTabKey() !== 'in-review') return 'Status';
+      const arrow = sortCol === 'status' ? (sortDir === 1 ? ' ↑' : ' ↓') : ' ↕';
+      return `<span onclick="toggleStatusSort()" style="cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:2px">Status<span style="font-size:10px;color:#9ca3af">${arrow}</span></span>`;
+    },
     cell: r => {
       if (r.status === 'delivered') {
         const releaseDate = new Date(r.date);
         const today = new Date('2026-04-11');
         const sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate() - 7);
-        if (releaseDate >= sevenDaysAgo && releaseDate <= today) {
+        const noPulse = new Set([14, 15, 16]);
+        if (releaseDate >= sevenDaysAgo && releaseDate <= today && !noPulse.has(r.id)) {
           return `<td><div class="live-recent-wrapper"><span class="live-pulse-dot"></span>${statusChip(r.status)}</div></td>`;
         }
       }
@@ -3901,8 +3943,10 @@ const columnDefs = {
     }
   },
   submissionDate: {
-    header: () => `Submitted`,
-    cell: r => `<td class="date-cell">${formatDate(r.submissionDate)}</td>`
+    header: () => `Context`,
+    cell: r => r.status === 'need-action' && r.reason
+      ? `<td class="date-cell">${r.reason}</td>`
+      : `<td class="date-cell"><span style="color:#9ca3af;margin-right:4px">Sent</span>${formatDate(r.submissionDate)}</td>`
   },
   reason: {
     header: () => 'Reason',
@@ -3925,7 +3969,7 @@ const columnDefs = {
     }
   },
   takedownDate: {
-    header: () => `Taken down`,
+    header: () => `Takedown`,
     cell: r => `<td class="date-cell">${formatDate(r.takedownDate)}</td>`
   },
   storesAffected: {
@@ -3956,12 +4000,10 @@ function renderTabHeaders(cols, count) {
     const def = columnDefs[k];
     if (!def) return '';
     const cls = k === 'release' ? ' class="col-release"' : ' class="col-data"';
-    const label = k === 'release'
-      ? `Release <span style="color:#b0b5bf;font-weight:400">· ${count}</span>`
-      : def.header();
+    const label = def.header();
     return `<th${cls}><div class="th-inner">${label}</div></th>`;
   });
-  const noActions = new Set(['in-review', 'taken-down']);
+  const noActions = new Set(['in-review', 'taken-down', 'all', 'live', 'watchlist']);
   ths.unshift(`<th style="padding:0 4px;width:32px;min-width:32px"></th>`);
   ths.push(noActions.has(getTabKey()) ? `<th></th>` : `<th class="col-actions">Actions</th>`);
   ths.push(`<th class="col-chevron"></th>`);
@@ -3984,7 +4026,7 @@ function rowCtaCell(r) {
   if (tk === 'draft') {
     const pct = completenessValue(r);
     if (pct === 100) action = `<button onclick="event.stopPropagation();openSubmitConfirm(${r.id})" style="display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 12px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;font-size:14px;font-weight:500;color:#0f1012;cursor:pointer;white-space:nowrap;font-family:var(--font)">Submit</button>`;
-  } else if (tk === 'in-review' || tk === 'taken-down') {
+  } else if (tk === 'in-review' || tk === 'taken-down' || tk === 'all' || tk === 'live' || tk === 'watchlist') {
     return `<td></td>`;
   } else if (tk === 'live') {
   } else if (tk === 'need-action') {
@@ -4007,11 +4049,11 @@ function getFilteredReleases(statusOverride) {
   const q      = (getSearchQuery?.() || document.getElementById('main-search')?.value || '').toLowerCase();
   const labelQ = (document.getElementById('fb-label-input')?.value || '').toLowerCase();
   const now = new Date();
-  return releases.filter(r => {
+  const filtered = releases.filter(r => {
     // Status filter (tab)
     const matchStatus = tab === 'all'
       || r.status === tab
-      || (tab === 'in-review' && processingGroup.has(r.status))
+      || (tab === 'in-review' && (processingGroup.has(r.status) || r.status === 'need-action'))
       || (tab === 'watchlist' && watchlist.has(r.id));
     // Search
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
@@ -4051,6 +4093,11 @@ function getFilteredReleases(statusOverride) {
     }
     return matchStatus && matchSearch && matchLabel && matchDate && matchArtist;
   });
+  if (tab === 'in-review') {
+    const order = ['need-action', 'ready-for-release', 'under-review', 'draft', 'delivered', 'unsellable'];
+    filtered.sort((a, b) => (order.indexOf(a.status) - order.indexOf(b.status)) * sortDir);
+  }
+  return filtered;
 }
 
 function filtersActive() {
@@ -4151,13 +4198,13 @@ function renderTable() {
                 const noDialog = new Set(['under-review','approved-by-believe','sent-to-platforms','unsellable','need-action']).has(r.status);
                 return `<tr style="cursor:pointer" onclick="event.stopPropagation();openPanelAndPlay(${r.id},${t.num})">
                   <td class="track-num">${t.num}</td>
-                  <td style="font-weight:500">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</td>
+                  <td style="font-weight:500">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Archived</span>` : ''}</td>
                   <td style="color:var(--text-secondary)">${t.artists}</td>
                   <td><div class="isrc-wrap">
                     <span class="mono isrc-text" ${t.isrc && !noDialog ? `onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
                     ${t.isrc ? `<button class="copy-btn" onclick="event.stopPropagation();copyISRC('${t.isrc}',this)">copy</button>` : ''}
                     ${t.isrc && (isrcReleaseCount[t.isrc] > 1) && !noDialog ? `<span class="isrc-shared-chip" onclick="event.stopPropagation();openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : t.isrc && (isrcReleaseCount[t.isrc] > 1) ? `<span class="isrc-shared-chip">Shared</span>` : ''}
-                    ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}
+                    ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Archived</span>` : ''}
                   </div></td>
                 </tr>`;
               }).join('')}
@@ -4340,27 +4387,27 @@ function executeTakedown() {
 }
 
 function refreshPills() {
-  const labels = { all: 'All', draft: 'Draft', 'in-review': 'Upcoming', delivered: 'Live', 'need-action': 'Need action', unsellable: 'Taken down' };
-  const showCounts = filtersActive();
+  const labels = { all: 'All', draft: 'Draft', 'in-review': 'Ongoing', delivered: 'Live', 'need-action': 'Action required', unsellable: 'Takedown' };
   document.querySelectorAll('#statusPills .pill').forEach(pill => {
     const s = pill.dataset.status;
     if (s === 'watchlist') {
       const baseLabel = activeFilter === 'watchlist' ? '★ Watchlist' : '☆ Watchlist';
-      if (showCounts) {
-        const n = getFilteredReleases('watchlist').length;
-        pill.innerHTML = `${baseLabel} <span class="pill-count">${n}</span>`;
-      } else {
-        pill.innerHTML = baseLabel;
-      }
+      const n = getFilteredReleases('watchlist').length;
+      pill.innerHTML = `${baseLabel} <span class="pill-count">${n}</span>`;
+    } else if (s === 'in-review') {
+      const n = getFilteredReleases('in-review').length;
+      pill.innerHTML = `Ongoing <span class="pill-count">${n}</span><span id="ongoing-alert-dot" class="pill-alert-dot" style="display:none"></span>`;
     } else if (labels[s]) {
-      if (showCounts) {
-        const n = getFilteredReleases(s).length;
-        pill.innerHTML = `${labels[s]} <span class="pill-count">${n}</span>`;
-      } else {
-        pill.textContent = labels[s];
-      }
+      const n = getFilteredReleases(s).length;
+      pill.innerHTML = `${labels[s]} <span class="pill-count">${n}</span>`;
     }
   });
+  // Drive the Action required badge on the Ongoing tab
+  const dot = document.getElementById('ongoing-alert-dot');
+  if (dot) {
+    const actionCount = releases.filter(r => r.status === 'need-action').length;
+    dot.style.display = actionCount > 0 ? 'block' : 'none';
+  }
 }
 
 // ─── Distribution Tab ─────────────────────────────────────────────────────
@@ -4570,6 +4617,8 @@ document.getElementById('statusPills').addEventListener('click', e => {
   const pill = e.target.closest('.pill');
   if (!pill) return;
   activeFilter = pill.dataset.status;
+  if (activeFilter === 'in-review') { sortCol = 'status'; sortDir = 1; }
+  else { sortCol = null; sortDir = 1; }
   currentPage = 1;
   document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   pill.classList.add('active');
@@ -4689,6 +4738,32 @@ function toggleWatchlist(id, btn) {
     });
   }
   if (activeFilter === 'watchlist') renderTable();
+  updateWatchlistBtnCount();
+}
+
+function updateWatchlistBtnCount() {
+  const badge = document.getElementById('watchlist-btn-count');
+  if (!badge) return;
+  const n = watchlist.size;
+  if (n > 0) { badge.textContent = n; badge.style.display = 'inline'; }
+  else { badge.style.display = 'none'; }
+}
+
+function toggleWatchlistTab() {
+  const btn = document.getElementById('btn-watchlist-toggle');
+  if (activeFilter === 'watchlist') {
+    activeFilter = 'draft';
+    currentPage = 1;
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    document.querySelector('.pill[data-status="draft"]')?.classList.add('active');
+    if (btn) btn.classList.remove('active');
+  } else {
+    activeFilter = 'watchlist';
+    currentPage = 1;
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
+  renderTable();
 }
 
 function toggleWatchlistFilter() {
@@ -5102,14 +5177,14 @@ function renderRpTab(tab) {
         </button>
         <span class="rp-track-num">${t.num}</span>
         <div class="rp-track-info">
-          <span class="rp-track-title">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}</span>
+          <span class="rp-track-title">${t.title}${t.takenDown ? ` <span class="chip chip-red" style="font-size:10px;padding:1px 6px">Archived</span>` : ''}</span>
           <span class="rp-track-artist">${t.artists}</span>
         </div>
         <div class="isrc-wrap">
           <span class="mono isrc-text"${t.isrc && !noDialog ? ` onclick="openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})"` : ''}>${t.isrc || '—'}</span>
           ${t.isrc ? `<button class="copy-btn" onclick="copyISRC('${t.isrc}',this)">copy</button>` : ''}
           ${isrcShared && !noDialog ? `<span class="isrc-shared-chip" onclick="openTrackModal('${t.isrc}','${safeTitle}','${safeArtists}',${r.id})">Shared</span>` : isrcShared ? `<span class="isrc-shared-chip">Shared</span>` : ''}
-          ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Taken down</span>` : ''}
+          ${r.status === 'unsellable' ? `<span class="chip chip-red" style="font-size:10px;padding:1px 6px">Archived</span>` : ''}
         </div>
       </div>`;
     }).join('');
@@ -5355,20 +5430,17 @@ function applyCustomDate() {
 function renderNeedActionAlert() {
   const count = releases.filter(r => r.status === 'need-action').length;
   const alert = document.getElementById('need-action-alert');
-  const badge = document.getElementById('needActionBadge');
+  if (!alert) return;
   if (count === 0) {
     alert.classList.add('hidden');
-    badge.classList.add('hidden');
     return;
   }
   alert.classList.remove('hidden');
-  document.getElementById('need-action-count').textContent = count;
-  document.getElementById('need-action-text').textContent = count === 1 ? 'release requires your attention' : 'releases require your attention';
-  badge.textContent = count;
-  badge.classList.remove('hidden');
+  const countEl = document.getElementById('need-action-count');
+  const textEl = document.getElementById('need-action-text');
+  if (countEl) countEl.textContent = count;
+  if (textEl) textEl.textContent = count === 1 ? 'release requires your attention' : 'releases require your attention';
 }
-renderNeedActionAlert();
-
 // ─── Account Selector ─────────────────────────────────────────────────────
 function toggleAccountDropdown() {
   const dd = document.getElementById('account-selector-dropdown');
@@ -5411,6 +5483,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── Init ─────────────────────────────────────────────────────────────────
+renderNeedActionAlert();
 renderTable();
 </script>
 <!-- Artist Modal -->
