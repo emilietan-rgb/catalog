@@ -1210,7 +1210,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
-  font-size: 13px;
+  font-size: 14px;
 }
 thead tr {
   border-bottom: 1px solid var(--divider);
@@ -1218,7 +1218,6 @@ thead tr {
 }
 th {
   padding: 10px 20px;
-  text-align: left;
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
@@ -1234,6 +1233,13 @@ th.col-release {
   z-index: 3;
   background: var(--color-background-primary, #fff);
   min-width: 240px;
+}
+th.col-actions {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary, var(--text-secondary));
 }
 .th-inner {
   display: flex;
@@ -1256,9 +1262,11 @@ tbody tr:last-child { border-bottom: none; }
 tbody tr:hover { background: var(--bg-secondary); }
 tbody tr.expanded { background: var(--bg-secondary); }
 td {
-  padding: 10px 20px;
+  padding: 8px 20px;
   vertical-align: middle;
-  color: var(--text-primary);
+  color: #27282c;
+  font-weight: 400;
+  line-height: 18px;
   white-space: nowrap;
 }
 td.release-col-cell {
@@ -1267,6 +1275,7 @@ td.release-col-cell {
   z-index: 2;
   background: var(--color-background-primary, #fff);
   min-width: 240px;
+  text-align: left;
 }
 tbody tr:hover td.release-col-cell,
 tbody tr.expanded td.release-col-cell { background: var(--bg-secondary); }
@@ -1333,26 +1342,34 @@ tbody tr.expanded td.release-col-cell { background: var(--bg-secondary); }
 }
 .chevron-btn:hover { color: var(--text-primary); background: var(--neutral-40); }
 .chevron-btn.open { transform: rotate(90deg); color: var(--text-primary); }
-.row-expand-cell { width: 32px; text-align: center; padding: 0; }
-.row-expand-btn { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-secondary); padding: 4px; border-radius: 4px; transition: transform 0.2s ease; line-height: 1; }
-.row-expand-btn.expanded { transform: rotate(90deg); }
+.row-expand-cell { width: 40px; text-align: center; padding: 0 4px; }
+.row-expand-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  background: none; border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, transform 0.15s;
+  flex-shrink: 0;
+}
+.row-expand-btn:hover { background: var(--neutral-40); color: var(--text-primary); }
+.row-expand-btn.expanded { transform: rotate(180deg); color: var(--text-primary); }
 
 /* ─── Star / Watchlist ───────────────────────────────────────────────────── */
 .star-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--sp-3xsm);
-  border-radius: var(--cr-4xsm);
-  display: flex;
-  align-items: center;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  background: none; border: none;
+  border-radius: 6px;
   color: var(--neutral-70);
-  transition: color 0.1s, background 0.1s;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
   flex-shrink: 0;
 }
-.star-btn:hover { color: var(--neutral-120); background: var(--neutral-40); }
+.star-btn:hover { background: var(--neutral-40); color: var(--neutral-120); }
 .star-btn.starred { color: var(--neutral-120); }
-.star-btn.starred:hover { color: var(--neutral-120); background: var(--neutral-40); }
+.star-btn.starred:hover { background: var(--neutral-40); }
 .watchlist-btn {
   display: inline-flex;
   align-items: center;
@@ -3713,7 +3730,7 @@ const columnDefs = {
   },
   label: {
     header: () => 'Label',
-    cell: r => `<td style="font-size:13px;color:var(--text-secondary)">${r.label}</td>`
+    cell: r => `<td>${r.label}</td>`
   },
   platforms: {
     header: () => 'Platforms',
@@ -3805,12 +3822,13 @@ function renderTabHeaders(cols) {
   const ths = cols.map(k => {
     const def = columnDefs[k];
     if (!def) return '';
-    const cls = k === 'release' ? ' class="col-release"' : '';
+    const cls = k === 'release' ? ' class="col-release"' : ' class="col-data"';
     return `<th${cls}><div class="th-inner">${def.header()}</div></th>`;
   });
-  ths.unshift(`<th></th>`);
-  ths.push(`<th></th>`);
-  ths.push(`<th></th>`);
+  const noActions = new Set(['in-review', 'taken-down']);
+  ths.unshift(`<th style="padding:0 4px;width:32px;min-width:32px"></th>`);
+  ths.push(noActions.has(getTabKey()) ? `<th></th>` : `<th class="col-actions">Actions</th>`);
+  ths.push(`<th class="col-chevron"></th>`);
   thead.innerHTML = `<tr>${ths.join('')}</tr>`;
 }
 
@@ -3835,7 +3853,7 @@ function renderTabContextBar(data) {
 
 function rowStarCell(r) {
   const isStarred = watchlist.has(r.id);
-  return `<td style="padding:0;text-align:center"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="14" height="14" viewBox="0 0 16 16" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="8,2 10.2,6.5 15,7.3 11.5,10.7 12.4,15.5 8,13.2 3.6,15.5 4.5,10.7 1,7.3 5.8,6.5"/></svg></button></td>`;
+  return `<td style="padding:0 4px;width:32px;min-width:32px;text-align:center"><button class="star-btn${isStarred ? ' starred' : ''}" data-id="${r.id}" onclick="event.stopPropagation();toggleWatchlist(${r.id}, this)" title="${isStarred ? 'Remove from watchlist' : 'Add to watchlist'}"><svg width="18" height="18" viewBox="0 0 18 18" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><polygon points="9,2.25 11.47,7.28 17,8.09 13,11.97 13.94,17.48 9,14.87 4.06,17.48 5,11.97 1,8.09 6.53,7.28"/></svg></button></td>`;
 }
 
 function rowCtaCell(r) {
@@ -3846,11 +3864,20 @@ function rowCtaCell(r) {
     action = pct === 100
       ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
       : `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
-  } else if (tk === 'in-review') {
-    action = '';
+  } else if (tk === 'in-review' || tk === 'taken-down') {
+    return `<td></td>`;
   } else if (tk === 'live') {
   } else if (tk === 'need-action') {
     action = `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
+  } else if (tk === 'all') {
+    if (r.status === 'draft') {
+      const pct = completenessValue(r);
+      action = pct === 100
+        ? `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Submit for review</button>`
+        : `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Continue editing</button>`;
+    } else if (r.status === 'need-action') {
+      action = `<button class="row-cta row-cta-primary" onclick="event.stopPropagation();openReleasePage(${r.id})">Fix now</button>`;
+    }
   }
   return `<td style="padding:4px 8px;white-space:nowrap;text-align:right">${action}</td>`;
 }
@@ -4019,10 +4046,16 @@ function renderTable() {
     if (isExpanded) tr.classList.add('expanded');
     // Taken-down manual: dim row
 
-    const cellsHTML = cols.map(k => { const def = columnDefs[k]; return def ? def.cell(r) : '<td></td>'; }).join('');
+    const cellsHTML = cols.map(k => {
+      const def = columnDefs[k];
+      if (!def) return '<td></td>';
+      const html = def.cell(r);
+      if (k === 'release') return html;
+      return html.replace(/^<td/, '<td class="col-data"');
+    }).join('');
     const expandable = new Set(['all', 'live', 'watchlist', 'draft', 'in-review']);
     const expandCell = expandable.has(tk)
-      ? `<td class="row-expand-cell"><button class="row-expand-btn${isExpanded ? ' expanded' : ''}" aria-label="Expand tracks" aria-expanded="${isExpanded}" onclick="event.stopPropagation();toggleExpand(${r.id})">›</button></td>`
+      ? `<td class="row-expand-cell"><button class="row-expand-btn${isExpanded ? ' expanded' : ''}" aria-label="Expand tracks" aria-expanded="${isExpanded}" onclick="event.stopPropagation();toggleExpand(${r.id})"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 7l4.5 4.5L13.5 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></td>`
       : `<td class="row-expand-cell"></td>`;
     tr.innerHTML = rowStarCell(r) + cellsHTML + rowCtaCell(r) + expandCell;
     tr.addEventListener('click', () => openReleasePage(r.id));
