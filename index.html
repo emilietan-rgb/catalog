@@ -2455,15 +2455,13 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
       <div class="filter-bar-left">
         <div class="filter-bar-search">
           <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-          <input type="text" id="main-search" placeholder="Search for a release, track, UPC." autocomplete="off">
+          <input type="text" id="main-search" placeholder="Search for a release, track, ID..." autocomplete="off">
           <button class="search-clear" id="search-clear" aria-label="Clear" style="display:none">✕</button>
         </div>
+<button id="bulk-import-btn" data-si-tooltip="Import" data-si-tooltip-pos="bottom" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:none;border:none;border-radius:6px;cursor:pointer;color:#747884;transition:background 0.12s,color 0.12s;flex-shrink:0" onmouseover="this.style.background='#f3f4f8';this.style.color='#0f1012'" onmouseout="this.style.background='none';this.style.color='#747884'"><span class="material-icons" style="font-size:18px">add</span></button>
 
         <div class="fb-chip-wrap">
-          <button class="filter-chip filter-chip-more" id="chip-more" onclick="toggleFbDropdown('fb-more-dropdown')">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M4 8h8M6 12h4"/></svg>
-            Filters
-          </button>
+          <button id="chip-more" data-si-tooltip="Add filters" data-si-tooltip-pos="bottom" onclick="toggleFbDropdown('fb-more-dropdown')" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#f9fafc;border:1px solid #ebeff5;border-radius:6px;cursor:pointer;color:#27282c;flex-shrink:0;transition:background 0.12s,border-color 0.12s,color 0.12s;position:relative" onmouseover="this.style.background='#f3f4f8'" onmouseout="this.style.background=this.classList.contains('active')?'#f3f4f8':'#f9fafc'"><span class="material-icons" style="font-size:18px">filter_list</span></button>
           <div class="fb-dropdown hidden" id="fb-more-dropdown">
             <div class="fb-dropdown-label">Label</div>
             <input type="text" class="fb-label-input" id="fb-label-input" placeholder="Filter by label…">
@@ -4725,10 +4723,10 @@ function updateFbMoreChip() {
   const chip = document.getElementById('chip-more');
   if (!chip) return;
   const labelQ = document.getElementById('fb-label-input')?.value || '';
-  chip.innerHTML = labelQ
-    ? `+ Filters (1) <span class="chip-clear" onclick="event.stopPropagation();clearMoreFilters()">✕</span>`
-    : '+ Filters';
+  chip.innerHTML = `<span class="material-icons" style="font-size:18px">filter_list</span>${labelQ ? '<span style="position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:#2599fb"></span>' : ''}`;
   chip.classList.toggle('active', !!labelQ);
+  chip.style.borderColor = labelQ ? '#2599fb' : '#ebeff5';
+  chip.style.color = labelQ ? '#2599fb' : '#27282c';
 }
 
 function clearMoreFilters() {
@@ -5507,6 +5505,7 @@ renderTable();
     if (!el) return;
     anchorEl = el.dataset.siTooltipPos ? el : null;
     clearTimeout(timer);
+    const delay = anchorEl ? 0 : 1000;
     timer = setTimeout(() => {
       tip.textContent = el.dataset.siTooltip;
       if (anchorEl) {
@@ -5518,13 +5517,20 @@ renderTable();
           tip.style.visibility = '';
           tip.style.left = (r.left - w - 8) + 'px';
           tip.style.top  = (r.top + r.height / 2 - 12) + 'px';
+        } else if (anchorEl.dataset.siTooltipPos === 'bottom') {
+          tip.style.visibility = 'hidden';
+          tip.style.opacity = '1';
+          const w = tip.offsetWidth;
+          tip.style.visibility = '';
+          tip.style.left = (r.left + r.width / 2 - w / 2) + 'px';
+          tip.style.top  = (r.bottom + 8) + 'px';
         } else {
           tip.style.left = (r.right + 8) + 'px';
           tip.style.top  = (r.top + r.height / 2 - 12) + 'px';
         }
       }
       tip.style.opacity = '1';
-    }, 1000);
+    }, delay);
   });
   document.addEventListener('mousemove', e => {
     if (anchorEl) return;
@@ -5637,6 +5643,202 @@ function confirmSubmit() {
   closeSubmitConfirm();
   if (id != null) openReleasePage(id);
 }
+</script>
+<!-- Bulk Import Modal -->
+<div id="bulk-import-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center;">
+  <div id="bulk-import-modal" style="background:var(--color-background-primary,#fff);border-radius:12px;padding:24px;width:100%;max-width:520px;margin:0 16px;max-height:90vh;overflow-y:auto;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span style="font-size:16px;font-weight:600;color:var(--text-primary)">Import a list</span>
+      <button id="bulk-import-close" style="border:1px solid var(--color-border-secondary,#ebeff5);border-radius:6px;background:transparent;width:28px;height:28px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--text-secondary)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+      </button>
+    </div>
+
+    <!-- Segmented control -->
+    <div id="bulk-type-tabs" style="display:flex;gap:8px;margin:16px 0 12px;flex-wrap:wrap">
+      <button class="bulk-tab active" data-type="upc">UPC</button>
+      <button class="bulk-tab" data-type="isrc">ISRC</button>
+    </div>
+
+    <!-- Warning bar (Display UPC only) -->
+    <div id="bulk-warning" style="display:none;background:var(--color-background-warning,#fff8e1);color:var(--color-text-warning,#92400e);border-left:3px solid var(--color-border-warning,#f59e0b);border-radius:6px;padding:10px 12px;font-size:13px;margin-bottom:12px;">
+      ⚠ UPC ≠ Display UPC. Vérifiez quel identifiant vous avez avant d'importer — une confusion peut mener à un takedown erroné.
+    </div>
+
+    <!-- Textarea -->
+    <label style="font-size:13px;font-weight:500;display:block;margin-bottom:6px;color:var(--text-primary)">Paste identifiers (one per line)</label>
+    <textarea id="bulk-textarea" placeholder="00602508007365&#10;00602508007372&#10;00602508007389" style="width:100%;height:140px;border:1px solid var(--color-border-secondary,#ebeff5);border-radius:8px;padding:10px;font-family:monospace;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;color:var(--text-primary);background:var(--bg-primary)"></textarea>
+    <span id="bulk-hint" style="font-size:12px;color:var(--color-text-secondary,#747884);margin-top:6px;display:block">UPC format : 12 ou 13 chiffres. Les lignes vides et espaces sont ignorés.</span>
+
+    <!-- Divider "or" -->
+    <div style="display:flex;align-items:center;gap:12px;margin:16px 0">
+      <hr style="flex:1;border:none;border-top:1px solid var(--color-border-tertiary,#f3f4f8)">
+      <span style="font-size:13px;color:var(--color-text-tertiary,#9ca3af);white-space:nowrap">or</span>
+      <hr style="flex:1;border:none;border-top:1px solid var(--color-border-tertiary,#f3f4f8)">
+    </div>
+
+    <!-- Upload zone -->
+    <div id="bulk-upload-zone" style="border:1.5px dashed var(--color-border-secondary,#ebeff5);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='var(--color-background-secondary,#f9fafc)'" onmouseout="this.style.background='transparent'" onclick="document.getElementById('bulk-file-input').click()">
+      <span style="font-size:14px;font-weight:500;display:block;color:var(--text-primary)">↑ Drop a CSV or click to browse</span>
+      <span style="font-size:12px;color:var(--color-text-secondary,#747884);margin-top:4px;display:block">Colonne attendue : "upc". Les autres colonnes sont ignorées.</span>
+    </div>
+    <input type="file" id="bulk-file-input" accept=".csv" style="display:none">
+
+    <!-- Counter -->
+    <div id="bulk-counter" style="margin-top:14px;font-size:13px;color:var(--color-text-secondary,#747884)">0 identifiers detected</div>
+    <div id="bulk-pills" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+
+    <!-- Footer -->
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+      <button id="bulk-cancel" style="border:1px solid var(--color-border-secondary,#ebeff5);background:transparent;border-radius:8px;padding:8px 16px;font-size:14px;cursor:pointer;font-family:var(--font);color:var(--text-primary)">Cancel</button>
+      <button id="bulk-apply" disabled style="background:var(--color-text-primary,#0f1012);color:var(--color-background-primary,#fff);border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:500;cursor:not-allowed;font-family:var(--font);opacity:0.4">Apply to catalog (0)</button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.bulk-tab {
+  border: 1px solid var(--color-border-secondary, #ebeff5);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font);
+  color: var(--text-primary);
+  transition: background 0.1s, border-color 0.1s;
+}
+.bulk-tab.active {
+  background: var(--color-background-secondary, #f3f4f8);
+  border-color: var(--color-border-primary, #d1d5db);
+  font-weight: 500;
+}
+</style>
+
+<script>
+(function() {
+  const overlay   = document.getElementById('bulk-import-overlay');
+  const modal     = document.getElementById('bulk-import-modal');
+  const textarea  = document.getElementById('bulk-textarea');
+  const counter   = document.getElementById('bulk-counter');
+  const pillsWrap = document.getElementById('bulk-pills');
+  const applyBtn  = document.getElementById('bulk-apply');
+  const hint      = document.getElementById('bulk-hint');
+  const warning   = document.getElementById('bulk-warning');
+  const fileInput = document.getElementById('bulk-file-input');
+
+  let activeType = 'upc';
+
+  const hints = {
+    'upc':  'UPC format : 12 ou 13 chiffres. Les lignes vides et espaces sont ignorés.',
+    'isrc': 'ISRC format : CC-XXX-YY-NNNNN (ex: FR-LM1-24-01234).',
+  };
+
+  function validate(value, type) {
+    if (type === 'upc')  return /^\d{12,13}$/.test(value);
+    if (type === 'isrc') return /^[A-Z]{2}-?\w{3}-?\d{2}-?\d{5}$/i.test(value);
+    return false;
+  }
+
+  function runValidation() {
+    const lines  = textarea.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const valid  = lines.filter(l => validate(l, activeType));
+    const invalid = lines.length - valid.length;
+
+    if (lines.length === 0) {
+      counter.innerHTML = '0 identifiers detected';
+      pillsWrap.innerHTML = '';
+      applyBtn.disabled = true;
+      applyBtn.style.opacity = '0.4';
+      applyBtn.style.cursor = 'not-allowed';
+      applyBtn.textContent = 'Apply to catalog (0)';
+      return;
+    }
+
+    counter.innerHTML =
+      `${lines.length} identifier${lines.length > 1 ? 's' : ''} detected · ` +
+      `<span style="background:var(--color-background-success,#e8faef);color:var(--color-text-success,#16a34a);font-size:11px;padding:2px 8px;border-radius:20px">${valid.length} valid</span>` +
+      (invalid > 0 ? ` · <span style="background:var(--color-background-danger,#ffecef);color:var(--color-text-danger,#e63a52);font-size:11px;padding:2px 8px;border-radius:20px">${invalid} invalid</span>` : '');
+
+    pillsWrap.innerHTML = valid.map(v =>
+      `<span style="background:var(--color-background-success,#e8faef);color:var(--color-text-success,#16a34a);font-size:11px;padding:2px 8px;border-radius:20px">${v}</span>`
+    ).join('');
+
+    applyBtn.disabled = valid.length === 0;
+    applyBtn.style.opacity = valid.length === 0 ? '0.4' : '1';
+    applyBtn.style.cursor = valid.length === 0 ? 'not-allowed' : 'pointer';
+    applyBtn.textContent = `Apply to catalog (${valid.length})`;
+  }
+
+  function openModal() {
+    overlay.style.display = 'flex';
+  }
+
+  function closeModal() {
+    overlay.style.display = 'none';
+  }
+
+  function setActiveTab(type) {
+    activeType = type;
+    document.querySelectorAll('.bulk-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.type === type);
+    });
+    warning.style.display = 'none';
+    hint.textContent = hints[type];
+    runValidation();
+  }
+
+  document.getElementById('bulk-import-btn').addEventListener('click', openModal);
+  document.getElementById('bulk-import-close').addEventListener('click', closeModal);
+  document.getElementById('bulk-cancel').addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => e.stopPropagation());
+
+  document.getElementById('bulk-type-tabs').addEventListener('click', e => {
+    const tab = e.target.closest('.bulk-tab');
+    if (tab) setActiveTab(tab.dataset.type);
+  });
+
+  textarea.addEventListener('input', runValidation);
+
+  // CSV upload
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const lines = e.target.result.split(/\r?\n/);
+      if (lines.length === 0) return;
+      const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^"|"$/g, ''));
+      const colIdx = headers.findIndex(h => h === 'upc');
+      if (colIdx === -1) { alert('No "upc" column found in the CSV.'); return; }
+      const values = lines.slice(1)
+        .map(l => { const cols = l.split(','); return cols[colIdx] ? cols[colIdx].trim().replace(/^"|"$/g, '') : ''; })
+        .filter(v => v.length > 0);
+      textarea.value = values.join('\n');
+      runValidation();
+    };
+    reader.readAsText(file);
+    fileInput.value = '';
+  });
+
+  document.getElementById('bulk-upload-zone').addEventListener('dragover', e => {
+    e.preventDefault();
+    e.currentTarget.style.background = 'var(--color-background-secondary,#f3f4f8)';
+  });
+  document.getElementById('bulk-upload-zone').addEventListener('dragleave', e => {
+    e.currentTarget.style.background = 'transparent';
+  });
+  document.getElementById('bulk-upload-zone').addEventListener('drop', e => {
+    e.preventDefault();
+    e.currentTarget.style.background = 'transparent';
+    const file = e.dataTransfer.files[0];
+    if (file) { fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change')); }
+  });
+})();
 </script>
 </body>
 </html>
