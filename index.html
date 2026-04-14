@@ -2702,7 +2702,7 @@ const releases = [
     title: "Hypnose",
     artist: "Neon Waves",
     label: "Lumière Records",
-    date: "2025-05-30",
+    date: "2026-04-09",
     upc: "196871000201",
     status: "under-review",
     type: "Album",
@@ -2726,7 +2726,7 @@ const releases = [
     title: "Dérives",
     artist: "Marco & The Drift",
     label: "Lumière Records",
-    date: "2025-05-15T08:00:00",
+    date: "2026-04-09T08:00:00",
     upc: "196871000202",
     status: "under-review",
     type: "Single",
@@ -2741,7 +2741,7 @@ const releases = [
     title: "Zéro Kelvin",
     artist: "Null Pointer",
     label: "Lumière Records",
-    date: "2025-05-08T17:45:00",
+    date: "2026-04-09T17:45:00",
     upc: "196871000203",
     status: "ready-for-release",
     type: "EP",
@@ -2759,7 +2759,7 @@ const releases = [
     title: "Solstice",
     artist: "Solange Mireille",
     label: "Lumière Records",
-    date: "2025-04-28",
+    date: "2026-04-09",
     upc: "196871000204",
     status: "ready-for-release",
     type: "Album",
@@ -2782,7 +2782,7 @@ const releases = [
     title: "Midnight Frequencies",
     artist: "Neon Waves",
     label: "Lumière Records",
-    date: "2025-03-12T11:20:00",
+    date: "2026-04-09T11:20:00",
     upc: "196871000701",
     status: "need-action",
     type: "Album",
@@ -2805,7 +2805,7 @@ const releases = [
     title: "Tessellate",
     artist: "Éclat",
     label: "Lumière Records",
-    date: "2025-02-20T23:59:00",
+    date: "2026-04-09T23:59:00",
     upc: "196871000801",
     status: "need-action",
     type: "EP",
@@ -4048,7 +4048,7 @@ function getFilteredReleases(statusOverride) {
   const tab = statusOverride !== undefined ? statusOverride : activeFilter;
   const q      = (getSearchQuery?.() || document.getElementById('main-search')?.value || '').toLowerCase();
   const labelQ = (document.getElementById('fb-label-input')?.value || '').toLowerCase();
-  const now = new Date();
+  const now = new Date(); now.setHours(0, 0, 0, 0);
   const filtered = releases.filter(r => {
     // Status filter (tab)
     const matchStatus = tab === 'all'
@@ -4065,7 +4065,7 @@ function getFilteredReleases(statusOverride) {
     // Date chip
     let matchDate = true;
     if (activeDateFilter.type !== 'all' && r.date) {
-      const d = new Date(r.date + 'T00:00:00');
+      const d = new Date(r.date.substring(0, 10) + 'T00:00:00');
       if (activeDateFilter.type === 'days7') {
         const cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 7);
         matchDate = d >= cutoff;
