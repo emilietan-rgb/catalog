@@ -1981,37 +1981,6 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
   transition: color 0.1s;
 }
 .search-clear:hover { color: var(--text-primary); }
-.search-bulk-btn {
-  position: absolute;
-  right: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  transition: color 0.1s;
-}
-.search-bulk-btn:hover { color: var(--text-primary); }
-.search-bulk-btn.active { color: var(--accent-60); }
-#main-search-bulk {
-  width: 280px;
-  min-height: 32px;
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 13px;
-  font-family: var(--font);
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  outline: none;
-  resize: vertical;
-  transition: border-color 0.12s, box-shadow 0.12s;
-}
-#main-search-bulk:focus { border-color: var(--accent-60); box-shadow: 0 0 0 3px var(--accent-10); }
-#main-search-bulk.hidden { display: none; }
 #main-search.hidden { display: none; }
 .fb-account-list { display: flex; flex-direction: column; gap: 2px; }
 .fb-account-item {
@@ -2486,13 +2455,9 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
       <div class="filter-bar-left">
         <div class="filter-bar-search">
           <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-          <input type="text" id="main-search" placeholder="Search for a release, track, UPC… ⌘K" autocomplete="off">
-          <button class="search-bulk-btn" id="search-bulk-btn" title="Toggle bulk UPC mode" onclick="toggleBulkUPC()" aria-pressed="false">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M2 8h8M2 12h5"/></svg>
-          </button>
+          <input type="text" id="main-search" placeholder="Search for a release, track, UPC." autocomplete="off">
           <button class="search-clear" id="search-clear" aria-label="Clear" style="display:none">✕</button>
         </div>
-        <textarea id="main-search-bulk" class="hidden" placeholder="Paste multiple UPCs, one per line…" rows="1" autocomplete="off"></textarea>
 
         <div class="fb-chip-wrap">
           <button class="filter-chip filter-chip-more" id="chip-more" onclick="toggleFbDropdown('fb-more-dropdown')">
@@ -4633,24 +4598,7 @@ document.getElementById('statusPills').addEventListener('click', e => {
 // ─── Search ───────────────────────────────────────────────────────────────
 let _searchDebounce = null;
 let _prevFilter = null;
-let _bulkUPCMode = false;
-
-function toggleBulkUPC() {
-  _bulkUPCMode = !_bulkUPCMode;
-  const input    = document.getElementById('main-search');
-  const bulk     = document.getElementById('main-search-bulk');
-  const btn      = document.getElementById('search-bulk-btn');
-  btn.classList.toggle('active', _bulkUPCMode);
-  btn.setAttribute('aria-pressed', _bulkUPCMode);
-  input.classList.toggle('hidden', _bulkUPCMode);
-  bulk.classList.toggle('hidden', !_bulkUPCMode);
-  if (_bulkUPCMode) { bulk.focus(); } else { input.focus(); }
-}
-
 function getSearchQuery() {
-  if (_bulkUPCMode) {
-    return document.getElementById('main-search-bulk').value;
-  }
   return document.getElementById('main-search').value;
 }
 
@@ -4670,11 +4618,9 @@ function onSearchInput(hasValue) {
 }
 
 document.getElementById('main-search').addEventListener('input', e => onSearchInput(!!e.target.value));
-document.getElementById('main-search-bulk').addEventListener('input', e => onSearchInput(!!e.target.value));
 
 document.getElementById('search-clear').addEventListener('click', () => {
   document.getElementById('main-search').value = '';
-  document.getElementById('main-search-bulk').value = '';
   document.getElementById('search-clear').style.display = 'none';
   if (_prevFilter) {
     activeFilter = _prevFilter;
