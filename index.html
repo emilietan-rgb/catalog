@@ -2439,7 +2439,7 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
           <span class="material-icons">error</span>
         </div>
         <div class="callout-body">
-          <div class="callout-title">Action required</div>
+          <div class="callout-title">Correction requested</div>
           <div class="callout-description"><span id="need-action-count"></span> <span id="need-action-text"></span></div>
         </div>
       </div>
@@ -2518,10 +2518,11 @@ td.upc-td { min-width: 0; width: 1px; white-space: nowrap; }
     <!-- Status Tabs -->
     <div class="pills-row">
       <div class="status-pills" id="statusPills">
-        <button class="pill active" data-status="all">All</button>
+        <button class="pill" data-status="all" style="display:none">All</button>
+        <button class="pill active" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
+        <button class="pill" data-status="in-review">Pending</button>
         <button class="pill" data-status="draft">Draft</button>
-        <button class="pill" data-status="in-review" style="position:relative">Ongoing</button>
-        <button class="pill" data-status="delivered"><span class="tab-live-dot"></span>Live</button>
+        <button class="pill" data-status="issues" style="position:relative">Issues</button>
         <button class="pill" data-status="unsellable">Takedown</button>
       </div>
     </div>
@@ -2707,7 +2708,7 @@ const releases = [
     label: "Lumière Records",
     date: "2026-04-09T17:45:00",
     upc: "196871000203",
-    status: "ready-for-release",
+    status: "approved",
     type: "EP",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 155,
@@ -2725,7 +2726,7 @@ const releases = [
     label: "Lumière Records",
     date: "2026-04-09",
     upc: "196871000204",
-    status: "ready-for-release",
+    status: "scheduled",
     type: "Album",
     platforms: { count: 0, total: 42, territories: 0, warn: null },
     coverHue: 330,
@@ -3595,7 +3596,7 @@ const DIST_TERRITORIES = [
 ];
 
 // ─── State ────────────────────────────────────────────────────────────────
-let activeFilter = "all";
+let activeFilter = "delivered";
 let sortCol = 'status';
 let sortDir = 1;   // 1 = asc, -1 = desc
 
@@ -3620,9 +3621,10 @@ function statusChip(status) {
   const map = {
     "draft":          ["chip-draft",    "Draft"],
     "under-review":   ["chip-purple",   "Under review"],
-    "ready-for-release": ["chip-purple", "Ready for release"],
+    "approved":          ["chip-purple",  "Approved"],
+    "scheduled":         ["chip-purple",  "Scheduled"],
     "delivered":      ["chip-green",    "Live"],
-    "need-action":    ["chip-red",      "Action required"],
+    "need-action":    ["chip-red",      "Correction requested"],
     "unsellable":     ["chip-neutral",  "Taken down"],
   };
   if (status === 'delivered') {
@@ -3692,9 +3694,9 @@ function platformsCell(p, status) {
     const isLive = st === 'live';
     const img = `<img class="store-logo-img status-${st}" src="${s.url}" alt="${s.name}" onerror="this.style.display='none'">`;
     if (isLive) {
-      return `<a class="store-logo-link" href="${s.dspUrl || '#'}" target="_blank" rel="noopener noreferrer" title="${s.name}" onclick="event.stopPropagation()">${img}</a>`;
+      return `<a class="store-logo-link" href="${s.dspUrl || '#'}" target="_blank" rel="noopener noreferrer" data-si-tooltip="View on ${s.name}" data-si-tooltip-pos="bottom" onclick="event.stopPropagation()">${img}</a>`;
     }
-    return `<span class="store-logo-static" title="Not available on this store">${img}</span>`;
+    return `<span class="store-logo-static" style="cursor:not-allowed">${img}</span>`;
   }
 
   let logosHtml = '';
@@ -3709,14 +3711,8 @@ function platformsCell(p, status) {
     logosHtml = logos.slice(0, 4).map(logoTag).join('');
   }
 
-  const topStoreIssues = logos.filter(s => TOP_STORES.includes(s.name) && (() => { const st = overrides[s.name] || 'live'; return st === 'pending' || st === 'error'; })()).length;
-  const issuesTag = topStoreIssues > 0
-    ? `<button class="store-issues-btn" aria-label="Store issues" onclick="event.stopPropagation()">⚠️<div class="store-issues-tooltip">Issue detected on ${topStoreIssues} store${topStoreIssues > 1 ? 's' : ''}</div></button>`
-    : '';
   return `<div class="platforms-cell">
     <div class="store-logos">${logosHtml}</div>
-    ${issuesTag}
-    ${warnIcon}
   </div>`;
 }
 
@@ -3760,7 +3756,8 @@ function statusIcon(status) {
   const map = {
     'draft':             ['edit',                 '#9ca3af'],
     'under-review':      ['schedule',             '#8b5cf6'],
-    'ready-for-release': ['schedule',             '#8b5cf6'],
+    'approved':          ['check_circle',          '#8b5cf6'],
+    'scheduled':         ['schedule',              '#8b5cf6'],
     'delivered':         'dot',
     'need-action':       ['error',                '#ef4444'],
     'unsellable':        ['block',                '#9ca3af'],
@@ -3768,9 +3765,10 @@ function statusIcon(status) {
   const labels = {
     'draft':             'Draft',
     'under-review':      'Under review',
-    'ready-for-release': 'Ready for release',
+    'approved':  'Approved',
+    'scheduled': 'Scheduled',
     'delivered':         'Live',
-    'need-action':       'Action required',
+    'need-action':       'Correction requested',
     'unsellable':        'Taken down',
   };
   const tooltip = labels[status] || status;
@@ -3803,6 +3801,7 @@ const tabColumnsConfig = {
   'need-action': ['release', 'upc', 'label', 'releaseDate', 'reason', 'territories'],
   'taken-down':  ['release', 'upc', 'label', 'takedownDate', 'takedownType'],
   watchlist:     ['release', 'upc', 'label', 'releaseDate', 'territories', 'status'],
+  issues:        ['release', 'upc', 'label', 'releaseDate', 'reason', 'territories'],
 };
 
 const columnDefs = {
@@ -3840,10 +3839,9 @@ const columnDefs = {
     cell: r => {
       if (r.status === 'under-review') return `<td class="upc-td" style="color:var(--neutral-70)">—</td>`;
       const u = r.upc || '';
-      const truncated = u.length > 6 ? `${u.slice(0, 3)}…${u.slice(-3)}` : u;
-      return `<td class="upc-td" onclick="event.stopPropagation();copyUPCFull(this,'${u}')" data-si-tooltip="${u}">
+      return `<td class="upc-td" onclick="event.stopPropagation();copyUPCFull(this,'${u}')">
         <div class="upc-cell">
-          <span class="upc-value">${truncated}</span>
+          <span class="upc-value">${u}</span>
           <span class="upc-copy-icon"><span class="material-icons">content_copy</span></span>
         </div>
       </td>`;
@@ -3858,8 +3856,9 @@ const columnDefs = {
     cell: r => {
       const n = territoriesMap[r.id];
       const p = r.platforms;
-      const storesLine = r.id === 2 ? `<span style="display:block;font-size:11px;color:#9ca3af;margin-top:2px">—</span>` : p && p.count > 0 ? `<span style="display:block;font-size:11px;color:#9ca3af;margin-top:2px">${p.count}/${p.total} stores</span>` : '';
-      return `<td><div style="line-height:1">${n != null ? `${n} territories` : '—'}${storesLine}</div></td>`;
+      const storesLine = r.id === 2 ? `—` : p && p.count > 0 ? `${p.count}/${p.total} stores` : null;
+      const territoriesLine = n != null ? `<span style="display:block;font-size:11px;color:#9ca3af;margin-top:2px">${n} territories</span>` : '';
+      return `<td><div style="line-height:1">${storesLine != null ? storesLine : '—'}${territoriesLine}</div></td>`;
     }
   },
   platforms: {
@@ -3949,7 +3948,7 @@ const columnDefs = {
 };
 
 function getTabKey() {
-  const map = { all: 'all', draft: 'draft', 'in-review': 'in-review', delivered: 'live', 'need-action': 'need-action', unsellable: 'taken-down', watchlist: 'watchlist' };
+  const map = { all: 'all', draft: 'draft', 'in-review': 'in-review', delivered: 'live', 'need-action': 'need-action', unsellable: 'taken-down', watchlist: 'watchlist', issues: 'issues' };
   return map[activeFilter] || 'all';
 }
 
@@ -3967,7 +3966,7 @@ function renderTabHeaders(cols, count) {
     const label = def.header();
     return `<th${cls}><div class="th-inner">${label}</div></th>`;
   });
-  const noActions = new Set(['in-review', 'taken-down', 'all', 'live', 'watchlist']);
+  const noActions = new Set(['in-review', 'taken-down', 'all', 'live', 'watchlist', 'issues']);
   ths.unshift(`<th style="padding:0 4px;width:32px;min-width:32px"></th>`);
   ths.push(noActions.has(getTabKey()) ? `<th></th>` : `<th class="col-actions"></th>`);
   ths.push(`<th class="col-chevron"></th>`);
@@ -4006,7 +4005,7 @@ function rowCtaCell(r) {
   return `<td style="padding:4px 8px;white-space:nowrap;text-align:right">${action}</td>`;
 }
 
-const processingGroup = new Set(['under-review', 'ready-for-release']);
+const processingGroup = new Set(['under-review', 'approved', 'scheduled']);
 
 function getFilteredReleases(statusOverride) {
   const tab = statusOverride !== undefined ? statusOverride : activeFilter;
@@ -4017,8 +4016,9 @@ function getFilteredReleases(statusOverride) {
     // Status filter (tab)
     const matchStatus = tab === 'all'
       || r.status === tab
-      || (tab === 'in-review' && (processingGroup.has(r.status) || r.status === 'need-action'))
-      || (tab === 'watchlist' && watchlist.has(r.id));
+      || (tab === 'in-review' && processingGroup.has(r.status))
+      || (tab === 'watchlist' && watchlist.has(r.id))
+      || (tab === 'issues' && r.status === 'need-action');
     // Search
     const matchSearch = !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.label.toLowerCase().includes(q) || r.upc.includes(q);
     // Label chip
@@ -4058,7 +4058,7 @@ function getFilteredReleases(statusOverride) {
     return matchStatus && matchSearch && matchLabel && matchDate && matchArtist;
   });
   if (tab === 'in-review') {
-    const order = ['need-action', 'ready-for-release', 'under-review', 'draft', 'delivered', 'unsellable'];
+    const order = ['need-action', 'approved', 'scheduled', 'under-review', 'draft', 'delivered', 'unsellable'];
     filtered.sort((a, b) => (order.indexOf(a.status) - order.indexOf(b.status)) * sortDir);
   }
   return filtered;
@@ -4354,7 +4354,7 @@ function executeTakedown() {
 }
 
 function refreshPills() {
-  const labels = { all: 'All', draft: 'Draft', 'in-review': 'Ongoing', delivered: 'Live', 'need-action': 'Action required', unsellable: 'Takedown' };
+  const labels = { all: 'All', draft: 'Draft', 'in-review': 'Pending', delivered: 'Live', 'need-action': 'Correction requested', unsellable: 'Takedown', issues: 'Issues' };
   document.querySelectorAll('#statusPills .pill').forEach(pill => {
     const s = pill.dataset.status;
     if (s === 'watchlist') {
@@ -4363,13 +4363,16 @@ function refreshPills() {
       pill.innerHTML = `${baseLabel} <span class="pill-count">${n}</span>`;
     } else if (s === 'in-review') {
       const n = getFilteredReleases('in-review').length;
-      pill.innerHTML = `Ongoing <span class="pill-count">${n}</span><span id="ongoing-alert-dot" class="pill-alert-dot" style="display:none"></span>`;
+      pill.innerHTML = `Pending <span class="pill-count">${n}</span>`;
+    } else if (s === 'issues') {
+      const n = getFilteredReleases('issues').length;
+      pill.innerHTML = `Issues <span class="pill-count">${n}</span><span id="ongoing-alert-dot" class="pill-alert-dot" style="display:none"></span>`;
     } else if (labels[s]) {
       const n = getFilteredReleases(s).length;
       pill.innerHTML = `${labels[s]} <span class="pill-count">${n}</span>`;
     }
   });
-  // Drive the Action required badge on the Ongoing tab
+  // Drive the Correction requested badge on the Issues tab
   const dot = document.getElementById('ongoing-alert-dot');
   if (dot) {
     const actionCount = releases.filter(r => r.status === 'need-action').length;
